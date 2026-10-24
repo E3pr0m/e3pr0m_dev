@@ -13,5 +13,5 @@ Thumbs.db
 *.zip
 
 # Riserved files
-mail.txt
+users.txt
 github-recovery-codes.txt
