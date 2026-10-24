@@ -38,7 +38,7 @@ The plugin does not collect or send data to any external service. The emails you
 
 == Installation ==
 
-1. Upload the `e3p-admin-mail-bcc` folder to `wp-content/plugins/`, or install it from the Plugins screen.
+1. Upload the `admin-mail-bcc` folder to `wp-content/plugins/`, or install it from the Plugins screen.
 2. Activate the plugin.
 3. Go to **Settings → Admin Mail Bcc**, enter the address that will receive the copy and choose the emails.
 

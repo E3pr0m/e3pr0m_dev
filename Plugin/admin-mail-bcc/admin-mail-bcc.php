@@ -2,7 +2,7 @@
 /*
  * Plugin Name:  Admin Mail Bcc
  * Description:  Sends a hidden Bcc copy of selected WordPress system emails (critical errors, automatic updates, new users...) to an extra address.
- * Text Domain:  e3p-admin-mail-bcc
+ * Text Domain:  admin-mail-bcc
  * Version:      1.0.0
  * Author:       E3pr0m
  * Author URI:   https://www.e3pr0m.com
@@ -90,32 +90,32 @@ function e3p_amb_get_notifications() {
 function e3p_amb_get_notification_texts() {
     $texts = array(
         'recovery_mode' => array(
-            'label'       => __( 'Critical error (recovery mode)', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'The "Your Site is Experiencing a Technical Issue" email.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'Critical error (recovery mode)', 'admin-mail-bcc' ),
+            'description' => __( 'The "Your Site is Experiencing a Technical Issue" email.', 'admin-mail-bcc' ),
         ),
         'core_update' => array(
-            'label'       => __( 'WordPress automatic updates', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'Result of automatic core updates.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'WordPress automatic updates', 'admin-mail-bcc' ),
+            'description' => __( 'Result of automatic core updates.', 'admin-mail-bcc' ),
         ),
         'plugin_update' => array(
-            'label'       => __( 'Plugin automatic updates', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'Result of automatic plugin updates.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'Plugin automatic updates', 'admin-mail-bcc' ),
+            'description' => __( 'Result of automatic plugin updates.', 'admin-mail-bcc' ),
         ),
         'theme_update' => array(
-            'label'       => __( 'Theme automatic updates', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'Result of automatic theme updates.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'Theme automatic updates', 'admin-mail-bcc' ),
+            'description' => __( 'Result of automatic theme updates.', 'admin-mail-bcc' ),
         ),
         'update_debug' => array(
-            'label'       => __( 'Automatic updates debug', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'Debug email about automatic updates.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'Automatic updates debug', 'admin-mail-bcc' ),
+            'description' => __( 'Debug email about automatic updates.', 'admin-mail-bcc' ),
         ),
         'new_user' => array(
-            'label'       => __( 'New user registration', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'Notice sent to the administrator when a new user registers.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'New user registration', 'admin-mail-bcc' ),
+            'description' => __( 'Notice sent to the administrator when a new user registers.', 'admin-mail-bcc' ),
         ),
         'comment_moderation' => array(
-            'label'       => __( 'Comment awaiting moderation', 'e3p-admin-mail-bcc' ),
-            'description' => __( 'Notice sent when a comment needs to be approved.', 'e3p-admin-mail-bcc' ),
+            'label'       => __( 'Comment awaiting moderation', 'admin-mail-bcc' ),
+            'description' => __( 'Notice sent when a comment needs to be approved.', 'admin-mail-bcc' ),
         ),
     );
 
@@ -248,7 +248,7 @@ function e3p_amb_sanitize_settings( $input ) {
 
     $email = isset( $input['email'] ) ? sanitize_email( wp_unslash( $input['email'] ) ) : '';
     if ( '' !== $email && ! is_email( $email ) ) {
-        add_settings_error( 'e3p_amb_settings', 'e3p_amb_invalid_email', __( 'The email address is not valid.', 'e3p-admin-mail-bcc' ) );
+        add_settings_error( 'e3p_amb_settings', 'e3p_amb_invalid_email', __( 'The email address is not valid.', 'admin-mail-bcc' ) );
     } else {
         $clean['email'] = $email;
     }
@@ -280,10 +280,10 @@ add_action( 'admin_init', 'e3p_amb_register_settings' );
 
 function e3p_amb_add_settings_page() {
     add_options_page(
-        __( 'Admin Mail Bcc', 'e3p-admin-mail-bcc' ),
-        __( 'Admin Mail Bcc', 'e3p-admin-mail-bcc' ),
+        __( 'Admin Mail Bcc', 'admin-mail-bcc' ),
+        __( 'Admin Mail Bcc', 'admin-mail-bcc' ),
         'manage_options',
-        'e3p-admin-mail-bcc',
+        'admin-mail-bcc',
         'e3p_amb_render_settings_page'
     );
 }
@@ -307,19 +307,19 @@ function e3p_amb_render_settings_page() {
 
             <table class="form-table" role="presentation">
                 <tr>
-                    <th scope="row"><label for="e3p_amb_email"><?php esc_html_e( 'Copy recipient', 'e3p-admin-mail-bcc' ); ?></label></th>
+                    <th scope="row"><label for="e3p_amb_email"><?php esc_html_e( 'Copy recipient', 'admin-mail-bcc' ); ?></label></th>
                     <td>
                         <?php if ( $locked ) : ?>
                             <input type="email" id="e3p_amb_email" class="regular-text" value="<?php echo esc_attr( e3p_amb_get_email() ); ?>" disabled>
-                            <p class="description"><?php esc_html_e( 'The address is set by the E3P_AMB_EXTRA_EMAIL constant in wp-config.php.', 'e3p-admin-mail-bcc' ); ?></p>
+                            <p class="description"><?php esc_html_e( 'The address is set by the E3P_AMB_EXTRA_EMAIL constant in wp-config.php.', 'admin-mail-bcc' ); ?></p>
                         <?php else : ?>
                             <input type="email" id="e3p_amb_email" name="e3p_amb_settings[email]" class="regular-text" value="<?php echo esc_attr( $settings['email'] ); ?>">
-                            <p class="description"><?php esc_html_e( 'This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin.', 'e3p-admin-mail-bcc' ); ?></p>
+                            <p class="description"><?php esc_html_e( 'This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin.', 'admin-mail-bcc' ); ?></p>
                         <?php endif; ?>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php esc_html_e( 'Emails to copy', 'e3p-admin-mail-bcc' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Emails to copy', 'admin-mail-bcc' ); ?></th>
                     <td>
                         <fieldset>
                             <?php foreach ( $notifications as $id => $notification ) : ?>
@@ -331,7 +331,7 @@ function e3p_amb_render_settings_page() {
                                 <br>
                             <?php endforeach; ?>
                         </fieldset>
-                        <p class="description"><?php esc_html_e( 'Only these WordPress system emails are copied. Other emails of the site, such as WooCommerce orders, are never copied.', 'e3p-admin-mail-bcc' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Only these WordPress system emails are copied. Other emails of the site, such as WooCommerce orders, are never copied.', 'admin-mail-bcc' ); ?></p>
                     </td>
                 </tr>
             </table>
@@ -349,8 +349,8 @@ function e3p_amb_render_settings_page() {
  * @return array
  */
 function e3p_amb_action_links( $links ) {
-    $url = admin_url( 'options-general.php?page=e3p-admin-mail-bcc' );
-    array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'e3p-admin-mail-bcc' ) . '</a>' );
+    $url = admin_url( 'options-general.php?page=admin-mail-bcc' );
+    array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'admin-mail-bcc' ) . '</a>' );
 
     return $links;
 }

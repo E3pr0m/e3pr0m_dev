@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Panoramica
 
-`E3pr0m_dev` raccoglie i progetti di sviluppo di E3pr0m. Al momento contiene un solo plugin WordPress, `Plugin/e3p-admin-mail-bcc/`: un plugin (`e3p-admin-mail-bcc.php` più `uninstall.php`, PHP 7.4+, WP 5.2+, senza dipendenze) che aggiunge un destinatario `Bcc:` nascosto alle mail di *sistema* che WordPress invia all'amministratore, scelte dall'utente in Impostazioni → Admin Mail Bcc. È pensato per la directory di WordPress.org, con una futura versione Pro come plugin separato. La documentazione per l'utente è in `Plugin/e3p-admin-mail-bcc/readme.txt`.
+`E3pr0m_dev` raccoglie i progetti di sviluppo di E3pr0m. Al momento contiene un solo plugin WordPress, `Plugin/admin-mail-bcc/`: un plugin (`admin-mail-bcc.php` più `uninstall.php`, PHP 7.4+, WP 5.2+, senza dipendenze) che aggiunge un destinatario `Bcc:` nascosto alle mail di *sistema* che WordPress invia all'amministratore, scelte dall'utente in Impostazioni → Admin Mail Bcc. È pensato per la directory di WordPress.org, con una futura versione Pro come plugin separato. La documentazione per l'utente è in `Plugin/admin-mail-bcc/readme.txt`.
 
 Lingua: commenti nel codice e risposte in italiano. Testi dell'interfaccia (`__()`) e `readme.txt` in inglese, come richiede la directory.
 
@@ -12,15 +12,15 @@ Non ci sono build, lint o test. Per provare una modifica, copiare la cartella in
 
 ## Convenzioni di nomenclatura
 
-Tutto ciò che si crea qui usa il prefisso `e3p` (identifica E3pr0m) seguito da una sigla del progetto (es. `amb` per Admin Mail Bcc), per evitare collisioni con altri plugin:
+Cartella, slug, file principale e Text Domain NON hanno prefisso: lo slug della directory di WordPress.org deriva dal nome del plugin. Tutto ciò che vive nel codice usa invece il prefisso `e3p` (identifica E3pr0m) seguito da una sigla del progetto (es. `amb` per Admin Mail Bcc), per evitare collisioni con altri plugin:
 
 | Elemento | Formato | Esempio |
 |---|---|---|
-| Cartella e slug | `e3p-<nome>` | `e3p-admin-mail-bcc` |
-| File principale | `e3p-<nome>.php` | `e3p-admin-mail-bcc.php` |
+| Cartella e slug | `<nome>` | `admin-mail-bcc` |
+| File principale | `<nome>.php` | `admin-mail-bcc.php` |
 | Funzioni, opzioni, hook, handle | `e3p_<sigla>_` | `e3p_amb_add_bcc()` |
 | Costanti | `E3P_<SIGLA>_` | `E3P_AMB_EXTRA_EMAIL` |
-| Text Domain | uguale allo slug | `e3p-admin-mail-bcc` |
+| Text Domain | uguale allo slug | `admin-mail-bcc` |
 
 Con le classi si può usare invece un namespace (`E3pr0m\<Nome>`). Il nome visibile del plugin (`Plugin Name`) resta in chiaro, senza prefisso.
 
