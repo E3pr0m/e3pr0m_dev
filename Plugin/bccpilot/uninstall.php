@@ -4,4 +4,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
 
-delete_option( 'e3p_amb_settings' );
+delete_option( 'e3p_bccpilot_settings' );

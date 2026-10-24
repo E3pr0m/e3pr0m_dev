@@ -1,8 +1,8 @@
 <?php
 /*
- * Plugin Name:  Admin Mail Bcc
- * Description:  Sends a hidden Bcc copy of selected WordPress system emails (critical errors, automatic updates, new users...) to an extra address.
- * Text Domain:  admin-mail-bcc
+ * Plugin Name:  BccPilot
+ * Description:  Choose which WordPress notifications get a hidden Bcc copy, sent to an address of your choice. No generic email filtering: only the notifications you pick.
+ * Text Domain:  bccpilot
  * Version:      1.0.0
  * Author:       E3pr0m
  * Author URI:   https://www.e3pr0m.com
@@ -29,11 +29,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *            message, headers), 'headers' se riceve solo gli header;
  * - default: true se la voce è attiva finché l'utente non salva le impostazioni.
  *
- * Il filtro `e3p_amb_notifications` permette a un plugin esterno di aggiungere voci.
+ * Il filtro `e3p_bccpilot_notifications` permette a un plugin esterno di aggiungere voci.
  *
  * @return array
  */
-function e3p_amb_get_notifications() {
+function e3p_bccpilot_get_notifications() {
     $notifications = array(
         'recovery_mode'  => array(
             'hook'        => 'recovery_mode_email',
@@ -72,7 +72,7 @@ function e3p_amb_get_notifications() {
         ),
     );
 
-    $filtered = apply_filters( 'e3p_amb_notifications', $notifications );
+    $filtered = apply_filters( 'e3p_bccpilot_notifications', $notifications );
 
     return is_array( $filtered ) ? $filtered : $notifications;
 }
@@ -83,43 +83,43 @@ function e3p_amb_get_notifications() {
  * Tenuti separati dal catalogo perché le traduzioni non si possono chiamare
  * prima di `init`, mentre i filtri vanno agganciati già in `plugins_loaded`
  * (la mail di errore critico può partire prima di `init`).
- * Il filtro `e3p_amb_notification_texts` permette di aggiungere i testi delle voci esterne.
+ * Il filtro `e3p_bccpilot_notification_texts` permette di aggiungere i testi delle voci esterne.
  *
  * @return array id => array( label, description )
  */
-function e3p_amb_get_notification_texts() {
+function e3p_bccpilot_get_notification_texts() {
     $texts = array(
         'recovery_mode' => array(
-            'label'       => __( 'Critical error (recovery mode)', 'admin-mail-bcc' ),
-            'description' => __( 'The "Your Site is Experiencing a Technical Issue" email.', 'admin-mail-bcc' ),
+            'label'       => __( 'Critical error (recovery mode)', 'bccpilot' ),
+            'description' => __( 'The "Your Site is Experiencing a Technical Issue" email.', 'bccpilot' ),
         ),
         'core_update' => array(
-            'label'       => __( 'WordPress automatic updates', 'admin-mail-bcc' ),
-            'description' => __( 'Result of automatic core updates.', 'admin-mail-bcc' ),
+            'label'       => __( 'WordPress automatic updates', 'bccpilot' ),
+            'description' => __( 'Result of automatic core updates.', 'bccpilot' ),
         ),
         'plugin_update' => array(
-            'label'       => __( 'Plugin automatic updates', 'admin-mail-bcc' ),
-            'description' => __( 'Result of automatic plugin updates.', 'admin-mail-bcc' ),
+            'label'       => __( 'Plugin automatic updates', 'bccpilot' ),
+            'description' => __( 'Result of automatic plugin updates.', 'bccpilot' ),
         ),
         'theme_update' => array(
-            'label'       => __( 'Theme automatic updates', 'admin-mail-bcc' ),
-            'description' => __( 'Result of automatic theme updates.', 'admin-mail-bcc' ),
+            'label'       => __( 'Theme automatic updates', 'bccpilot' ),
+            'description' => __( 'Result of automatic theme updates.', 'bccpilot' ),
         ),
         'update_debug' => array(
-            'label'       => __( 'Automatic updates debug', 'admin-mail-bcc' ),
-            'description' => __( 'Debug email about automatic updates.', 'admin-mail-bcc' ),
+            'label'       => __( 'Automatic updates debug', 'bccpilot' ),
+            'description' => __( 'Debug email about automatic updates.', 'bccpilot' ),
         ),
         'new_user' => array(
-            'label'       => __( 'New user registration', 'admin-mail-bcc' ),
-            'description' => __( 'Notice sent to the administrator when a new user registers.', 'admin-mail-bcc' ),
+            'label'       => __( 'New user registration', 'bccpilot' ),
+            'description' => __( 'Notice sent to the administrator when a new user registers.', 'bccpilot' ),
         ),
         'comment_moderation' => array(
-            'label'       => __( 'Comment awaiting moderation', 'admin-mail-bcc' ),
-            'description' => __( 'Notice sent when a comment needs to be approved.', 'admin-mail-bcc' ),
+            'label'       => __( 'Comment awaiting moderation', 'bccpilot' ),
+            'description' => __( 'Notice sent when a comment needs to be approved.', 'bccpilot' ),
         ),
     );
 
-    $filtered = apply_filters( 'e3p_amb_notification_texts', $texts );
+    $filtered = apply_filters( 'e3p_bccpilot_notification_texts', $texts );
 
     return is_array( $filtered ) ? $filtered : $texts;
 }
@@ -129,18 +129,18 @@ function e3p_amb_get_notification_texts() {
  *
  * @return array { email: string, notifications: string[] }
  */
-function e3p_amb_get_settings() {
+function e3p_bccpilot_get_settings() {
     $defaults = array(
         'email'         => '',
         'notifications' => array(),
     );
-    foreach ( e3p_amb_get_notifications() as $id => $notification ) {
+    foreach ( e3p_bccpilot_get_notifications() as $id => $notification ) {
         if ( ! empty( $notification['default'] ) ) {
             $defaults['notifications'][] = $id;
         }
     }
 
-    $saved = get_option( 'e3p_amb_settings', null );
+    $saved = get_option( 'e3p_bccpilot_settings', null );
     if ( ! is_array( $saved ) ) {
         return $defaults;
     }
@@ -152,17 +152,12 @@ function e3p_amb_get_settings() {
 }
 
 /**
- * Indirizzo che riceve la copia: la costante in wp-config.php ha la precedenza
- * sull'opzione salvata. Stringa vuota se non c'è un indirizzo valido.
+ * Indirizzo che riceve la copia. Stringa vuota se non c'è un indirizzo valido.
  *
  * @return string
  */
-function e3p_amb_get_email() {
-    if ( defined( 'E3P_AMB_EXTRA_EMAIL' ) && is_email( E3P_AMB_EXTRA_EMAIL ) ) {
-        return E3P_AMB_EXTRA_EMAIL;
-    }
-
-    $settings = e3p_amb_get_settings();
+function e3p_bccpilot_get_email() {
+    $settings = e3p_bccpilot_get_settings();
 
     return is_email( $settings['email'] ) ? $settings['email'] : '';
 }
@@ -173,8 +168,8 @@ function e3p_amb_get_email() {
  * @param string|array $headers Header esistenti.
  * @return array
  */
-function e3p_amb_append_bcc( $headers ) {
-    $email = e3p_amb_get_email();
+function e3p_bccpilot_append_bcc( $headers ) {
+    $email = e3p_bccpilot_get_email();
 
     if ( ! is_array( $headers ) ) {
         $headers = array_filter( explode( "\n", str_replace( "\r\n", "\n", (string) $headers ) ) );
@@ -192,11 +187,11 @@ function e3p_amb_append_bcc( $headers ) {
  * @param array $email to, subject, message, headers.
  * @return array
  */
-function e3p_amb_add_bcc( $email ) {
+function e3p_bccpilot_add_bcc( $email ) {
     if ( ! is_array( $email ) ) {
         return $email;
     }
-    $email['headers'] = e3p_amb_append_bcc( isset( $email['headers'] ) ? $email['headers'] : array() );
+    $email['headers'] = e3p_bccpilot_append_bcc( isset( $email['headers'] ) ? $email['headers'] : array() );
 
     return $email;
 }
@@ -207,31 +202,31 @@ function e3p_amb_add_bcc( $email ) {
  * @param string|array $headers Header esistenti.
  * @return array
  */
-function e3p_amb_add_bcc_headers( $headers ) {
-    return e3p_amb_append_bcc( $headers );
+function e3p_bccpilot_add_bcc_headers( $headers ) {
+    return e3p_bccpilot_append_bcc( $headers );
 }
 
 /**
  * Aggancia i filtri delle sole notifiche scelte. Senza un indirizzo valido
  * non aggancia nulla.
  */
-function e3p_amb_register_filters() {
-    if ( '' === e3p_amb_get_email() ) {
+function e3p_bccpilot_register_filters() {
+    if ( '' === e3p_bccpilot_get_email() ) {
         return;
     }
 
-    $settings      = e3p_amb_get_settings();
-    $notifications = e3p_amb_get_notifications();
+    $settings      = e3p_bccpilot_get_settings();
+    $notifications = e3p_bccpilot_get_notifications();
 
     foreach ( $settings['notifications'] as $id ) {
         if ( ! isset( $notifications[ $id ] ) ) {
             continue;
         }
-        $callback = 'headers' === $notifications[ $id ]['type'] ? 'e3p_amb_add_bcc_headers' : 'e3p_amb_add_bcc';
+        $callback = 'headers' === $notifications[ $id ]['type'] ? 'e3p_bccpilot_add_bcc_headers' : 'e3p_bccpilot_add_bcc';
         add_filter( $notifications[ $id ]['hook'], $callback );
     }
 }
-add_action( 'plugins_loaded', 'e3p_amb_register_filters' );
+add_action( 'plugins_loaded', 'e3p_bccpilot_register_filters' );
 
 /**
  * Pulisce i dati inviati dal modulo delle impostazioni.
@@ -239,7 +234,7 @@ add_action( 'plugins_loaded', 'e3p_amb_register_filters' );
  * @param mixed $input Dati grezzi dal modulo.
  * @return array
  */
-function e3p_amb_sanitize_settings( $input ) {
+function e3p_bccpilot_sanitize_settings( $input ) {
     $input = is_array( $input ) ? $input : array();
     $clean = array(
         'email'         => '',
@@ -248,13 +243,13 @@ function e3p_amb_sanitize_settings( $input ) {
 
     $email = isset( $input['email'] ) ? sanitize_email( wp_unslash( $input['email'] ) ) : '';
     if ( '' !== $email && ! is_email( $email ) ) {
-        add_settings_error( 'e3p_amb_settings', 'e3p_amb_invalid_email', __( 'The email address is not valid.', 'admin-mail-bcc' ) );
+        add_settings_error( 'e3p_bccpilot_settings', 'e3p_bccpilot_invalid_email', __( 'The email address is not valid.', 'bccpilot' ) );
     } else {
         $clean['email'] = $email;
     }
 
     if ( isset( $input['notifications'] ) && is_array( $input['notifications'] ) ) {
-        $known = array_keys( e3p_amb_get_notifications() );
+        $known = array_keys( e3p_bccpilot_get_notifications() );
         foreach ( $input['notifications'] as $id ) {
             $id = sanitize_key( $id );
             if ( in_array( $id, $known, true ) ) {
@@ -266,72 +261,66 @@ function e3p_amb_sanitize_settings( $input ) {
     return $clean;
 }
 
-function e3p_amb_register_settings() {
+function e3p_bccpilot_register_settings() {
     register_setting(
-        'e3p_amb_group',
-        'e3p_amb_settings',
+        'e3p_bccpilot_group',
+        'e3p_bccpilot_settings',
         array(
             'type'              => 'array',
-            'sanitize_callback' => 'e3p_amb_sanitize_settings',
+            'sanitize_callback' => 'e3p_bccpilot_sanitize_settings',
         )
     );
 }
-add_action( 'admin_init', 'e3p_amb_register_settings' );
+add_action( 'admin_init', 'e3p_bccpilot_register_settings' );
 
-function e3p_amb_add_settings_page() {
+function e3p_bccpilot_add_settings_page() {
     add_options_page(
-        __( 'Admin Mail Bcc', 'admin-mail-bcc' ),
-        __( 'Admin Mail Bcc', 'admin-mail-bcc' ),
+        __( 'BccPilot', 'bccpilot' ),
+        __( 'BccPilot', 'bccpilot' ),
         'manage_options',
-        'admin-mail-bcc',
-        'e3p_amb_render_settings_page'
+        'bccpilot',
+        'e3p_bccpilot_render_settings_page'
     );
 }
-add_action( 'admin_menu', 'e3p_amb_add_settings_page' );
+add_action( 'admin_menu', 'e3p_bccpilot_add_settings_page' );
 
-function e3p_amb_render_settings_page() {
+function e3p_bccpilot_render_settings_page() {
     if ( ! current_user_can( 'manage_options' ) ) {
         return;
     }
 
-    $settings      = e3p_amb_get_settings();
-    $notifications = e3p_amb_get_notifications();
-    $texts         = e3p_amb_get_notification_texts();
-    $locked        = defined( 'E3P_AMB_EXTRA_EMAIL' ) && is_email( E3P_AMB_EXTRA_EMAIL );
+    $settings      = e3p_bccpilot_get_settings();
+    $notifications = e3p_bccpilot_get_notifications();
+    $texts         = e3p_bccpilot_get_notification_texts();
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-        <?php settings_errors( 'e3p_amb_settings' ); ?>
+        <?php settings_errors( 'e3p_bccpilot_settings' ); ?>
         <form method="post" action="options.php">
-            <?php settings_fields( 'e3p_amb_group' ); ?>
+            <?php settings_fields( 'e3p_bccpilot_group' ); ?>
 
             <table class="form-table" role="presentation">
                 <tr>
-                    <th scope="row"><label for="e3p_amb_email"><?php esc_html_e( 'Copy recipient', 'admin-mail-bcc' ); ?></label></th>
+                    <th scope="row"><label for="e3p_bccpilot_email"><?php esc_html_e( 'Copy recipient', 'bccpilot' ); ?></label></th>
                     <td>
-                        <?php if ( $locked ) : ?>
-                            <input type="email" id="e3p_amb_email" class="regular-text" value="<?php echo esc_attr( e3p_amb_get_email() ); ?>" disabled>
-                            <p class="description"><?php esc_html_e( 'The address is set by the E3P_AMB_EXTRA_EMAIL constant in wp-config.php.', 'admin-mail-bcc' ); ?></p>
-                        <?php else : ?>
-                            <input type="email" id="e3p_amb_email" name="e3p_amb_settings[email]" class="regular-text" value="<?php echo esc_attr( $settings['email'] ); ?>">
-                            <p class="description"><?php esc_html_e( 'This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin.', 'admin-mail-bcc' ); ?></p>
-                        <?php endif; ?>
+                        <input type="email" id="e3p_bccpilot_email" name="e3p_bccpilot_settings[email]" class="regular-text" value="<?php echo esc_attr( $settings['email'] ); ?>">
+                        <p class="description"><?php esc_html_e( 'This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin.', 'bccpilot' ); ?></p>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php esc_html_e( 'Emails to copy', 'admin-mail-bcc' ); ?></th>
+                    <th scope="row"><?php esc_html_e( 'Emails to copy', 'bccpilot' ); ?></th>
                     <td>
                         <fieldset>
                             <?php foreach ( $notifications as $id => $notification ) : ?>
                                 <label>
-                                    <input type="checkbox" name="e3p_amb_settings[notifications][]" value="<?php echo esc_attr( $id ); ?>" <?php checked( in_array( $id, $settings['notifications'], true ) ); ?>>
+                                    <input type="checkbox" name="e3p_bccpilot_settings[notifications][]" value="<?php echo esc_attr( $id ); ?>" <?php checked( in_array( $id, $settings['notifications'], true ) ); ?>>
                                     <?php echo esc_html( isset( $texts[ $id ]['label'] ) ? $texts[ $id ]['label'] : $id ); ?>
                                 </label>
                                 <p class="description"><?php echo esc_html( isset( $texts[ $id ]['description'] ) ? $texts[ $id ]['description'] : '' ); ?></p>
                                 <br>
                             <?php endforeach; ?>
                         </fieldset>
-                        <p class="description"><?php esc_html_e( 'Only these WordPress system emails are copied. Other emails of the site, such as WooCommerce orders, are never copied.', 'admin-mail-bcc' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Only these WordPress system emails are copied. Other emails of the site, such as WooCommerce orders, are never copied.', 'bccpilot' ); ?></p>
                     </td>
                 </tr>
             </table>
@@ -348,10 +337,10 @@ function e3p_amb_render_settings_page() {
  * @param array $links Link già presenti.
  * @return array
  */
-function e3p_amb_action_links( $links ) {
-    $url = admin_url( 'options-general.php?page=admin-mail-bcc' );
-    array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'admin-mail-bcc' ) . '</a>' );
+function e3p_bccpilot_action_links( $links ) {
+    $url = admin_url( 'options-general.php?page=bccpilot' );
+    array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'bccpilot' ) . '</a>' );
 
     return $links;
 }
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'e3p_amb_action_links' );
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'e3p_bccpilot_action_links' );

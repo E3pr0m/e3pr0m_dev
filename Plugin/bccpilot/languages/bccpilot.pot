@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Admin Mail Bcc 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/admin-mail-bcc\n"
+"Project-Id-Version: BccPilot 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bccpilot\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Domain: admin-mail-bcc\n"
+"X-Domain: bccpilot\n"
 
 msgid "Critical error (recovery mode)"
 msgstr ""
@@ -52,13 +52,10 @@ msgstr ""
 msgid "The email address is not valid."
 msgstr ""
 
-msgid "Admin Mail Bcc"
+msgid "BccPilot"
 msgstr ""
 
 msgid "Copy recipient"
-msgstr ""
-
-msgid "The address is set by the E3P_AMB_EXTRA_EMAIL constant in wp-config.php."
 msgstr ""
 
 msgid "This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin."

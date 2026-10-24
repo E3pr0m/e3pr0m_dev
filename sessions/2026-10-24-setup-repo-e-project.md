@@ -21,16 +21,25 @@ Il repo era stato cancellato e la cartella spostata fuori da OneDrive in `C:\E3p
 - Slug cambiato in `admin-mail-bcc` (senza prefisso `e3p`): cartella, file principale, Text Domain e file in `languages/` rinominati; `CLAUDE.md` aggiornato. Il prefisso `e3p` resta solo in funzioni, opzioni, hook e costanti. Modifiche locali, ancora da committare.
 - Plugin Check rieseguito dopo la rinomina: tutto ok (il messaggio "not found in the WordPress.org SVN repository" è atteso finché il plugin non è pubblicato).
 
+- Commit e push della rinomina dello slug fatti dall'utente (branch `main`) con lo slug `admin-mail-bcc`, poi superato dal nome BccPilot.
+- Zip di pubblicazione rigenerato in `dist/admin-mail-bcc.zip` (cartella `admin-mail-bcc/` alla radice, 6 file, verificato). `/dist/` e `*.zip` aggiunti al `.gitignore` (modifica non ancora committata).
+
+- Guideline 17 della directory: "Admin Mail Bcc" è troppo generico. Nome definitivo scelto: **BccPilot** (slug `bccpilot`, ricerche su UE/USA, directory e Google senza collisioni; il marchio USA trovato è abbandonato dal 2005). Il plugin è stato rinominato di nuovo (cartella, file, Text Domain, `languages/`) e le descrizioni riscritte per non limitarsi alle mail di sistema. Plugin Check ok. Il prefisso `e3p_amb_` resta nel codice.
+- Zip aggiornato in `dist/bccpilot.zip`. Project e issue #3 rinominati con il nuovo nome.
+- Utente sta creando `dev@e3pr0m.com` da usare come email dell'account wordpress.org.
+
 ## Decisioni
-- Slug senza prefisso, per non dipendere dall'approvazione di un revisore a ogni plugin.
+- Slug senza prefisso `e3p`, per non dipendere dall'approvazione di un revisore a ogni plugin.
 - Un Project per ogni cosa creata, più una label con la sigla del plugin.
 - Le issue si mostrano in bozza e si creano solo dopo l'ok dell'utente; vanno assegnate all'utente.
 - Traduzioni: il plugin non usa `load_plugin_textdomain()`. In produzione le traduzioni arrivano da translate.wordpress.org; i file in `languages/` sono la base di partenza.
 
 ## Da fare / aperto
-- Committare la rinomina dello slug e aggiornare la #3.
-- Creare lo zip (`admin-mail-bcc/` alla radice) e inviarlo; verificare che `wordpress.org/plugins/admin-mail-bcc/` dia 404.
-- Rimuovere dal sito e3pr0m.com la vecchia cartella `e3p-admin-mail-bcc`.
+- Committare la rinomina in `Plugin/bccpilot/` (`git add -A Plugin`), `CLAUDE.md`, `.gitignore` e `sessions/`.
+- Verificare che `wordpress.org/plugins/bccpilot/` dia 404, poi inviare `dist/bccpilot.zip` dal modulo di WordPress.org.
+- Rimuovere dal sito e3pr0m.com le vecchie cartelle `e3p-admin-mail-bcc` e `admin-mail-bcc` (se presenti).
+- Aggiungere il `Donate link` (GitHub Sponsors) quando il profilo è approvato.
 - Issue #1 e #2.
+- Cambiare l'email dell'account wordpress.org con `dev@e3pr0m.com` prima di inviare lo zip.
 - Decidere se escludere `.vscode/` dal repo.
 - Il `CLAUDE.md` non ha una roadmap: l'utente deve ancora elencare le funzioni da implementare (plugin gratuito e Pro), poi scriverle nel `CLAUDE.md`.
