@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Admin Mail Bcc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/e3p-admin-mail-bcc\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Critical error (recovery mode)"
+msgstr "Errore critico (modalità di recupero)"
+
+msgid "The \"Your Site is Experiencing a Technical Issue\" email."
+msgstr "La mail \"Il tuo sito sta riscontrando un problema tecnico\"."
+
+msgid "WordPress automatic updates"
+msgstr "Aggiornamenti automatici di WordPress"
+
+msgid "Result of automatic core updates."
+msgstr "Esito degli aggiornamenti automatici del core."
+
+msgid "Plugin automatic updates"
+msgstr "Aggiornamenti automatici dei plugin"
+
+msgid "Result of automatic plugin updates."
+msgstr "Esito degli aggiornamenti automatici dei plugin."
+
+msgid "Theme automatic updates"
+msgstr "Aggiornamenti automatici dei temi"
+
+msgid "Result of automatic theme updates."
+msgstr "Esito degli aggiornamenti automatici dei temi."
+
+msgid "Automatic updates debug"
+msgstr "Debug degli aggiornamenti automatici"
+
+msgid "Debug email about automatic updates."
+msgstr "Mail di debug sugli aggiornamenti automatici."
+
+msgid "New user registration"
+msgstr "Registrazione di un nuovo utente"
+
+msgid "Notice sent to the administrator when a new user registers."
+msgstr "Avviso inviato all'amministratore quando si registra un nuovo utente."
+
+msgid "Comment awaiting moderation"
+msgstr "Commento in attesa di moderazione"
+
+msgid "Notice sent when a comment needs to be approved."
+msgstr "Avviso inviato quando un commento deve essere approvato."
+
+msgid "The email address is not valid."
+msgstr "L'indirizzo email non è valido."
+
+msgid "Admin Mail Bcc"
+msgstr "Admin Mail Bcc"
+
+msgid "Copy recipient"
+msgstr "Destinatario della copia"
+
+msgid "The address is set by the E3P_AMB_EXTRA_EMAIL constant in wp-config.php."
+msgstr "L'indirizzo è impostato dalla costante E3P_AMB_EXTRA_EMAIL in wp-config.php."
+
+msgid "This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin."
+msgstr "Questo indirizzo riceverà una copia nascosta (Bcc) delle mail selezionate qui sotto. Lascialo vuoto per disattivare il plugin."
+
+msgid "Emails to copy"
+msgstr "Mail da copiare"
+
+msgid "Only these WordPress system emails are copied. Other emails of the site, such as WooCommerce orders, are never copied."
+msgstr "Vengono copiate solo queste mail di sistema di WordPress. Le altre mail del sito, come gli ordini di WooCommerce, non vengono mai copiate."
+
+msgid "Settings"
+msgstr "Impostazioni"
+

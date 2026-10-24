@@ -1,0 +1,9 @@
+# Dipendenze di sviluppo (stub WordPress per l'editor): si reinstallano con "composer install"
+vendor/
+composer.*
+.vscode
+
+# File locali di Claude Code e del sistema
+.claude/settings.local.json
+Thumbs.db
+.DS_Store
