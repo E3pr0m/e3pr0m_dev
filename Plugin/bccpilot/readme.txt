@@ -21,7 +21,7 @@ The plugin does not hook the generic `wp_mail` function. It only uses the filter
 = Features =
 
 * Hidden Bcc copy of the "Your Site is Experiencing a Technical Issue" email
-* Bcc copy of automatic update results for core, plugins and themes, and of the updates debug email
+* Bcc copy of automatic update results for core, plugins and themes (plugins and themes share one option), and of the updates debug email
 * Optional copy of the new user registration notice
 * Optional copy of the "comment awaiting moderation" notice
 

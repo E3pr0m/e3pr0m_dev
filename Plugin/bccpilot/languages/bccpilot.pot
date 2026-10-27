@@ -19,16 +19,10 @@ msgstr ""
 msgid "Result of automatic core updates."
 msgstr ""
 
-msgid "Plugin automatic updates"
+msgid "Plugin and theme automatic updates"
 msgstr ""
 
-msgid "Result of automatic plugin updates."
-msgstr ""
-
-msgid "Theme automatic updates"
-msgstr ""
-
-msgid "Result of automatic theme updates."
+msgid "Result of automatic plugin and theme updates."
 msgstr ""
 
 msgid "Automatic updates debug"

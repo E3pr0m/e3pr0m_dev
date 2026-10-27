@@ -45,13 +45,8 @@ function e3p_bccpilot_get_notifications() {
             'type'        => 'email',
             'default'     => true,
         ),
-        'plugin_update'  => array(
-            'hook'        => 'auto_plugin_update_email',
-            'type'        => 'email',
-            'default'     => true,
-        ),
-        'theme_update'   => array(
-            'hook'        => 'auto_theme_update_email',
+        'plugin_theme_update' => array(
+            'hook'        => 'auto_plugin_theme_update_email',
             'type'        => 'email',
             'default'     => true,
         ),
@@ -97,13 +92,9 @@ function e3p_bccpilot_get_notification_texts() {
             'label'       => __( 'WordPress automatic updates', 'bccpilot' ),
             'description' => __( 'Result of automatic core updates.', 'bccpilot' ),
         ),
-        'plugin_update' => array(
-            'label'       => __( 'Plugin automatic updates', 'bccpilot' ),
-            'description' => __( 'Result of automatic plugin updates.', 'bccpilot' ),
-        ),
-        'theme_update' => array(
-            'label'       => __( 'Theme automatic updates', 'bccpilot' ),
-            'description' => __( 'Result of automatic theme updates.', 'bccpilot' ),
+        'plugin_theme_update' => array(
+            'label'       => __( 'Plugin and theme automatic updates', 'bccpilot' ),
+            'description' => __( 'Result of automatic plugin and theme updates.', 'bccpilot' ),
         ),
         'update_debug' => array(
             'label'       => __( 'Automatic updates debug', 'bccpilot' ),
@@ -241,9 +232,11 @@ function e3p_bccpilot_sanitize_settings( $input ) {
         'notifications' => array(),
     );
 
-    $email = isset( $input['email'] ) ? sanitize_email( wp_unslash( $input['email'] ) ) : '';
+    $email = isset( $input['email'] ) && is_string( $input['email'] ) ? trim( sanitize_text_field( wp_unslash( $input['email'] ) ) ) : '';
     if ( '' !== $email && ! is_email( $email ) ) {
+        // Indirizzo non valido: errore e si mantiene quello già salvato.
         add_settings_error( 'e3p_bccpilot_settings', 'e3p_bccpilot_invalid_email', __( 'The email address is not valid.', 'bccpilot' ) );
+        $clean['email'] = e3p_bccpilot_get_settings()['email'];
     } else {
         $clean['email'] = $email;
     }
@@ -295,7 +288,6 @@ function e3p_bccpilot_render_settings_page() {
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-        <?php settings_errors( 'e3p_bccpilot_settings' ); ?>
         <form method="post" action="options.php">
             <?php settings_fields( 'e3p_bccpilot_group' ); ?>
 
