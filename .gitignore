@@ -15,3 +15,6 @@ Thumbs.db
 # Riserved files
 users.txt
 github-recovery-codes.txt
+
+#Ignore Brand folder
+brand/
