@@ -15,6 +15,14 @@ Thumbs.db
 # Riserved files
 users.txt
 github-recovery-codes.txt
+wordfence-api-key.txt
 
 #Ignore Brand folder
-brand/
+/Brand/
+
+# Ignore SVN folder
+/svn/
+
+# Ignore Vincoli.md
+/Plugin/logpilot/VINCOLI.md
+/Plugin/pluginaudit/VINCOLI.md

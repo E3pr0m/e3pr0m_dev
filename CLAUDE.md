@@ -17,6 +17,8 @@ Plugin presenti:
 | Plugin | Cartella | Cosa fa |
 |---|---|---|
 | BccPilot | `Plugin/bccpilot/` | Aggiunge un destinatario `Bcc:` nascosto alle mail di sistema che WordPress invia all'amministratore. Dettagli nella sezione "BccPilot" in fondo. |
+| Plugin Audit | `Plugin/pluginaudit/` | Elenca i plugin del sito con avvisi di vulnerabilità, indizi d'uso e stato di salute. In sviluppo, non ancora pubblicato. Dettagli nella sezione "Plugin Audit" in fondo. |
+| LogPilot | `Plugin/logpilot/` | Facilita l'accesso a `debug.log` e all'`error_log` di PHP, evidenzia gli errori per livello e attiva/disattiva il debug da pannello. In sviluppo, non ancora pubblicato. Dettagli nella sezione "LogPilot" in fondo. |
 
 Lingua: commenti nel codice e risposte in italiano. Testi dell'interfaccia (`__()`) e `readme.txt` in inglese, come richiede la directory.
 
@@ -72,3 +74,48 @@ Cartella `Plugin/bccpilot/`. Aggiunge un destinatario `Bcc:` nascosto alle mail 
 - NON agganciare `wp_mail` né altri filtri generici sulle mail: il plugin non deve copiare le mail di WooCommerce o altre mail del sito. Aggiungere solo filtri di singole notifiche, dopo aver verificato nel core che il filtro esista.
 - Senza indirizzo valido il plugin non fa nulla.
 - Unica scrittura sul database: l'opzione `e3p_bccpilot_settings`.
+
+## Plugin Audit
+
+Cartella `Plugin/pluginaudit/`. Elenca i plugin del sito, attivi e non, con il loro stato di salute: avvisi di vulnerabilità divisi per gravità (colori) e categoria (con una breve descrizione), indizi d'uso, aggiornamenti disponibili, compatibilità PHP/WP, plugin disattivati ma installati. È un audit dello stato dei plugin, non una scansione del codice né del malware. Versione gratuita su WordPress.org e Pro come plugin separato (`pluginaudit-pro`). Stato: scheletro in sviluppo, non ancora pubblicato. File: `pluginaudit.php`, `uninstall.php`, `readme.txt`, `languages/` (solo il `.pot`) e `VINCOLI.md` (file di sviluppo, vedi sotto).
+
+Le issue stanno nel Project `Plugin | Plugin Audit` (n. 10), label `pluginaudit` (gratuita, #26-#32) e `pluginaudit_pro` (Pro, #16-#25).
+
+### Architettura (da definire)
+
+- Fonte dei dati sulle vulnerabilità: Wordfence Intelligence v3, scelta provvisoria in attesa della risposta di Wordfence (uso in un plugin gratuito e Pro, limiti, campi del production feed). Ogni utente inserisce la propria chiave API. Lo scanner feed non ha CVSS né CWE: la categoria si ricava dal titolo e la gravità va decisa.
+- Il feed è grande (circa 82 MB di JSON): da scaricare al massimo una volta al giorno, conservare e gestire il 429 senza errori visibili. Il problema della memoria in PHP è da verificare.
+- Indizi d'uso: etichetta "nessun segno d'uso trovato", mai "inutilizzato".
+- Integrazione con BccPilot: la Pro aggiunge la sua voce al catalogo con i filtri `e3p_bccpilot_notifications` e `e3p_bccpilot_notification_texts`. In BccPilot, dopo la pubblicazione di Plugin Audit, una riga di testo con link se manca e il checkbox se è attivo.
+- Scritture sul database: da definire (chiave API, feed in cache, impostazioni). Ognuna va documentata qui e rimossa da `uninstall.php`.
+
+### Vincoli specifici
+
+- Il nome deve essere vero il giorno del rilascio: il `readme.txt` dice anche cosa il plugin NON fa (non scansiona il codice, non cerca malware, non sostituisce un plugin di sicurezza).
+- Servizi esterni: consenso esplicito prima del primo uso, dati inviati e termini documentati nel `readme.txt` (Guideline 7); si scaricano solo dati, mai codice (Guideline 8).
+- Nessuna chiave API nel codice e nessuna chiave condivisa (termini Wordfence).
+- Ogni voce di Wordfence mostrata riporta il link al record e il copyright e la licenza di Defiant.
+- La gravità si mostra sempre anche con testo e icona, mai solo con il colore.
+- `Plugin/pluginaudit/VINCOLI.md` è un file di sviluppo e fa eccezione alla regola "niente file di sviluppo": non va nello zip né in SVN. Prima di ogni commit SVN, `svn status` deve mostrare solo i file del plugin.
+
+## LogPilot
+
+Cartella `Plugin/logpilot/`. Legge `debug.log` e l'`error_log` di PHP, evidenzia gli errori per livello con spiegazioni semplici per utenti non esperti e permette agli amministratori di attivare e disattivare il debug da pannello, senza aprire file. Versione gratuita su WordPress.org e Pro come plugin separato (`logpilot-pro`). Stato: scheletro in sviluppo, non ancora pubblicato. File: `logpilot.php`, `uninstall.php`, `readme.txt`, `languages/` (solo il `.pot`) e `VINCOLI.md` (file di sviluppo, vedi sotto).
+
+Le issue stanno nel Project `Plugin | LogPilot` (n. 11), label `logpilot` (gratuita, #33-#41) e `logpilot_pro` (Pro, #42-#54).
+
+### Architettura (da definire)
+
+- Lettura: solo la coda dei file, con un limite. Il livello di ogni voce si riconosce dalla riga; voci su più righe trattate come una; righe non riconosciute come "Non classificato". Ogni riga mostrata va escapata (dato non fidato).
+- Attivazione del debug: modifica di `wp-config.php` con backup, scrittura atomica, controllo di sintassi, ripristino automatico, solo le costanti di debug delimitate da un commento marcatore. Se il file non è scrivibile, il plugin mostra le righe da aggiungere a mano. `WP_DEBUG_DISPLAY` sempre spento; `DISALLOW_FILE_EDIT` non si tocca. Licenza di WPConfigTransformer da verificare prima dell'uso.
+- Spegnimento automatico dopo una durata scelta, oppure promemoria via email ogni N giorni a un indirizzo scelto dall'utente (l'email dell'amministratore solo come proposta modificabile).
+- Scritture sul database e su disco: da definire. Ognuna va documentata qui e rimossa da `uninstall.php`.
+- Collegamento con BccPilot (filtri del catalogo) e con Plugin Audit: non deciso.
+
+### Vincoli specifici
+
+- Nessun servizio esterno nella gratuita; canali esterni solo in Pro, con consenso esplicito e documentazione (Guideline 7).
+- Il `readme.txt` dice cosa il plugin NON fa: non corregge gli errori, non dice se il sito è sano o sicuro.
+- La gravità si mostra sempre con testo e icona, mai solo con il colore.
+- Non agganciare `wp_mail`: il plugin invia solo le proprie mail.
+- `Plugin/logpilot/VINCOLI.md` è un file di sviluppo e fa eccezione alla regola "niente file di sviluppo": non va nello zip né in SVN. Prima di ogni commit SVN, `svn status` deve mostrare solo i file del plugin.
