@@ -5,6 +5,10 @@ composer.*
 
 # File locali di Claude Code e del sistema
 .claude/settings.local.json
+settings.json
+settings.local.json
+.claude/
+
 Thumbs.db
 .DS_Store
 
@@ -26,3 +30,4 @@ wordfence-api-key.txt
 # Ignore Vincoli.md
 /Plugin/logpilot/VINCOLI.md
 /Plugin/pluginaudit/VINCOLI.md
+

@@ -1,4 +1,4 @@
-=== Plugin Audit ===
+=== PluginAudit ===
 Contributors:      e3pr0m
 Tags:              plugins, security, vulnerabilities, audit, updates
 Requires at least: 5.2
@@ -12,7 +12,7 @@ See the health of the plugins on your site: known vulnerabilities, signs of use,
 
 == Description ==
 
-Plugin Audit lists every plugin installed on your site, active or not, and shows its state: known vulnerabilities with severity and category, signs of use, available updates, PHP and WordPress compatibility, and plugins that are installed but not active.
+PluginAudit lists every plugin installed on your site, active or not, and shows its state: known vulnerabilities with severity and category, signs of use, available updates, PHP and WordPress compatibility, and plugins that are installed but not active.
 
 = What this plugin does not do =
 

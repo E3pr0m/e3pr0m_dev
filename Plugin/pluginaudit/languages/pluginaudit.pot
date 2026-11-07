@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Plugin Audit 0.1.0\n"
+"Project-Id-Version: PluginAudit 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pluginaudit\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name:  Plugin Audit
+ * Plugin Name:  PluginAudit
  * Description:  See the health of the plugins on your site: known vulnerabilities, signs of use, available updates and compatibility. Not a code or malware scanner.
  * Text Domain:  pluginaudit
  * Version:      0.1.0

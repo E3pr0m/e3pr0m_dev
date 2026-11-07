@@ -1,9 +1,1251 @@
+# Copyright (C) 2026 E3pr0m
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: LogPilot 0.1.0\n"
+"Project-Id-Version: LogPilot 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/logpilot\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-07T16:23:41+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: logpilot\n"
 
+#. Plugin Name of the plugin
+#: logpilot.php
+#: logpilot.php:665
+#: logpilot.php:666
+msgid "LogPilot"
+msgstr ""
+
+#. Description of the plugin
+#: logpilot.php
+msgid "Read the PHP and WordPress error logs, see which errors matter, and turn debug logging on and off from a panel, without editing files."
+msgstr ""
+
+#. Author of the plugin
+#: logpilot.php
+msgid "E3pr0m"
+msgstr ""
+
+#. Author URI of the plugin
+#: logpilot.php
+msgid "https://www.e3pr0m.com"
+msgstr ""
+
+#: includes/auto-off.php:21
+msgid "1 hour"
+msgstr ""
+
+#: includes/auto-off.php:22
+msgid "6 hours"
+msgstr ""
+
+#: includes/auto-off.php:23
+msgid "24 hours"
+msgstr ""
+
+#: includes/auto-off.php:24
+msgid "3 days"
+msgstr ""
+
+#: includes/auto-off.php:25
+msgid "7 days"
+msgstr ""
+
+#: includes/auto-off.php:36
+msgid "every day"
+msgstr ""
+
+#: includes/auto-off.php:37
+msgid "every 3 days"
+msgstr ""
+
+#: includes/auto-off.php:38
+msgid "every 7 days"
+msgstr ""
+
+#. translators: %s: site name
+#: includes/auto-off.php:221
+#, php-format
+msgid "[%s] LogPilot could not turn debug logging off"
+msgstr ""
+
+#. translators: 1: site name, 2: reason, 3: link to the LogPilot page
+#: includes/auto-off.php:224
+#, php-format
+msgid ""
+"The automatic turn-off of debug logging did not work on %1$s, so logging is still on.\n"
+"\n"
+"%2$s\n"
+"\n"
+"The log can contain private information. Turn logging off here, or edit wp-config.php by hand:\n"
+"%3$s"
+msgstr ""
+
+#. translators: %s: site name
+#: includes/auto-off.php:248
+#, php-format
+msgid "[%s] Debug logging is still on"
+msgstr ""
+
+#. translators: 1: site name, 2: how long logging has been on, e.g. "3 days", 3: link to the LogPilot page
+#: includes/auto-off.php:251
+#, php-format
+msgid ""
+"Debug logging has been on for %2$s on %1$s.\n"
+"\n"
+"The log can contain private information, so turn it off when you no longer need it. You can do it here:\n"
+"%3$s\n"
+"\n"
+"You asked LogPilot to remind you about this."
+msgstr ""
+
+#: includes/auto-off.php:269
+msgid "Turn logging off automatically"
+msgstr ""
+
+#: includes/auto-off.php:270
+msgid "After"
+msgstr ""
+
+#: includes/auto-off.php:275
+msgid "Don’t turn it off, remind me"
+msgstr ""
+
+#. translators: %s: site administrator e-mail address
+#: includes/auto-off.php:281
+#, php-format
+msgid "If the automatic turn-off ever fails, LogPilot sends an e-mail to the site administrator address (%s)."
+msgstr ""
+
+#: includes/auto-off.php:287
+msgid "Remind me"
+msgstr ""
+
+#: includes/auto-off.php:294
+msgid "Send the reminder to"
+msgstr ""
+
+#: includes/auto-off.php:296
+msgid "Logging stays on until you turn it off. LogPilot only uses this address to send the reminder."
+msgstr ""
+
+#: includes/auto-off.php:317
+msgid "The automatic turn-off could not change wp-config.php, so logging is still on. Turn it off with the button below, or by hand."
+msgstr ""
+
+#. translators: 1: date and time, 2: time left, e.g. "5 hours"
+#: includes/auto-off.php:326
+#, php-format
+msgid "It will turn off automatically on %1$s (in %2$s)."
+msgstr ""
+
+#. translators: 1: reminder interval, e.g. "every 3 days", 2: e-mail address
+#: includes/auto-off.php:336
+#, php-format
+msgid "Logging will stay on. LogPilot reminds you %1$s at %2$s."
+msgstr ""
+
+#. translators: %s: date and time of the next reminder
+#: includes/auto-off.php:344
+#, php-format
+msgid "Next reminder: %s."
+msgstr ""
+
+#: includes/auto-off.php:352
+msgid "WP-Cron is disabled on this site. The automatic turn-off then happens when someone opens the admin area after the set time, and reminders need your server to run wp-cron.php regularly."
+msgstr ""
+
+#: includes/debug-switch.php:20
+msgid "Debug logging is now on. Remember to turn it off when you are done: logs can contain sensitive data."
+msgstr ""
+
+#: includes/debug-switch.php:24
+msgid "Debug logging is now off."
+msgstr ""
+
+#: includes/debug-switch.php:28
+msgid "Nothing was changed: tick the confirmation box first."
+msgstr ""
+
+#: includes/debug-switch.php:32
+msgid "Nothing was changed: LogPilot could not create the folder where the log is saved."
+msgstr ""
+
+#: includes/debug-switch.php:36
+msgid "Nothing was deleted: tick the confirmation box first."
+msgstr ""
+
+#: includes/debug-switch.php:40
+msgid "The old wp-content/debug.log was deleted."
+msgstr ""
+
+#: includes/debug-switch.php:44
+msgid "The old wp-content/debug.log could not be deleted. Check its permissions or delete it by hand."
+msgstr ""
+
+#: includes/debug-switch.php:48
+msgid "There was no wp-content/debug.log to delete."
+msgstr ""
+
+#: includes/debug-switch.php:52
+msgid "The excerpt was handed over to your site’s mail system. If it does not arrive, check the spam folder and your site’s e-mail setup."
+msgstr ""
+
+#: includes/debug-switch.php:56
+msgid "The e-mail could not be sent, so nothing was delivered. Most often the site cannot send e-mail: this is normal on a local test site, and on a live site an SMTP plugin or your host’s e-mail settings usually fix it. You can still download the log instead."
+msgstr ""
+
+#: includes/debug-switch.php:60
+msgid "Nothing was sent: enter a valid e-mail address."
+msgstr ""
+
+#: includes/debug-switch.php:64
+msgid "Nothing was sent: tick the confirmation box first."
+msgstr ""
+
+#: includes/debug-switch.php:68
+msgid "Nothing was sent: that log is not available or has nothing to send."
+msgstr ""
+
+#: includes/debug-switch.php:72
+msgid "Nothing was downloaded: that log is not available."
+msgstr ""
+
+#: includes/debug-switch.php:76
+msgid "The log could not be read, so nothing was downloaded. Check its permissions."
+msgstr ""
+
+#: includes/debug-switch.php:80
+msgid "Nothing was changed: enter a valid e-mail address for the reminder, or choose an automatic turn-off time."
+msgstr ""
+
+#: includes/debug-switch.php:84
+msgid "Nothing was changed: wp-config.php is not written in a form LogPilot recognizes."
+msgstr ""
+
+#: includes/debug-switch.php:88
+msgid "Nothing was changed: LogPilot could not produce a safe version of wp-config.php."
+msgstr ""
+
+#: includes/debug-switch.php:92
+msgid "Nothing was changed: wp-config.php could not be read."
+msgstr ""
+
+#: includes/debug-switch.php:96
+msgid "Nothing was changed: wp-config.php (or its folder) is not writable."
+msgstr ""
+
+#: includes/debug-switch.php:100
+msgid "Nothing was changed: the new wp-config.php would have a syntax error."
+msgstr ""
+
+#: includes/debug-switch.php:104
+msgid "Nothing was changed: the backup copy could not be created."
+msgstr ""
+
+#: includes/debug-switch.php:108
+msgid "The new wp-config.php could not be written. The original file was kept."
+msgstr ""
+
+#: includes/debug-switch.php:112
+msgid "The written file did not pass the final check, so the original wp-config.php was restored from the backup."
+msgstr ""
+
+#: includes/debug-switch.php:122
+#: includes/download.php:55
+#: includes/email-excerpt.php:80
+#: includes/log-location.php:293
+#: includes/log-location.php:319
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/debug-switch.php:209
+msgid "This usually happens when the file is set to read-only, belongs to another user on the server, or your hosting provider locks it for security. Nothing is wrong with your site."
+msgstr ""
+
+#: includes/debug-switch.php:210
+msgid "Who can help:"
+msgstr ""
+
+#: includes/debug-switch.php:211
+msgid "Your hosting provider’s support: they can change the file permissions or add the lines for you."
+msgstr ""
+
+#: includes/debug-switch.php:212
+msgid "The file manager in your hosting control panel, or an SFTP program: open wp-config.php, add the lines above the line “That’s all, stop editing!”, and save."
+msgstr ""
+
+#: includes/debug-switch.php:213
+msgid "The person who manages the site, if it is not you."
+msgstr ""
+
+#: includes/debug-switch.php:223
+msgid "For the button to work, these three lines must be written like this in wp-config.php: one per line, at the top level of the file (not inside an \"if\" block), above the line \"That's all, stop editing!\", and not defined anywhere else in the file."
+msgstr ""
+
+#: includes/debug-switch.php:225
+msgid "This is the \"off\" state. After you fix the file, reload this page: the button will appear."
+msgstr ""
+
+#: includes/debug-switch.php:227
+msgid "Debug logging is on right now. To turn it off by hand, change true to false in the first two lines."
+msgstr ""
+
+#: includes/debug-switch.php:240
+msgid "Find your error - check your logs"
+msgstr ""
+
+#: includes/debug-switch.php:241
+msgid "Use this box to turn logging on easily, and let WordPress write down what goes wrong."
+msgstr ""
+
+#: includes/debug-switch.php:257
+msgid "Logging is on"
+msgstr ""
+
+#: includes/debug-switch.php:257
+msgid "Logging is off"
+msgstr ""
+
+#: includes/debug-switch.php:261
+msgid "WordPress is writing the problems it meets into a log file, and you can read them below. When you are done, turn logging off: a log can contain private information."
+msgstr ""
+
+#: includes/debug-switch.php:262
+msgid "To find out what is going wrong, turn logging on, repeat the action that causes the problem, then come back here to see what was written down."
+msgstr ""
+
+#: includes/debug-switch.php:264
+msgid "This switch only controls the WordPress log (debug.log). The PHP error log belongs to your server: LogPilot shows it below when it exists, but it cannot turn it on."
+msgstr ""
+
+#: includes/debug-switch.php:270
+msgid "LogPilot could not read wp-config.php, so it cannot change it. To turn logging on or off, these lines have to be set by hand:"
+msgstr ""
+
+#: includes/debug-switch.php:293
+msgid "Warning: debug logging was already on in wp-config.php before LogPilot changed it. If you turn it off here, LogPilot sets it to false."
+msgstr ""
+
+#: includes/debug-switch.php:294
+msgid "Note: debug logging was already on in wp-config.php before LogPilot first changed it. LogPilot has set it to false, so it is off now."
+msgstr ""
+
+#: includes/debug-switch.php:299
+msgid "Warning: debug logging was turned on in wp-config.php, not by LogPilot. If you turn it off here, LogPilot sets WP_DEBUG and WP_DEBUG_LOG to false in that file."
+msgstr ""
+
+#: includes/debug-switch.php:304
+msgid "wp-config.php (or its folder) is not writable, so LogPilot cannot change it. To turn logging on or off, these lines have to be set by hand:"
+msgstr ""
+
+#: includes/debug-switch.php:339
+msgid "Yes, change the setting for me (LogPilot edits wp-config.php and keeps a safety copy)."
+msgstr ""
+
+#: includes/debug-switch.php:340
+msgid "Turn logging off"
+msgstr ""
+
+#: includes/debug-switch.php:340
+msgid "Turn logging on"
+msgstr ""
+
+#: includes/debug-switch.php:343
+msgid "Technical details"
+msgstr ""
+
+#: includes/debug-switch.php:344
+msgid "After the change, these lines will be in wp-config.php:"
+msgstr ""
+
+#: includes/debug-switch.php:345
+msgid "(no debug lines)"
+msgstr ""
+
+#: includes/debug-switch.php:346
+msgid "WP_DEBUG_DISPLAY is always kept off, so errors are never shown on the pages of your site. When you turn logging on, a copy of wp-config.php as it was before is saved as wp-config-logpilot-backup.php in the same folder."
+msgstr ""
+
+#: includes/debug-switch.php:362
+msgid "LogPilot did not change anything: wp-config.php is not written in a form it can safely edit."
+msgstr ""
+
+#: includes/debug-switch.php:367
+msgid "The file has a PHP syntax error."
+msgstr ""
+
+#. translators: %s: constant name
+#: includes/debug-switch.php:372
+#, php-format
+msgid "%s is defined more than once."
+msgstr ""
+
+#: includes/debug-switch.php:377
+msgid "The line \"That's all, stop editing!\" was not found."
+msgstr ""
+
+#. translators: 1: constant name, 2: line number
+#: includes/debug-switch.php:382
+#, php-format
+msgid "%1$s (line %2$s) is inside a condition, shares a line with other code, or has a value other than true or false."
+msgstr ""
+
+#: includes/download.php:130
+msgid "Download this log"
+msgstr ""
+
+#. translators: 1: site name, 2: log name, e.g. "PHP error_log"
+#: includes/email-excerpt.php:112
+#, php-format
+msgid "[%1$s] LogPilot: excerpt of the %2$s"
+msgstr ""
+
+#. translators: 1: number of lines, 2: log name, 3: site address
+#: includes/email-excerpt.php:118
+#, php-format
+msgid ""
+"This is the end of the %2$s (up to %1$d lines), sent from %3$s with LogPilot.\n"
+""
+msgstr ""
+
+#: includes/email-excerpt.php:124
+msgid ""
+"Web addresses, e-mail addresses, file paths and IP addresses were replaced with placeholders.\n"
+""
+msgstr ""
+
+#: includes/email-excerpt.php:125
+msgid ""
+"The text is sent as it is in the log: it may contain personal data.\n"
+""
+msgstr ""
+
+#: includes/email-excerpt.php:167
+msgid "Email an excerpt"
+msgstr ""
+
+#. translators: %s: maximum download size, e.g. "50 MB"
+#: includes/email-excerpt.php:180
+#, php-format
+msgid "This log is large: the download contains only its latest part (up to %s)."
+msgstr ""
+
+#: includes/email-excerpt.php:184
+msgid "The file may contain file paths, user names or other personal data. Keep it private and share it only with people you trust."
+msgstr ""
+
+#: includes/email-excerpt.php:199
+msgid "Sending…"
+msgstr ""
+
+#: includes/email-excerpt.php:204
+msgid "Send it to"
+msgstr ""
+
+#: includes/email-excerpt.php:207
+msgid "How much of the log"
+msgstr ""
+
+#. translators: %d: number of lines
+#: includes/email-excerpt.php:215
+#, php-format
+msgid "The last %d line"
+msgid_plural "The last %d lines"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/email-excerpt.php:220
+msgid "Protect my privacy (recommended):"
+msgstr ""
+
+#: includes/email-excerpt.php:220
+msgid "replace web addresses, e-mail addresses, file paths and IP addresses with placeholders, like [email] or [path]."
+msgstr ""
+
+#: includes/email-excerpt.php:221
+msgid "I understand that a log can contain personal data and I want to send this excerpt to this address."
+msgstr ""
+
+#: includes/email-excerpt.php:223
+msgid "Send the excerpt"
+msgstr ""
+
+#: includes/email-excerpt.php:224
+msgid "The address is used only for this message and is not saved. If your site cannot send e-mail, the message will not arrive."
+msgstr ""
+
+#: includes/log-location.php:252
+msgid "The log is saved outside your website folder, so no web address can reach it."
+msgstr ""
+
+#: includes/log-location.php:256
+msgid "Checked: your server refuses to hand out the files in the log folder."
+msgstr ""
+
+#: includes/log-location.php:260
+msgid "Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules LogPilot writes (this is common on Nginx). Ask your hosting provider to block access to this folder, or move the log outside your website folder."
+msgstr ""
+
+#: includes/log-location.php:264
+msgid "LogPilot could not check whether the log folder is protected (the site did not answer its own test request). The folder has a secret name and protection rules, but this has not been verified."
+msgstr ""
+
+#: includes/log-location.php:270
+msgid "There is no old debug.log in wp-content."
+msgstr ""
+
+#: includes/log-location.php:274
+msgid "Checked: the old wp-content/debug.log cannot be downloaded from a web address."
+msgstr ""
+
+#: includes/log-location.php:278
+msgid "Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it with the button below."
+msgstr ""
+
+#: includes/log-location.php:282
+msgid "LogPilot could not check whether the old wp-content/debug.log can be downloaded."
+msgstr ""
+
+#: includes/log-location.php:363
+msgid "Where your log is saved"
+msgstr ""
+
+#: includes/log-location.php:369
+msgid "In a folder with a secret name outside your website folder. No web address can reach it."
+msgstr ""
+
+#: includes/log-location.php:370
+msgid "In a folder with a secret name inside wp-content, with rules that block access from the web."
+msgstr ""
+
+#: includes/log-location.php:374
+msgid "The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder."
+msgstr ""
+
+#: includes/log-location.php:379
+msgid "When you turn logging on, the log is saved in a folder with a secret name outside your website folder, where no web address can reach it."
+msgstr ""
+
+#: includes/log-location.php:380
+msgid "When you turn logging on, the log is saved in a folder with a secret name inside wp-content, with rules that block access from the web."
+msgstr ""
+
+#: includes/log-location.php:404
+msgid "Check that my logs cannot be downloaded"
+msgstr ""
+
+#. translators: %s: file size, e.g. "1.2 MB"
+#: includes/log-location.php:414
+#, php-format
+msgid "There is an old debug.log in wp-content (%s). That file name is the first thing people try to download."
+msgstr ""
+
+#: includes/log-location.php:421
+msgid "Yes, delete wp-content/debug.log permanently."
+msgstr ""
+
+#: includes/log-location.php:422
+msgid "Delete debug.log"
+msgstr ""
+
+#: logpilot.php:60
+msgid "Fatal error"
+msgstr ""
+
+#: logpilot.php:61
+msgid "PHP stopped running a request, so the page or feature that was running may have failed."
+msgstr ""
+
+#: logpilot.php:65
+msgid "Parse error"
+msgstr ""
+
+#: logpilot.php:66
+msgid "PHP could not read a file because of a syntax mistake in its code."
+msgstr ""
+
+#: logpilot.php:70
+msgid "Database error"
+msgstr ""
+
+#: logpilot.php:71
+msgid "A database query failed or reported a problem."
+msgstr ""
+
+#: logpilot.php:75
+msgid "Warning"
+msgstr ""
+
+#: logpilot.php:76
+msgid "Something went wrong, but PHP kept running. It may or may not affect the site."
+msgstr ""
+
+#: logpilot.php:80
+msgid "Notice"
+msgstr ""
+
+#: logpilot.php:81
+msgid "A minor issue in the code, normally harmless on its own."
+msgstr ""
+
+#: logpilot.php:85
+msgid "Deprecated"
+msgstr ""
+
+#: logpilot.php:86
+msgid "The code uses something that is planned to stop working in a future version."
+msgstr ""
+
+#: logpilot.php:90
+msgid "Unclassified"
+msgstr ""
+
+#: logpilot.php:91
+msgid "LogPilot did not recognize the type of this entry."
+msgstr ""
+
+#: logpilot.php:106
+msgid "Serious problems"
+msgstr ""
+
+#: logpilot.php:107
+msgid "Something failed or stopped running. Look at these first."
+msgstr ""
+
+#: logpilot.php:113
+msgid "Warnings"
+msgstr ""
+
+#: logpilot.php:114
+msgid "Something went wrong, but the site kept running."
+msgstr ""
+
+#: logpilot.php:120
+msgid "Minor notes"
+msgstr ""
+
+#: logpilot.php:121
+msgid "Small remarks, things that will change in future versions, and entries LogPilot could not sort."
+msgstr ""
+
+#: logpilot.php:173
+msgid "WordPress debug.log"
+msgstr ""
+
+#: logpilot.php:174
+msgid "LogPilot protected debug.log"
+msgstr ""
+
+#: logpilot.php:175
+msgid "PHP error_log"
+msgstr ""
+
+#. translators: %s: PHP memory limit, e.g. "64 MB"
+#: logpilot.php:620
+#, php-format
+msgid "There is not enough free PHP memory (limit: %s) to read the log safely, so LogPilot does not load it."
+msgstr ""
+
+#. translators: 1: PHP memory limit, 2: log size that can be loaded, 3: usual log size limit
+#: logpilot.php:626
+#, php-format
+msgid "Your PHP memory limit (%1$s) leaves room for about %2$s of log at a time, less than the usual %3$s. LogPilot lowers its limit so it does not run out of memory."
+msgstr ""
+
+#: logpilot.php:634
+msgid "How to get more memory"
+msgstr ""
+
+#. translators: 1: PHP constant line, 2: file name, 3: comment text found in that file
+#: logpilot.php:639
+#, php-format
+msgid "In the %2$s file, in the site root, add the line %1$s above the line that says \"%3$s\". Take a backup of the file first."
+msgstr ""
+
+#. translators: 1: php.ini setting, 2: file name
+#: logpilot.php:648
+#, php-format
+msgid "Or raise it in the PHP settings: many hosting control panels have a \"PHP settings\" or \"PHP version\" page with a memory limit field. On your own server, set %1$s in %2$s."
+msgstr ""
+
+#: logpilot.php:653
+msgid "If neither works, your hosting plan probably caps the memory. Ask your hosting provider's support to raise the PHP \"memory_limit\" to at least 256M, or ask the person who manages the site."
+msgstr ""
+
+#: logpilot.php:655
+msgid "Changing WP_MEMORY_LIMIT cannot exceed the cap set by the host. Reload this page afterwards to see the new limit."
+msgstr ""
+
+#: logpilot.php:685
+msgid "PHP ran out of memory while running something."
+msgstr ""
+
+#: logpilot.php:686
+msgid "Something took too long to run, so PHP stopped it."
+msgstr ""
+
+#: logpilot.php:687
+msgid "The code tried to use a function that does not exist. This often happens when a plugin or theme is missing, disabled or out of date."
+msgstr ""
+
+#: logpilot.php:688
+msgid "The code tried to use a class that was not found. This often happens when a plugin or theme is missing, disabled or out of date."
+msgstr ""
+
+#: logpilot.php:689
+msgid "The code used a value that was never set."
+msgstr ""
+
+#: logpilot.php:690
+msgid "Something printed text before WordPress could send the page headers."
+msgstr ""
+
+#: logpilot.php:691
+msgid "A plugin or theme loaded its translations too early."
+msgstr ""
+
+#: logpilot.php:692
+msgid "The code tried to open a file that is missing or cannot be read."
+msgstr ""
+
+#: logpilot.php:693
+msgid "The code looked for a database table that does not exist."
+msgstr ""
+
+#: logpilot.php:694
+msgid "The connection to the database was lost."
+msgstr ""
+
+#: logpilot.php:695
+msgid "The database refused the login details it was given."
+msgstr ""
+
+#: logpilot.php:738
+msgid "Out of memory"
+msgstr ""
+
+#: logpilot.php:742
+msgid "Took too long"
+msgstr ""
+
+#: logpilot.php:746
+msgid "Something not set or missing"
+msgstr ""
+
+#: logpilot.php:750
+msgid "Text printed too early"
+msgstr ""
+
+#: logpilot.php:754
+msgid "File not found"
+msgstr ""
+
+#: logpilot.php:758
+msgid "Missing database table"
+msgstr ""
+
+#: logpilot.php:762
+msgid "Translations loaded too early"
+msgstr ""
+
+#: logpilot.php:766
+msgid "Database connection failed"
+msgstr ""
+
+#: logpilot.php:770
+msgid "Method called on an empty value"
+msgstr ""
+
+#: logpilot.php:774
+msgid "Database connection lost"
+msgstr ""
+
+#: logpilot.php:778
+msgid "Database login refused"
+msgstr ""
+
+#: logpilot.php:897
+msgid "WordPress itself (a core file)"
+msgstr ""
+
+#. translators: %s: plugin name
+#: logpilot.php:916
+#, php-format
+msgid "Plugin: %s"
+msgstr ""
+
+#. translators: %s: theme name
+#: logpilot.php:928
+#, php-format
+msgid "Theme: %s"
+msgstr ""
+
+#. translators: %s: must-use plugin folder or file name
+#: logpilot.php:932
+#, php-format
+msgid "Must-use plugin: %s"
+msgstr ""
+
+#. translators: %s: time elapsed, e.g. "5 minutes"
+#: logpilot.php:1026
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#. translators: 1: size of the chosen period, 2: most LogPilot loads at once
+#: logpilot.php:1044
+#, php-format
+msgid "This period is too big to show (about %1$s). The most LogPilot loads at once is %2$s. Choose fewer days."
+msgstr ""
+
+#. translators: 1: size of the chosen period, 2: most LogPilot loads at once
+#: logpilot.php:1051
+#, php-format
+msgid "This period is small enough to show (about %1$s). The most LogPilot loads at once is %2$s."
+msgstr ""
+
+#: logpilot.php:1328
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: logpilot.php:1368
+msgid "Read your WordPress error logs and see what each message means."
+msgstr ""
+
+#: logpilot.php:1378
+msgid "Which log do you want to read?"
+msgstr ""
+
+#: logpilot.php:1378
+msgid "Pick the log you want to look at. You can also download it or send an excerpt by e-mail."
+msgstr ""
+
+#: logpilot.php:1379
+msgid "Log files"
+msgstr ""
+
+#. translators: %s: log name
+#: logpilot.php:1400
+#, php-format
+msgid "%s — cannot be read"
+msgstr ""
+
+#. translators: %s: log name
+#: logpilot.php:1407
+#, php-format
+msgid "%s — not created yet"
+msgstr ""
+
+#: logpilot.php:1416
+msgid "LogPilot protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place."
+msgstr ""
+
+#: logpilot.php:1419
+msgid "A greyed-out log does not exist yet: WordPress and PHP create their logs when the first message is written to them."
+msgstr ""
+
+#. translators: 1: log name, 2: file path
+#: logpilot.php:1428
+#, php-format
+msgid "%1$s (%2$s): the file exists, but PHP cannot read it. Check its permissions."
+msgstr ""
+
+#: logpilot.php:1441
+msgid "Nothing to read yet"
+msgstr ""
+
+#: logpilot.php:1444
+msgid "Logging is on, but no log file has been created yet. Repeat the action that causes the problem, then reload this page."
+msgstr ""
+
+#: logpilot.php:1445
+msgid "No log file exists yet. Turn logging on in the box above, repeat the action that causes the problem, then reload this page."
+msgstr ""
+
+#: logpilot.php:1447
+msgid "WordPress only writes debug.log while logging is on, and PHP only writes its own log if your server is set up to do so."
+msgstr ""
+
+#: logpilot.php:1456
+#: logpilot.php:1654
+#: logpilot.php:1669
+#: logpilot.php:1676
+msgid "The log file could not be read."
+msgstr ""
+
+#. translators: %s: log name, e.g. "PHP error_log"
+#: logpilot.php:1506
+#, php-format
+msgid "You are reading: %s"
+msgstr ""
+
+#: logpilot.php:1510
+msgid "This is WordPress’s own debug.log, saved by LogPilot in a protected folder."
+msgstr ""
+
+#. translators: 1: file size, 2: last modified date and time
+#: logpilot.php:1515
+#, php-format
+msgid "%1$s · last modified %2$s"
+msgstr ""
+
+#: logpilot.php:1551
+msgid "Which period do you want to see?"
+msgstr ""
+
+#: logpilot.php:1551
+msgid "Choose which days of the log you want to look at."
+msgstr ""
+
+#: logpilot.php:1557
+msgid "All viewable entries"
+msgstr ""
+
+#: logpilot.php:1562
+msgid "Last day in the log"
+msgstr ""
+
+#: logpilot.php:1573
+msgid "Last 7 days in the log"
+msgstr ""
+
+#: logpilot.php:1585
+msgid "Quick choices"
+msgstr ""
+
+#: logpilot.php:1590
+msgid "Click again to go back to all viewable entries"
+msgstr ""
+
+#: logpilot.php:1596
+msgid "Pick your own dates"
+msgstr ""
+
+#: logpilot.php:1600
+msgid "From"
+msgstr ""
+
+#: logpilot.php:1602
+msgid "To"
+msgstr ""
+
+#: logpilot.php:1604
+msgid "Show these dates"
+msgstr ""
+
+#: logpilot.php:1607
+msgid "Clear dates"
+msgstr ""
+
+#. translators: 1: first date in the log, 2: last date in the log
+#: logpilot.php:1614
+#, php-format
+msgid "This log covers %1$s to %2$s."
+msgstr ""
+
+#: logpilot.php:1621
+msgid "Why can't I load everything at once?"
+msgstr ""
+
+#: logpilot.php:1622
+msgid "Very large logs can make the page slow or run out of memory, so LogPilot only loads a limited amount at a time. Dates are the ones written in the log (usually UTC), not your site time."
+msgstr ""
+
+#. translators: %s: size limit, e.g. "2 MB"
+#: logpilot.php:1626
+#, php-format
+msgid "A period can load at most %s of log."
+msgstr ""
+
+#. translators: 1: average log growth per day, 2: size limit
+#: logpilot.php:1633
+#, php-format
+msgid "On average it grows about %1$s per day, more than the %2$s limit: some single days may be too large to load."
+msgstr ""
+
+#. translators: 1: average log growth per day, 2: number of days, 3: size limit
+#: logpilot.php:1640
+#, php-format
+msgid "On average it grows about %1$s per day, so ranges of about %2$s days or less stay under the %3$s limit."
+msgstr ""
+
+#: logpilot.php:1648
+msgid "This log has no dates LogPilot can read, so only its latest part can be shown."
+msgstr ""
+
+#. translators: %s: size of the whole log file
+#: logpilot.php:1688
+#, php-format
+msgid "This log is large (%s), so only its most recent part is shown. Pick a period above to look at older days."
+msgstr ""
+
+#: logpilot.php:1698
+msgid "There are no entries in this range."
+msgstr ""
+
+#: logpilot.php:1698
+msgid "The log file is empty: nothing has been recorded in it yet."
+msgstr ""
+
+#. translators: %s: number of serious problems
+#: logpilot.php:1810
+#, php-format
+msgid "%s serious problem"
+msgid_plural "%s serious problems"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of warnings
+#: logpilot.php:1813
+#, php-format
+msgid "%s warning"
+msgid_plural "%s warnings"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of minor notes
+#: logpilot.php:1816
+#, php-format
+msgid "%s minor note"
+msgid_plural "%s minor notes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: logpilot.php:1821
+msgid "Which entries do you want to see?"
+msgstr ""
+
+#: logpilot.php:1821
+msgid "Narrow down the list below by type, by message or by where it comes from."
+msgstr ""
+
+#. translators: %s: counts, e.g. "2 serious problems, 14 warnings, 1,402 minor notes"
+#: logpilot.php:1826
+#, php-format
+msgid "In the part of the log shown: %s."
+msgstr ""
+
+#: logpilot.php:1877
+msgid "Copy a summary for support"
+msgstr ""
+
+#: logpilot.php:1878
+msgid "Asking someone for help? Copy one of these summaries and paste it into your message."
+msgstr ""
+
+#: logpilot.php:1881
+msgid "Safe summary (recommended)"
+msgstr ""
+
+#: logpilot.php:1882
+msgid "Counts, versions and the most repeated messages. File paths, web addresses, e-mail addresses and IP addresses are removed automatically, but please read it before you share it."
+msgstr ""
+
+#: logpilot.php:1884
+#: logpilot.php:1889
+#: logpilot.php:2283
+#: logpilot.php:2284
+msgid "Copy"
+msgstr ""
+
+#: logpilot.php:1884
+#: logpilot.php:1889
+#: logpilot.php:2283
+msgid "Copied"
+msgstr ""
+
+#: logpilot.php:1884
+#: logpilot.php:1889
+#: logpilot.php:2283
+msgid "Press Ctrl+C to copy"
+msgstr ""
+
+#: logpilot.php:1886
+msgid "Complete summary"
+msgstr ""
+
+#: logpilot.php:1887
+msgid "Includes personal data."
+msgstr ""
+
+#: logpilot.php:1887
+msgid "It adds the latest entries exactly as written in the log. They can contain file paths, web addresses, e-mail addresses or IP addresses. Share it only with people you trust."
+msgstr ""
+
+#: logpilot.php:1913
+msgid "Filter by exact type"
+msgstr ""
+
+#: logpilot.php:1946
+msgid "Search in “What happened”"
+msgstr ""
+
+#: logpilot.php:1947
+msgid "e.g. memory, undefined, table"
+msgstr ""
+
+#: logpilot.php:1948
+msgid "Search in “Reported in”"
+msgstr ""
+
+#: logpilot.php:1949
+msgid "e.g. a plugin or theme name"
+msgstr ""
+
+#: logpilot.php:1955
+msgid "Search"
+msgstr ""
+
+#: logpilot.php:1956
+msgid "You can use one field or both. They only search the part of the log loaded above."
+msgstr ""
+
+#. translators: %s: keyword that will be searched for
+#: logpilot.php:2061
+msgid "Click again to remove this search"
+msgstr ""
+
+#. translators: %s: keyword that will be searched for
+#: logpilot.php:2061
+#, php-format
+msgid "Search “What happened” for “%s”"
+msgstr ""
+
+#: logpilot.php:2087
+msgid "Most repeated messages (search “What happened”):"
+msgstr ""
+
+#: logpilot.php:2088
+msgid "Known problems (search “What happened”):"
+msgstr ""
+
+#. translators: %s: text searched for
+#: logpilot.php:2093
+#, php-format
+msgid "what happened: “%s”"
+msgstr ""
+
+#. translators: %s: text searched for in the "Reported in" column
+#: logpilot.php:2109
+#, php-format
+msgid "reported in: “%s”"
+msgstr ""
+
+#: logpilot.php:2117
+msgid "one repeated message"
+msgstr ""
+
+#. translators: 1: active filters, e.g. "Warnings, Plugin: Akismet", 2: number of matching entries
+#: logpilot.php:2136
+#, php-format
+msgid "Showing only: %1$s (%2$s entries)."
+msgstr ""
+
+#: logpilot.php:2151
+msgid "Show all"
+msgstr ""
+
+#: logpilot.php:2155
+msgid "Nothing found in the part of the log shown. Try another period or clear the filters."
+msgstr ""
+
+#: logpilot.php:2201
+msgid "Every entry of this message is listed."
+msgstr ""
+
+#: logpilot.php:2202
+#: logpilot.php:2205
+msgid "Group identical messages"
+msgstr ""
+
+#: logpilot.php:2204
+msgid "Every entry is listed."
+msgstr ""
+
+#: logpilot.php:2207
+msgid "Identical messages are shown once, with how many times they appear."
+msgstr ""
+
+#: logpilot.php:2208
+msgid "Show every entry"
+msgstr ""
+
+#: logpilot.php:2215
+msgid "Level"
+msgstr ""
+
+#: logpilot.php:2216
+msgid "When"
+msgstr ""
+
+#: logpilot.php:2217
+msgid "What happened"
+msgstr ""
+
+#: logpilot.php:2218
+msgid "Reported in"
+msgstr ""
+
+#. translators: %s: date and time of the first occurrence
+#: logpilot.php:2241
+#, php-format
+msgid "First seen: %s"
+msgstr ""
+
+#: logpilot.php:2261
+msgid "Click again to remove this filter"
+msgstr ""
+
+#: logpilot.php:2261
+msgid "Show only the entries from this source"
+msgstr ""
+
+#: logpilot.php:2266
+msgid "Several sources"
+msgstr ""
+
+#. translators: %s: number of times the same message appears
+#: logpilot.php:2274
+#, php-format
+msgid "Repeated %s time"
+msgid_plural "Repeated %s times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: logpilot.php:2275
+msgid "See each entry"
+msgstr ""
+
+#: logpilot.php:2280
+msgid "Show the technical text"
+msgstr ""
+
+#: logpilot.php:2287
+msgid "Not identified"
+msgstr ""
+
+#. translators: 1: first row number, 2: last row number, 3: total different messages
+#: logpilot.php:2318
+#, php-format
+msgid "Showing %1$s–%2$s of %3$s different messages"
+msgstr ""
+
+#. translators: 1: first entry number, 2: last entry number, 3: total entries
+#: logpilot.php:2320
+#, php-format
+msgid "Showing %1$s–%2$s of %3$s entries"
+msgstr ""
+
+#: logpilot.php:2333
+msgid "‹ Newer"
+msgstr ""
+
+#: logpilot.php:2334
+msgid "Older ›"
+msgstr ""
