@@ -87,3 +87,7 @@ Modificati: `.gitignore`, `CLAUDE.md`, `Plugin/logpilot/logpilot.php`, `Plugin/l
 ## Prova di disinstallazione con il debug acceso (07/11)
 - Provato sul sito live, volutamente senza spegnere il debug: la cartella dei log sparisce, le tre righe in `wp-config.php` restano (`WP_DEBUG` true, `WP_DEBUG_LOG` con il percorso della cartella che non c'è più, `WP_DEBUG_DISPLAY` false). Come previsto dalla scelta del 05/11 (la disinstallazione non modifica `wp-config.php`); l'utente le ha rimesse a mano.
 - Valutata e scartata per ora l'alternativa di spegnerle da `uninstall.php` con il motore sicuro. Il `readme.txt` ora dice la conseguenza in chiaro (WordPress continua a fare debug senza un file di log finché `WP_DEBUG` e `WP_DEBUG_LOG` non sono messi a false).
+
+## Pulsante grigio del log di PHP (07/11)
+- Richiesta dell'utente: il pulsante "PHP error_log" deve restare nell'elenco anche quando non c'è un file (su Aruba, `/dev/stderr`), grigio e con la spiegazione, altrimenti con un solo pulsante la domanda "Which log do you want to read?" perde senso.
+- **Fatto:** `e3p_logpilot_get_log_files()` aggiunge `php` con stato `unavailable` (path vuoto) quando `error_log` è flusso, `syslog` o vuoto; il pulsante dice "PHP error_log — not available"; la nota sotto comincia con "PHP error_log is not available: …"; la frase "greyed-out log" ora dice "A log marked “not created yet” does not exist". Con `error_log` su un file non ancora creato resta "not created yet". Provato per i quattro casi. `.pot` rigenerato.

@@ -174,13 +174,13 @@ function e3p_logpilot_render_php_log_note( $target ) {
     if ( 'stream' === $target['kind'] ) {
         $text = sprintf(
             /* translators: %s: where PHP sends its errors, e.g. /dev/stderr */
-            __( 'PHP sends its errors to the server’s own log (%s), so there is no PHP error log file for LogPilot to read.', 'logpilot' ),
+            __( 'PHP error_log is not available: PHP sends its errors to the server’s own log (%s), so there is no file for LogPilot to read.', 'logpilot' ),
             $target['path']
         );
     } elseif ( 'syslog' === $target['kind'] ) {
-        $text = __( 'PHP sends its errors to the system log (syslog), so there is no PHP error log file for LogPilot to read.', 'logpilot' );
+        $text = __( 'PHP error_log is not available: PHP sends its errors to the system log (syslog), so there is no file for LogPilot to read.', 'logpilot' );
     } else {
-        $text = __( 'PHP is not set to write its errors to a file, so there is no PHP error log for LogPilot to read.', 'logpilot' );
+        $text = __( 'PHP error_log is not available: PHP is not set to write its errors to a file.', 'logpilot' );
     }
     echo '<p class="description">' . esc_html( $text . ' ' . __( 'The WordPress debug.log still records the errors WordPress can see.', 'logpilot' ) ) . '</p>';
     echo '<details class="e3p-logpilot-details"><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How can I get a PHP error log?', 'logpilot' ) . '</summary>';
@@ -260,6 +260,15 @@ function e3p_logpilot_get_log_files() {
             'label'  => $labels[ $key ],
             'path'   => $real,
             'status' => $status,
+        );
+    }
+
+    if ( 'file' !== $php_target['kind'] ) {
+        // Il log di PHP non è un file da leggere: resta nell'elenco, grigio, perché la scelta "quale log" abbia senso.
+        $files['php'] = array(
+            'label'  => $labels['php'],
+            'path'   => '',
+            'status' => 'unavailable',
         );
     }
 
@@ -1455,7 +1464,13 @@ function e3p_logpilot_render_page() {
                 ) . '"' . ( $is_shown ? ' aria-current="true"' : '' ) . '>' . esc_html( $log_text ) . '</a>';
                 continue;
             }
-            if ( 'unreadable' === $log_info['status'] ) {
+            if ( 'unavailable' === $log_info['status'] ) {
+                $log_text = sprintf(
+                    /* translators: %s: log name */
+                    __( '%s — not available', 'logpilot' ),
+                    $log_info['label']
+                );
+            } elseif ( 'unreadable' === $log_info['status'] ) {
                 $log_text = sprintf(
                     /* translators: %s: log name */
                     __( '%s — cannot be read', 'logpilot' ),
@@ -1477,7 +1492,7 @@ function e3p_logpilot_render_page() {
             echo '<p class="description">' . esc_html__( 'LogPilot protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place.', 'logpilot' ) . '</p>';
         }
         if ( $has_missing ) {
-            echo '<p class="description">' . esc_html__( 'A greyed-out log does not exist yet: WordPress and PHP create their logs when the first message is written to them.', 'logpilot' ) . '</p>';
+            echo '<p class="description">' . esc_html__( 'A log marked “not created yet” does not exist: WordPress and PHP create their logs when the first message is written to them.', 'logpilot' ) . '</p>';
         }
 
         // Il log di PHP non è un file da leggere (flusso del server, syslog o niente): si dice perché e come averne uno.
