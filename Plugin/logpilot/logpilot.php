@@ -166,23 +166,30 @@ function e3p_logpilot_php_log_target() {
 }
 
 /**
- * Nota sul log di PHP quando non c'è un file da leggere: dice dove vanno gli errori e come averne uno.
+ * Frase breve che dice perché il log di PHP non è disponibile (accanto al suo pulsante grigio).
  *
  * @param array $target Risultato di e3p_logpilot_php_log_target().
+ * @return string
  */
-function e3p_logpilot_render_php_log_note( $target ) {
+function e3p_logpilot_php_log_reason( $target ) {
     if ( 'stream' === $target['kind'] ) {
         $text = sprintf(
             /* translators: %s: where PHP sends its errors, e.g. /dev/stderr */
-            __( 'PHP error_log is not available: PHP sends its errors to the server’s own log (%s), so there is no file for LogPilot to read.', 'logpilot' ),
+            __( 'PHP sends its errors to the server’s own log (%s): there is no file to read.', 'logpilot' ),
             $target['path']
         );
     } elseif ( 'syslog' === $target['kind'] ) {
-        $text = __( 'PHP error_log is not available: PHP sends its errors to the system log (syslog), so there is no file for LogPilot to read.', 'logpilot' );
+        $text = __( 'PHP sends its errors to the system log (syslog): there is no file to read.', 'logpilot' );
     } else {
-        $text = __( 'PHP error_log is not available: PHP is not set to write its errors to a file.', 'logpilot' );
+        $text = __( 'PHP is not set to write its errors to a file: there is no file to read.', 'logpilot' );
     }
-    echo '<p class="description">' . esc_html( $text . ' ' . __( 'The WordPress debug.log still records the errors WordPress can see.', 'logpilot' ) ) . '</p>';
+    return $text . ' ' . __( 'The WordPress debug.log still records the errors WordPress can see.', 'logpilot' );
+}
+
+/**
+ * Dettaglio apribile "come ottengo un log di PHP", sotto i pulsanti dei log quando quello di PHP non è un file.
+ */
+function e3p_logpilot_render_php_log_help() {
     echo '<details class="e3p-logpilot-details"><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How can I get a PHP error log?', 'logpilot' ) . '</summary>';
     echo '<p class="description">' . esc_html__( 'If your hosting lets you change PHP settings (in the hosting panel, in php.ini or in a .user.ini file), set these two lines, with a path that PHP can write to and that is outside your website folder. Some hosts do not allow it: ask them.', 'logpilot' ) . '</p>';
     echo '<pre class="e3p-logpilot-code">' . esc_html( "log_errors = On
@@ -1154,6 +1161,8 @@ function e3p_logpilot_enqueue_styles( $hook_suffix ) {
 .e3p-logpilot-problems{margin:12px 0;padding:8px 12px;list-style:none;background:#fcf3e0;border:1px solid #dcc9a0;border-left:4px solid #b26200;color:#1d2327}
 .e3p-logpilot-problems li{margin:4px 0}
 .e3p-logpilot-problem-line{display:inline-block;margin-top:4px;word-break:break-all}
+.e3p-logpilot-why{display:flex;align-items:flex-start;gap:6px;margin:8px 0 0;color:#50575e}
+.e3p-logpilot-why .dashicons{flex:none;width:18px;height:18px;font-size:18px;color:#b26200}
 .e3p-logpilot-problems ol{list-style:decimal;margin:8px 0 8px 20px}
 .e3p-logpilot-problems summary{cursor:pointer;font-weight:600}
 .e3p-logpilot-problems .dashicons{color:#b26200}
@@ -1487,18 +1496,22 @@ function e3p_logpilot_render_page() {
             echo '<span class="button e3p-logpilot-log-off" aria-disabled="true">' . esc_html( $log_text ) . '</span>';
         }
         echo '</div>';
+        // Il log di PHP non è un file da leggere (flusso del server, syslog o niente): subito sotto i pulsanti si dice perché.
+        $php_target = e3p_logpilot_php_log_target();
+        if ( 'file' !== $php_target['kind'] ) {
+            echo '<p class="e3p-logpilot-why"><span class="dashicons dashicons-info-outline" aria-hidden="true"></span><span>' . esc_html( e3p_logpilot_php_log_reason( $php_target ) ) . '</span></p>';
+        }
         // Il log di LogPilot è il debug.log di WordPress: lo si dice, perché da solo il nome potrebbe far pensare a un log del plugin.
         if ( isset( $all_files['protected'] ) ) {
             echo '<p class="description">' . esc_html__( 'LogPilot protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place.', 'logpilot' ) . '</p>';
         }
         if ( $has_missing ) {
-            echo '<p class="description">' . esc_html__( 'A log marked “not created yet” does not exist: WordPress and PHP create their logs when the first message is written to them.', 'logpilot' ) . '</p>';
+            echo '<p class="description">' . esc_html__( 'A log marked “not created yet” does not exist: WordPress and PHP (if available) create their logs when the first message is written to them.', 'logpilot' ) . '</p>';
         }
 
-        // Il log di PHP non è un file da leggere (flusso del server, syslog o niente): si dice perché e come averne uno.
-        $php_target = e3p_logpilot_php_log_target();
+        // Come ottenere un log di PHP, se non c'è un file da leggere.
         if ( 'file' !== $php_target['kind'] ) {
-            e3p_logpilot_render_php_log_note( $php_target );
+            e3p_logpilot_render_php_log_help();
         }
 
         // Un log che esiste ma PHP non legge: si dice come rimediare.
