@@ -234,7 +234,7 @@ function e3p_logpilot_read_tail( $path, $max_bytes ) {
         return false;
     }
 
-    $handle = fopen( $path, 'rb' );
+    $handle = fopen( $path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
     if ( false === $handle ) {
         return false;
     }
@@ -244,7 +244,7 @@ function e3p_logpilot_read_tail( $path, $max_bytes ) {
         fseek( $handle, -$max_bytes, SEEK_END );
     }
     $content = $size > 0 ? stream_get_contents( $handle ) : '';
-    fclose( $handle );
+    fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
 
     if ( false === $content ) {
         return false;
@@ -425,7 +425,7 @@ function e3p_logpilot_get_date_bounds( $path, $size ) {
     if ( $size <= 0 ) {
         return null;
     }
-    $handle = fopen( $path, 'rb' );
+    $handle = fopen( $path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
     if ( false === $handle ) {
         return null;
     }
@@ -446,7 +446,7 @@ function e3p_logpilot_get_date_bounds( $path, $size ) {
     $last = null;
     fseek( $handle, max( 0, $size - 65536 ) );
     $chunk = stream_get_contents( $handle );
-    fclose( $handle );
+    fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
 
     if ( is_string( $chunk ) && '' !== $chunk ) {
         $lines = array_reverse( preg_split( '/\r\n|\r|\n/', $chunk ) );
@@ -543,21 +543,21 @@ function e3p_logpilot_find_offset( $handle, $size, $date ) {
  * @return array{start: int, end: int}|false
  */
 function e3p_logpilot_range_offsets( $path, $size, $from, $to ) {
-    $handle = fopen( $path, 'rb' );
+    $handle = fopen( $path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
     if ( false === $handle ) {
         return false;
     }
 
     $next = date_create( $to, new DateTimeZone( 'UTC' ) );
     if ( false === $next ) {
-        fclose( $handle );
+        fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
         return false;
     }
     $next = $next->modify( '+1 day' )->format( 'Y-m-d' );
 
     $start = e3p_logpilot_find_offset( $handle, $size, $from );
     $end   = e3p_logpilot_find_offset( $handle, $size, $next );
-    fclose( $handle );
+    fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
 
     return array(
         'start' => $start,
@@ -577,12 +577,12 @@ function e3p_logpilot_read_bytes( $path, $start, $length ) {
     if ( $length <= 0 ) {
         return '';
     }
-    $handle = fopen( $path, 'rb' );
+    $handle = fopen( $path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
     if ( false === $handle ) {
         return false;
     }
     $content = stream_get_contents( $handle, $length, $start );
-    fclose( $handle );
+    fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Reads only the end or a part of a log that can be hundreds of MB; WP_Filesystem would load it whole into memory.
     return $content;
 }
 
@@ -1724,7 +1724,7 @@ function e3p_logpilot_render_page() {
             $group_counts[ $group_key ] += $counts[ $group_level ];
         }
     }
-    $group_filter = isset( $_GET['group'] ) ? sanitize_key( wp_unslash( $_GET['group'] ) ) : '';
+    $group_filter = isset( $_GET['group'] ) ? sanitize_key( wp_unslash( $_GET['group'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only filter taken from the address; nothing is written.
     if ( '' !== $filter || ! isset( $group_counts[ $group_filter ] ) || 0 === $group_counts[ $group_filter ] ) {
         $group_filter = '';
     }

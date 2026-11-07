@@ -456,7 +456,7 @@ function e3p_logpilot_config_write( $path, $new_src, $make_backup = true ) {
     if ( false === $old ) {
         return 'read';
     }
-    if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) {
+    if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
         return 'not_writable';
     }
     if ( ! e3p_logpilot_config_syntax_ok( $new_src ) ) {
@@ -471,18 +471,18 @@ function e3p_logpilot_config_write( $path, $new_src, $make_backup = true ) {
     $bytes = file_put_contents( $temp, $new_src, LOCK_EX );
     if ( strlen( $new_src ) !== $bytes ) {
         if ( file_exists( $temp ) ) {
-            unlink( $temp );
+            wp_delete_file( $temp );
         }
         return 'write';
     }
     $perms = fileperms( $path );
     if ( false !== $perms ) {
-        chmod( $temp, $perms & 0777 );
+        chmod( $temp, $perms & 0777 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod -- Keeps the permissions of wp-config.php on its replacement.
     }
 
-    if ( ! rename( $temp, $path ) ) {
+    if ( ! rename( $temp, $path ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- Atomic replacement of wp-config.php: the new file is complete or nothing changes.
         if ( file_exists( $temp ) ) {
-            unlink( $temp );
+            wp_delete_file( $temp );
         }
         return 'write';
     }

@@ -64,7 +64,7 @@ function e3p_logpilot_handle_download() {
 
 	$path   = $files[ $key ]['path'];
 	$size   = filesize( $path );
-	$handle = ( false !== $size && $size > 0 ) ? fopen( $path, 'rb' ) : false;
+	$handle = ( false !== $size && $size > 0 ) ? fopen( $path, 'rb' ) : false; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streams the log in blocks; WP_Filesystem would load it whole into memory.
 	if ( false === $handle ) {
 		e3p_logpilot_download_redirect( 'download_failed', $key );
 	}
@@ -104,7 +104,7 @@ function e3p_logpilot_handle_download() {
 	// Si leggono esattamente i byte annunciati: il log può crescere mentre lo si scarica.
 	$left = $length;
 	while ( $left > 0 && ! feof( $handle ) ) {
-		$chunk = fread( $handle, min( 65536, $left ) );
+		$chunk = fread( $handle, min( 65536, $left ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread -- Streams the log in blocks; WP_Filesystem would load it whole into memory.
 		if ( false === $chunk || '' === $chunk ) {
 			break;
 		}
@@ -112,7 +112,7 @@ function e3p_logpilot_handle_download() {
 		$left -= strlen( $chunk );
 		flush();
 	}
-	fclose( $handle );
+	fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Streams the log in blocks; WP_Filesystem would load it whole into memory.
 	exit;
 }
 add_action( 'admin_post_e3p_logpilot_download', 'e3p_logpilot_handle_download' );

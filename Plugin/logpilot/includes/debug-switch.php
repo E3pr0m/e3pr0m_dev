@@ -300,7 +300,7 @@ function e3p_logpilot_render_debug_section() {
         echo '</p></div>';
     }
 
-    if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) {
+    if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
         echo '<p>' . esc_html__( 'wp-config.php (or its folder) is not writable, so LogPilot cannot change it. To turn logging on or off, these lines have to be set by hand:', 'logpilot' ) . '</p>';
         echo '<pre class="e3p-logpilot-code">' . esc_html( e3p_logpilot_manual_lines( ! $active ) ) . '</pre>';
         e3p_logpilot_render_manual_help();

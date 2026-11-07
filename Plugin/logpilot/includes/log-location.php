@@ -62,7 +62,7 @@ function e3p_logpilot_plan_log_location( $force_inside = false ) {
 
     // Le @ evitano gli avvisi di open_basedir quando la cartella sopra non è accessibile a PHP.
     // phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
-    $parent_ok = ! $force_inside && '' !== $parent && '.' !== $parent && @is_dir( $parent ) && @is_writable( $parent );
+    $parent_ok = ! $force_inside && '' !== $parent && '.' !== $parent && @is_dir( $parent ) && @is_writable( $parent ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
     // phpcs:enable WordPress.PHP.NoSilencedErrors.Discouraged
 
     if ( $parent_ok && ! e3p_logpilot_inside_docroot( $parent ) ) {
@@ -88,7 +88,7 @@ function e3p_logpilot_plan_log_location( $force_inside = false ) {
  * @return bool True se è tutto a posto.
  */
 function e3p_logpilot_prepare_log_location( $loc ) {
-    if ( ! wp_mkdir_p( $loc['dir'] ) || ! is_writable( $loc['dir'] ) ) {
+    if ( ! wp_mkdir_p( $loc['dir'] ) || ! is_writable( $loc['dir'] ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
         return false;
     }
 
@@ -159,7 +159,7 @@ function e3p_logpilot_http_probe( $url, $method = 'GET' ) {
             'method'      => $method,
             'timeout'     => 4,
             'redirection' => 0,
-            'sslverify'   => apply_filters( 'https_local_ssl_verify', false ),
+            'sslverify'   => apply_filters( 'https_local_ssl_verify', false ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress filter, applied on purpose for the loopback request to this same site.
         )
     );
     if ( is_wp_error( $response ) ) {
@@ -201,7 +201,7 @@ function e3p_logpilot_run_checks( $loc ) {
     // e nessun "403" o "404" può essere interpretato.
     $marker  = 'e3p-logpilot-probe-' . wp_generate_password( 12, false );
     $control = wp_normalize_path( WP_CONTENT_DIR ) . '/e3p-logpilot-control-' . wp_generate_password( 8, false ) . '.txt';
-    if ( false === file_put_contents( $control, $marker ) ) {
+    if ( false === file_put_contents( $control, $marker ) ) { // phpcs:ignore PluginCheck.CodeAnalysis.WriteFile.PluginDirectoryWrite -- Temporary check file inside the log folder in wp-content (not in the plugin folder), deleted right after the test.
         return $result;
     }
     $answer = e3p_logpilot_http_probe( content_url( '/' . basename( $control ) ) );

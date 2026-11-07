@@ -15,7 +15,7 @@ wp_clear_scheduled_hook( 'e3p_logpilot_remind' );
 foreach ( array( ABSPATH, dirname( ABSPATH ) . '/' ) as $e3p_logpilot_dir ) {
     $e3p_logpilot_backup = $e3p_logpilot_dir . 'wp-config-logpilot-backup.php';
     if ( is_file( $e3p_logpilot_backup ) ) {
-        unlink( $e3p_logpilot_backup );
+        wp_delete_file( $e3p_logpilot_backup );
     }
 }
 
@@ -32,8 +32,9 @@ foreach ( array( dirname( untrailingslashit( wp_normalize_path( ABSPATH ) ) ), w
     foreach ( false === $e3p_logpilot_items ? array() : $e3p_logpilot_items as $e3p_logpilot_item ) {
         $e3p_logpilot_path = $e3p_logpilot_logdir . '/' . $e3p_logpilot_item;
         if ( '.' !== $e3p_logpilot_item && '..' !== $e3p_logpilot_item && is_file( $e3p_logpilot_path ) ) {
-            unlink( $e3p_logpilot_path );
+            wp_delete_file( $e3p_logpilot_path );
         }
     }
-    rmdir( $e3p_logpilot_logdir ); // Solo se è vuota: se dentro c'è altro, resta.
+    // Solo se è vuota: se dentro c'è altro, resta.
+    rmdir( $e3p_logpilot_logdir ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- Removes the log folder created by this plugin.
 }
