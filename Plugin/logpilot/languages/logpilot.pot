@@ -9,15 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-07T16:40:51+00:00\n"
+"POT-Creation-Date: 2026-11-07T17:21:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: logpilot\n"
 
 #. Plugin Name of the plugin
 #: logpilot.php
-#: logpilot.php:665
-#: logpilot.php:666
+#: logpilot.php:725
+#: logpilot.php:726
 msgid "LogPilot"
 msgstr ""
 
@@ -664,367 +664,393 @@ msgstr ""
 msgid "Small remarks, things that will change in future versions, and entries LogPilot could not sort."
 msgstr ""
 
-#: logpilot.php:173
+#. translators: %s: where PHP sends its errors, e.g. /dev/stderr
+#: logpilot.php:177
+#, php-format
+msgid "PHP sends its errors to the server’s own log (%s), so there is no PHP error log file for LogPilot to read."
+msgstr ""
+
+#: logpilot.php:181
+msgid "PHP sends its errors to the system log (syslog), so there is no PHP error log file for LogPilot to read."
+msgstr ""
+
+#: logpilot.php:183
+msgid "PHP is not set to write its errors to a file, so there is no PHP error log for LogPilot to read."
+msgstr ""
+
+#: logpilot.php:185
+msgid "The WordPress debug.log still records the errors WordPress can see."
+msgstr ""
+
+#: logpilot.php:186
+msgid "How can I get a PHP error log?"
+msgstr ""
+
+#: logpilot.php:187
+msgid "If your hosting lets you change PHP settings (in the hosting panel, in php.ini or in a .user.ini file), set these two lines, with a path that PHP can write to and that is outside your website folder. Some hosts do not allow it: ask them."
+msgstr ""
+
+#: logpilot.php:233
 msgid "WordPress debug.log"
 msgstr ""
 
-#: logpilot.php:174
+#: logpilot.php:234
 msgid "LogPilot protected debug.log"
 msgstr ""
 
-#: logpilot.php:175
+#: logpilot.php:235
 msgid "PHP error_log"
 msgstr ""
 
 #. translators: %s: PHP memory limit, e.g. "64 MB"
-#: logpilot.php:620
+#: logpilot.php:680
 #, php-format
 msgid "There is not enough free PHP memory (limit: %s) to read the log safely, so LogPilot does not load it."
 msgstr ""
 
 #. translators: 1: PHP memory limit, 2: log size that can be loaded, 3: usual log size limit
-#: logpilot.php:626
+#: logpilot.php:686
 #, php-format
 msgid "Your PHP memory limit (%1$s) leaves room for about %2$s of log at a time, less than the usual %3$s. LogPilot lowers its limit so it does not run out of memory."
 msgstr ""
 
-#: logpilot.php:634
+#: logpilot.php:694
 msgid "How to get more memory"
 msgstr ""
 
 #. translators: 1: PHP constant line, 2: file name, 3: comment text found in that file
-#: logpilot.php:639
+#: logpilot.php:699
 #, php-format
 msgid "In the %2$s file, in the site root, add the line %1$s above the line that says \"%3$s\". Take a backup of the file first."
 msgstr ""
 
 #. translators: 1: php.ini setting, 2: file name
-#: logpilot.php:648
+#: logpilot.php:708
 #, php-format
 msgid "Or raise it in the PHP settings: many hosting control panels have a \"PHP settings\" or \"PHP version\" page with a memory limit field. On your own server, set %1$s in %2$s."
 msgstr ""
 
-#: logpilot.php:653
+#: logpilot.php:713
 msgid "If neither works, your hosting plan probably caps the memory. Ask your hosting provider's support to raise the PHP \"memory_limit\" to at least 256M, or ask the person who manages the site."
 msgstr ""
 
-#: logpilot.php:655
+#: logpilot.php:715
 msgid "Changing WP_MEMORY_LIMIT cannot exceed the cap set by the host. Reload this page afterwards to see the new limit."
 msgstr ""
 
-#: logpilot.php:685
+#: logpilot.php:745
 msgid "PHP ran out of memory while running something."
 msgstr ""
 
-#: logpilot.php:686
+#: logpilot.php:746
 msgid "Something took too long to run, so PHP stopped it."
 msgstr ""
 
-#: logpilot.php:687
+#: logpilot.php:747
 msgid "The code tried to use a function that does not exist. This often happens when a plugin or theme is missing, disabled or out of date."
 msgstr ""
 
-#: logpilot.php:688
+#: logpilot.php:748
 msgid "The code tried to use a class that was not found. This often happens when a plugin or theme is missing, disabled or out of date."
 msgstr ""
 
-#: logpilot.php:689
+#: logpilot.php:749
 msgid "The code used a value that was never set."
 msgstr ""
 
-#: logpilot.php:690
+#: logpilot.php:750
 msgid "Something printed text before WordPress could send the page headers."
 msgstr ""
 
-#: logpilot.php:691
+#: logpilot.php:751
 msgid "A plugin or theme loaded its translations too early."
 msgstr ""
 
-#: logpilot.php:692
+#: logpilot.php:752
 msgid "The code tried to open a file that is missing or cannot be read."
 msgstr ""
 
-#: logpilot.php:693
+#: logpilot.php:753
 msgid "The code looked for a database table that does not exist."
 msgstr ""
 
-#: logpilot.php:694
+#: logpilot.php:754
 msgid "The connection to the database was lost."
 msgstr ""
 
-#: logpilot.php:695
+#: logpilot.php:755
 msgid "The database refused the login details it was given."
 msgstr ""
 
-#: logpilot.php:738
+#: logpilot.php:798
 msgid "Out of memory"
 msgstr ""
 
-#: logpilot.php:742
+#: logpilot.php:802
 msgid "Took too long"
 msgstr ""
 
-#: logpilot.php:746
+#: logpilot.php:806
 msgid "Something not set or missing"
 msgstr ""
 
-#: logpilot.php:750
+#: logpilot.php:810
 msgid "Text printed too early"
 msgstr ""
 
-#: logpilot.php:754
+#: logpilot.php:814
 msgid "File not found"
 msgstr ""
 
-#: logpilot.php:758
+#: logpilot.php:818
 msgid "Missing database table"
 msgstr ""
 
-#: logpilot.php:762
+#: logpilot.php:822
 msgid "Translations loaded too early"
 msgstr ""
 
-#: logpilot.php:766
+#: logpilot.php:826
 msgid "Database connection failed"
 msgstr ""
 
-#: logpilot.php:770
+#: logpilot.php:830
 msgid "Method called on an empty value"
 msgstr ""
 
-#: logpilot.php:774
+#: logpilot.php:834
 msgid "Database connection lost"
 msgstr ""
 
-#: logpilot.php:778
+#: logpilot.php:838
 msgid "Database login refused"
 msgstr ""
 
-#: logpilot.php:897
+#: logpilot.php:957
 msgid "WordPress itself (a core file)"
 msgstr ""
 
 #. translators: %s: plugin name
-#: logpilot.php:916
+#: logpilot.php:976
 #, php-format
 msgid "Plugin: %s"
 msgstr ""
 
 #. translators: %s: theme name
-#: logpilot.php:928
+#: logpilot.php:988
 #, php-format
 msgid "Theme: %s"
 msgstr ""
 
 #. translators: %s: must-use plugin folder or file name
-#: logpilot.php:932
+#: logpilot.php:992
 #, php-format
 msgid "Must-use plugin: %s"
 msgstr ""
 
 #. translators: %s: time elapsed, e.g. "5 minutes"
-#: logpilot.php:1026
+#: logpilot.php:1086
 #, php-format
 msgid "%s ago"
 msgstr ""
 
 #. translators: 1: size of the chosen period, 2: most LogPilot loads at once
-#: logpilot.php:1044
+#: logpilot.php:1104
 #, php-format
 msgid "This period is too big to show (about %1$s). The most LogPilot loads at once is %2$s. Choose fewer days."
 msgstr ""
 
 #. translators: 1: size of the chosen period, 2: most LogPilot loads at once
-#: logpilot.php:1051
+#: logpilot.php:1111
 #, php-format
 msgid "This period is small enough to show (about %1$s). The most LogPilot loads at once is %2$s."
 msgstr ""
 
-#: logpilot.php:1329
+#: logpilot.php:1389
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: logpilot.php:1369
+#: logpilot.php:1429
 msgid "Read your WordPress error logs and see what each message means."
 msgstr ""
 
-#: logpilot.php:1379
+#: logpilot.php:1439
 msgid "Which log do you want to read?"
 msgstr ""
 
-#: logpilot.php:1379
+#: logpilot.php:1439
 msgid "Pick the log you want to look at. You can also download it or send an excerpt by e-mail."
 msgstr ""
 
-#: logpilot.php:1380
+#: logpilot.php:1440
 msgid "Log files"
 msgstr ""
 
 #. translators: %s: log name
-#: logpilot.php:1401
+#: logpilot.php:1461
 #, php-format
 msgid "%s — cannot be read"
 msgstr ""
 
 #. translators: %s: log name
-#: logpilot.php:1408
+#: logpilot.php:1468
 #, php-format
 msgid "%s — not created yet"
 msgstr ""
 
-#: logpilot.php:1417
+#: logpilot.php:1477
 msgid "LogPilot protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place."
 msgstr ""
 
-#: logpilot.php:1420
+#: logpilot.php:1480
 msgid "A greyed-out log does not exist yet: WordPress and PHP create their logs when the first message is written to them."
 msgstr ""
 
 #. translators: 1: log name, 2: file path
-#: logpilot.php:1429
+#: logpilot.php:1495
 #, php-format
 msgid "%1$s (%2$s): the file exists, but PHP cannot read it. Check its permissions."
 msgstr ""
 
-#: logpilot.php:1442
+#: logpilot.php:1508
 msgid "Nothing to read yet"
 msgstr ""
 
-#: logpilot.php:1445
+#: logpilot.php:1511
 msgid "Logging is on, but no log file has been created yet. Repeat the action that causes the problem, then reload this page."
 msgstr ""
 
-#: logpilot.php:1446
+#: logpilot.php:1512
 msgid "No log file exists yet. Turn logging on in the box above, repeat the action that causes the problem, then reload this page."
 msgstr ""
 
-#: logpilot.php:1448
+#: logpilot.php:1514
 msgid "WordPress only writes debug.log while logging is on, and PHP only writes its own log if your server is set up to do so."
 msgstr ""
 
-#: logpilot.php:1457
-#: logpilot.php:1655
-#: logpilot.php:1670
-#: logpilot.php:1677
+#: logpilot.php:1523
+#: logpilot.php:1721
+#: logpilot.php:1736
+#: logpilot.php:1743
 msgid "The log file could not be read."
 msgstr ""
 
 #. translators: %s: log name, e.g. "PHP error_log"
-#: logpilot.php:1507
+#: logpilot.php:1573
 #, php-format
 msgid "You are reading: %s"
 msgstr ""
 
-#: logpilot.php:1511
+#: logpilot.php:1577
 msgid "This is WordPress’s own debug.log, saved by LogPilot in a protected folder."
 msgstr ""
 
 #. translators: 1: file size, 2: last modified date and time
-#: logpilot.php:1516
+#: logpilot.php:1582
 #, php-format
 msgid "%1$s · last modified %2$s"
 msgstr ""
 
-#: logpilot.php:1552
+#: logpilot.php:1618
 msgid "Which period do you want to see?"
 msgstr ""
 
-#: logpilot.php:1552
+#: logpilot.php:1618
 msgid "Choose which days of the log you want to look at."
 msgstr ""
 
-#: logpilot.php:1558
+#: logpilot.php:1624
 msgid "All viewable entries"
 msgstr ""
 
-#: logpilot.php:1563
+#: logpilot.php:1629
 msgid "Last day in the log"
 msgstr ""
 
-#: logpilot.php:1574
+#: logpilot.php:1640
 msgid "Last 7 days in the log"
 msgstr ""
 
-#: logpilot.php:1586
+#: logpilot.php:1652
 msgid "Quick choices"
 msgstr ""
 
-#: logpilot.php:1591
+#: logpilot.php:1657
 msgid "Click again to go back to all viewable entries"
 msgstr ""
 
-#: logpilot.php:1597
+#: logpilot.php:1663
 msgid "Pick your own dates"
 msgstr ""
 
-#: logpilot.php:1601
+#: logpilot.php:1667
 msgid "From"
 msgstr ""
 
-#: logpilot.php:1603
+#: logpilot.php:1669
 msgid "To"
 msgstr ""
 
-#: logpilot.php:1605
+#: logpilot.php:1671
 msgid "Show these dates"
 msgstr ""
 
-#: logpilot.php:1608
+#: logpilot.php:1674
 msgid "Clear dates"
 msgstr ""
 
 #. translators: 1: first date in the log, 2: last date in the log
-#: logpilot.php:1615
+#: logpilot.php:1681
 #, php-format
 msgid "This log covers %1$s to %2$s."
 msgstr ""
 
-#: logpilot.php:1622
+#: logpilot.php:1688
 msgid "Why can't I load everything at once?"
 msgstr ""
 
-#: logpilot.php:1623
+#: logpilot.php:1689
 msgid "Very large logs can make the page slow or run out of memory, so LogPilot only loads a limited amount at a time. Dates are the ones written in the log (usually UTC), not your site time."
 msgstr ""
 
 #. translators: %s: size limit, e.g. "2 MB"
-#: logpilot.php:1627
+#: logpilot.php:1693
 #, php-format
 msgid "A period can load at most %s of log."
 msgstr ""
 
 #. translators: 1: average log growth per day, 2: size limit
-#: logpilot.php:1634
+#: logpilot.php:1700
 #, php-format
 msgid "On average it grows about %1$s per day, more than the %2$s limit: some single days may be too large to load."
 msgstr ""
 
 #. translators: 1: average log growth per day, 2: number of days, 3: size limit
-#: logpilot.php:1641
+#: logpilot.php:1707
 #, php-format
 msgid "On average it grows about %1$s per day, so ranges of about %2$s days or less stay under the %3$s limit."
 msgstr ""
 
-#: logpilot.php:1649
+#: logpilot.php:1715
 msgid "This log has no dates LogPilot can read, so only its latest part can be shown."
 msgstr ""
 
 #. translators: %s: size of the whole log file
-#: logpilot.php:1689
+#: logpilot.php:1755
 #, php-format
 msgid "This log is large (%s), so only its most recent part is shown. Pick a period above to look at older days."
 msgstr ""
 
-#: logpilot.php:1699
+#: logpilot.php:1765
 msgid "There are no entries in this range."
 msgstr ""
 
-#: logpilot.php:1699
+#: logpilot.php:1765
 msgid "The log file is empty: nothing has been recorded in it yet."
 msgstr ""
 
 #. translators: %s: number of serious problems
-#: logpilot.php:1811
+#: logpilot.php:1877
 #, php-format
 msgid "%s serious problem"
 msgid_plural "%s serious problems"
@@ -1032,7 +1058,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of warnings
-#: logpilot.php:1814
+#: logpilot.php:1880
 #, php-format
 msgid "%s warning"
 msgid_plural "%s warnings"
@@ -1040,242 +1066,242 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of minor notes
-#: logpilot.php:1817
+#: logpilot.php:1883
 #, php-format
 msgid "%s minor note"
 msgid_plural "%s minor notes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: logpilot.php:1822
+#: logpilot.php:1888
 msgid "Which entries do you want to see?"
 msgstr ""
 
-#: logpilot.php:1822
+#: logpilot.php:1888
 msgid "Narrow down the list below by type, by message or by where it comes from."
 msgstr ""
 
 #. translators: %s: counts, e.g. "2 serious problems, 14 warnings, 1,402 minor notes"
-#: logpilot.php:1827
+#: logpilot.php:1893
 #, php-format
 msgid "In the part of the log shown: %s."
 msgstr ""
 
-#: logpilot.php:1878
+#: logpilot.php:1944
 msgid "Copy a summary for support"
 msgstr ""
 
-#: logpilot.php:1879
+#: logpilot.php:1945
 msgid "Asking someone for help? Copy one of these summaries and paste it into your message."
 msgstr ""
 
-#: logpilot.php:1882
+#: logpilot.php:1948
 msgid "Safe summary (recommended)"
 msgstr ""
 
-#: logpilot.php:1883
+#: logpilot.php:1949
 msgid "Counts, versions and the most repeated messages. File paths, web addresses, e-mail addresses and IP addresses are removed automatically, but please read it before you share it."
 msgstr ""
 
-#: logpilot.php:1885
-#: logpilot.php:1890
-#: logpilot.php:2284
-#: logpilot.php:2285
+#: logpilot.php:1951
+#: logpilot.php:1956
+#: logpilot.php:2350
+#: logpilot.php:2351
 msgid "Copy"
 msgstr ""
 
-#: logpilot.php:1885
-#: logpilot.php:1890
-#: logpilot.php:2284
+#: logpilot.php:1951
+#: logpilot.php:1956
+#: logpilot.php:2350
 msgid "Copied"
 msgstr ""
 
-#: logpilot.php:1885
-#: logpilot.php:1890
-#: logpilot.php:2284
+#: logpilot.php:1951
+#: logpilot.php:1956
+#: logpilot.php:2350
 msgid "Press Ctrl+C to copy"
 msgstr ""
 
-#: logpilot.php:1887
+#: logpilot.php:1953
 msgid "Complete summary"
 msgstr ""
 
-#: logpilot.php:1888
+#: logpilot.php:1954
 msgid "Includes personal data."
 msgstr ""
 
-#: logpilot.php:1888
+#: logpilot.php:1954
 msgid "It adds the latest entries exactly as written in the log. They can contain file paths, web addresses, e-mail addresses or IP addresses. Share it only with people you trust."
 msgstr ""
 
-#: logpilot.php:1914
+#: logpilot.php:1980
 msgid "Filter by exact type"
 msgstr ""
 
-#: logpilot.php:1947
+#: logpilot.php:2013
 msgid "Search in “What happened”"
 msgstr ""
 
-#: logpilot.php:1948
+#: logpilot.php:2014
 msgid "e.g. memory, undefined, table"
 msgstr ""
 
-#: logpilot.php:1949
+#: logpilot.php:2015
 msgid "Search in “Reported in”"
 msgstr ""
 
-#: logpilot.php:1950
+#: logpilot.php:2016
 msgid "e.g. a plugin or theme name"
 msgstr ""
 
-#: logpilot.php:1956
+#: logpilot.php:2022
 msgid "Search"
 msgstr ""
 
-#: logpilot.php:1957
+#: logpilot.php:2023
 msgid "You can use one field or both. They only search the part of the log loaded above."
 msgstr ""
 
 #. translators: %s: keyword that will be searched for
-#: logpilot.php:2062
+#: logpilot.php:2128
 msgid "Click again to remove this search"
 msgstr ""
 
 #. translators: %s: keyword that will be searched for
-#: logpilot.php:2062
+#: logpilot.php:2128
 #, php-format
 msgid "Search “What happened” for “%s”"
 msgstr ""
 
-#: logpilot.php:2088
+#: logpilot.php:2154
 msgid "Most repeated messages (search “What happened”):"
 msgstr ""
 
-#: logpilot.php:2089
+#: logpilot.php:2155
 msgid "Known problems (search “What happened”):"
 msgstr ""
 
 #. translators: %s: text searched for
-#: logpilot.php:2094
+#: logpilot.php:2160
 #, php-format
 msgid "what happened: “%s”"
 msgstr ""
 
 #. translators: %s: text searched for in the "Reported in" column
-#: logpilot.php:2110
+#: logpilot.php:2176
 #, php-format
 msgid "reported in: “%s”"
 msgstr ""
 
-#: logpilot.php:2118
+#: logpilot.php:2184
 msgid "one repeated message"
 msgstr ""
 
 #. translators: 1: active filters, e.g. "Warnings, Plugin: Akismet", 2: number of matching entries
-#: logpilot.php:2137
+#: logpilot.php:2203
 #, php-format
 msgid "Showing only: %1$s (%2$s entries)."
 msgstr ""
 
-#: logpilot.php:2152
+#: logpilot.php:2218
 msgid "Show all"
 msgstr ""
 
-#: logpilot.php:2156
+#: logpilot.php:2222
 msgid "Nothing found in the part of the log shown. Try another period or clear the filters."
 msgstr ""
 
-#: logpilot.php:2202
+#: logpilot.php:2268
 msgid "Every entry of this message is listed."
 msgstr ""
 
-#: logpilot.php:2203
-#: logpilot.php:2206
+#: logpilot.php:2269
+#: logpilot.php:2272
 msgid "Group identical messages"
 msgstr ""
 
-#: logpilot.php:2205
+#: logpilot.php:2271
 msgid "Every entry is listed."
 msgstr ""
 
-#: logpilot.php:2208
+#: logpilot.php:2274
 msgid "Identical messages are shown once, with how many times they appear."
 msgstr ""
 
-#: logpilot.php:2209
+#: logpilot.php:2275
 msgid "Show every entry"
 msgstr ""
 
-#: logpilot.php:2216
+#: logpilot.php:2282
 msgid "Level"
 msgstr ""
 
-#: logpilot.php:2217
+#: logpilot.php:2283
 msgid "When"
 msgstr ""
 
-#: logpilot.php:2218
+#: logpilot.php:2284
 msgid "What happened"
 msgstr ""
 
-#: logpilot.php:2219
+#: logpilot.php:2285
 msgid "Reported in"
 msgstr ""
 
 #. translators: %s: date and time of the first occurrence
-#: logpilot.php:2242
+#: logpilot.php:2308
 #, php-format
 msgid "First seen: %s"
 msgstr ""
 
-#: logpilot.php:2262
+#: logpilot.php:2328
 msgid "Click again to remove this filter"
 msgstr ""
 
-#: logpilot.php:2262
+#: logpilot.php:2328
 msgid "Show only the entries from this source"
 msgstr ""
 
-#: logpilot.php:2267
+#: logpilot.php:2333
 msgid "Several sources"
 msgstr ""
 
 #. translators: %s: number of times the same message appears
-#: logpilot.php:2275
+#: logpilot.php:2341
 #, php-format
 msgid "Repeated %s time"
 msgid_plural "Repeated %s times"
 msgstr[0] ""
 msgstr[1] ""
 
-#: logpilot.php:2276
+#: logpilot.php:2342
 msgid "See each entry"
 msgstr ""
 
-#: logpilot.php:2281
+#: logpilot.php:2347
 msgid "Show the technical text"
 msgstr ""
 
-#: logpilot.php:2288
+#: logpilot.php:2354
 msgid "Not identified"
 msgstr ""
 
 #. translators: 1: first row number, 2: last row number, 3: total different messages
-#: logpilot.php:2319
+#: logpilot.php:2385
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s different messages"
 msgstr ""
 
 #. translators: 1: first entry number, 2: last entry number, 3: total entries
-#: logpilot.php:2321
+#: logpilot.php:2387
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s entries"
 msgstr ""
 
-#: logpilot.php:2334
+#: logpilot.php:2400
 msgid "‹ Newer"
 msgstr ""
 
-#: logpilot.php:2335
+#: logpilot.php:2401
 msgid "Older ›"
 msgstr ""

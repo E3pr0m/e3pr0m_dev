@@ -127,6 +127,69 @@ function e3p_logpilot_get_groups() {
 }
 
 /**
+ * Dove PHP scrive i suoi errori, letto dalla configurazione (`error_log`).
+ *
+ * @return array{kind: string, path: string} `kind`: `file` (un file che si può leggere), `stream` (un flusso o un
+ *         dispositivo come /dev/stderr: gli errori vanno al log del server, non c'è un file), `syslog` o `none`
+ *         (nessun valore: PHP usa il log del server).
+ */
+function e3p_logpilot_php_log_target() {
+    $value = get_cfg_var( 'error_log' );
+    if ( ! is_string( $value ) || '' === $value ) {
+        $value = ini_get( 'error_log' );
+    }
+    $value = is_string( $value ) ? trim( $value ) : '';
+    if ( '' === $value ) {
+        return array(
+            'kind' => 'none',
+            'path' => '',
+        );
+    }
+    $lower = strtolower( $value );
+    if ( 'syslog' === $lower ) {
+        return array(
+            'kind' => 'syslog',
+            'path' => $value,
+        );
+    }
+    // Flussi (php://stderr) e dispositivi (/dev/stderr, /dev/null, /proc/self/fd/2, nul di Windows): non sono file che PHP possa rileggere.
+    if ( 0 === strpos( $lower, 'php://' ) || 0 === strpos( $lower, '/dev/' ) || 'nul' === $lower || preg_match( '#^/proc/(?:self|\d+)/fd/#', $lower ) ) {
+        return array(
+            'kind' => 'stream',
+            'path' => $value,
+        );
+    }
+    return array(
+        'kind' => 'file',
+        'path' => $value,
+    );
+}
+
+/**
+ * Nota sul log di PHP quando non c'è un file da leggere: dice dove vanno gli errori e come averne uno.
+ *
+ * @param array $target Risultato di e3p_logpilot_php_log_target().
+ */
+function e3p_logpilot_render_php_log_note( $target ) {
+    if ( 'stream' === $target['kind'] ) {
+        $text = sprintf(
+            /* translators: %s: where PHP sends its errors, e.g. /dev/stderr */
+            __( 'PHP sends its errors to the server’s own log (%s), so there is no PHP error log file for LogPilot to read.', 'logpilot' ),
+            $target['path']
+        );
+    } elseif ( 'syslog' === $target['kind'] ) {
+        $text = __( 'PHP sends its errors to the system log (syslog), so there is no PHP error log file for LogPilot to read.', 'logpilot' );
+    } else {
+        $text = __( 'PHP is not set to write its errors to a file, so there is no PHP error log for LogPilot to read.', 'logpilot' );
+    }
+    echo '<p class="description">' . esc_html( $text . ' ' . __( 'The WordPress debug.log still records the errors WordPress can see.', 'logpilot' ) ) . '</p>';
+    echo '<details class="e3p-logpilot-details"><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How can I get a PHP error log?', 'logpilot' ) . '</summary>';
+    echo '<p class="description">' . esc_html__( 'If your hosting lets you change PHP settings (in the hosting panel, in php.ini or in a .user.ini file), set these two lines, with a path that PHP can write to and that is outside your website folder. Some hosts do not allow it: ask them.', 'logpilot' ) . '</p>';
+    echo '<pre class="e3p-logpilot-code">' . esc_html( "log_errors = On
+error_log = /path/to/php-error.log" ) . '</pre></details>';
+}
+
+/**
  * Log leggibili: debug.log di WordPress ed error_log di PHP.
  * I percorsi vengono solo da costanti e ini del server, mai da dati in ingresso.
  *
@@ -161,12 +224,9 @@ function e3p_logpilot_get_log_files() {
 
     // error_log di PHP: l'ini può essere vuoto o puntare a syslog. Con WP_DEBUG_LOG attivo WordPress
     // lo reindirizza a debug.log con ini_set(): get_cfg_var() legge il valore originale di php.ini.
-    $php_log = get_cfg_var( 'error_log' );
-    if ( ! is_string( $php_log ) || '' === $php_log ) {
-        $php_log = ini_get( 'error_log' );
-    }
-    if ( is_string( $php_log ) && '' !== $php_log && 'syslog' !== strtolower( $php_log ) ) {
-        $candidates['php'] = $php_log;
+    $php_target = e3p_logpilot_php_log_target();
+    if ( 'file' === $php_target['kind'] ) {
+        $candidates['php'] = $php_target['path'];
     }
 
     $labels = array(
@@ -1418,6 +1478,12 @@ function e3p_logpilot_render_page() {
         }
         if ( $has_missing ) {
             echo '<p class="description">' . esc_html__( 'A greyed-out log does not exist yet: WordPress and PHP create their logs when the first message is written to them.', 'logpilot' ) . '</p>';
+        }
+
+        // Il log di PHP non è un file da leggere (flusso del server, syslog o niente): si dice perché e come averne uno.
+        $php_target = e3p_logpilot_php_log_target();
+        if ( 'file' !== $php_target['kind'] ) {
+            e3p_logpilot_render_php_log_note( $php_target );
         }
 
         // Un log che esiste ma PHP non legge: si dice come rimediare.

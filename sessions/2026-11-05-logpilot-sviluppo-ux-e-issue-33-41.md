@@ -72,3 +72,9 @@ Modificati: `.gitignore`, `CLAUDE.md`, `Plugin/logpilot/logpilot.php`, `Plugin/l
 - Primo report: centinaia di "TextDomainMismatch" falsi. Causa: `dist/logpilot.zip` era senza la cartella `logpilot/` alla radice, quindi WordPress ha creato la cartella con un nome temporaneo (`logpilot-yVd7OnYnjseBDWIV`) e Plugin Check la usava come slug. Lo zip va fatto con un'unica cartella `logpilot/` dentro (come `bccpilot.zip`). Rinominata la cartella sul sito, i falsi sono spariti.
 - Restavano 29 segnalazioni vere in 11 punti. Fatto: `unlink()` sostituito da `wp_delete_file()` (config-editor, uninstall); le altre funzioni sui file (`is_writable`, `chmod`, `rename`, `rmdir`, `fopen`/`fread`/`fclose`) restano con `phpcs:ignore` e il motivo (lettura della coda di file enormi, scrittura atomica di `wp-config.php`); stessa cosa per il filtro di WordPress `https_local_ssl_verify`, il file di controllo in `wp-content` e la lettura di `group` dall'indirizzo.
 - Da rilanciare Plugin Check sul sito con la cartella `logpilot` e il plugin aggiornato; se i revisori di WordPress.org obiettano sui commenti, si ritocca.
+
+## Log di PHP non leggibile (07/11)
+- Sul sito live (Aruba, PHP FPM/FastCGI) `error_log` vale `/dev/stderr`: gli errori vanno al log della piattaforma e non c'è un file. Il plugin lo mostrava come "PHP error_log — not created yet", fuorviante.
+- **Fatto:** `e3p_logpilot_php_log_target()` distingue `file`, `stream` (`/dev/…`, `php://…`, `/proc/…/fd/…`, `nul`), `syslog` e `none`; se non c'è un file, nell'elenco dei log non compare più il pulsante e compare una nota ("PHP sends its errors to the server's own log …") più il dettaglio "How can I get a PHP error log?" con le due righe `log_errors` ed `error_log`. `.pot` rigenerato.
+- Su Aruba si può provare un `.user.ini` (FPM/FastCGI); da verificare dall'utente con `phpinfo`.
+- Plugin Check passato senza errori dopo la sostituzione di `unlink()` e i commenti `phpcs:ignore`.
