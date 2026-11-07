@@ -127,6 +127,24 @@ function e3p_logpilot_get_groups() {
 }
 
 /**
+ * Se PHP registra i suoi errori (`log_errors`), letto dalla configurazione di php.ini: WordPress, con WP_DEBUG_LOG acceso,
+ * lo imposta a runtime, quindi si guarda prima il valore originale (get_cfg_var).
+ *
+ * @return bool
+ */
+function e3p_logpilot_php_logging_on() {
+    $value = get_cfg_var( 'log_errors' );
+    if ( false === $value ) {
+        $value = ini_get( 'log_errors' ); // Non scritto in php.ini: vale quello di PHP (o di .user.ini).
+    }
+    if ( false === $value || null === $value ) {
+        return true; // Non si sa: non si dice che è spento.
+    }
+    $on = filter_var( $value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+    return null === $on ? true : $on;
+}
+
+/**
  * Dove PHP scrive i suoi errori, letto dalla configurazione (`error_log`).
  *
  * @return array{kind: string, path: string} `kind`: `file` (un file che si può leggere), `stream` (un flusso o un
@@ -174,12 +192,14 @@ function e3p_logpilot_php_log_target() {
 function e3p_logpilot_php_log_reason( $target ) {
     if ( 'stream' === $target['kind'] ) {
         $text = sprintf(
-            /* translators: %s: where PHP sends its errors, e.g. /dev/stderr */
-            __( 'PHP sends its errors to the server’s own log (%s): there is no file to read.', 'logpilot' ),
+            /* translators: %s: where PHP sends its errors, the value of its error_log setting, e.g. /dev/stderr */
+            __( 'PHP sends its errors to %s, which is not a file (usually they end up in the server’s own log): there is no file to read.', 'logpilot' ),
             $target['path']
         );
     } elseif ( 'syslog' === $target['kind'] ) {
-        $text = __( 'PHP sends its errors to the system log (syslog): there is no file to read.', 'logpilot' );
+        $text = __( 'PHP sends its errors to the system log (syslog), which is not a file: there is no file to read.', 'logpilot' );
+    } elseif ( 'off' === $target['kind'] ) {
+        $text = __( 'PHP error logging is turned off (log_errors), so PHP does not record its errors anywhere: there is no log to read.', 'logpilot' );
     } else {
         $text = __( 'PHP is not set to write its errors to a file: there is no file to read.', 'logpilot' );
     }
@@ -270,12 +290,18 @@ function e3p_logpilot_get_log_files() {
         );
     }
 
+    // Un file configurato ma assente, con log_errors spento: PHP non lo creerà mai, quindi non è "non ancora creato".
+    if ( isset( $files['php'] ) && 'missing' === $files['php']['status'] && ! e3p_logpilot_php_logging_on() ) {
+        unset( $files['php'] );
+        $php_target['kind'] = 'off';
+    }
     if ( 'file' !== $php_target['kind'] ) {
         // Il log di PHP non è un file da leggere: resta nell'elenco, grigio, perché la scelta "quale log" abbia senso.
         $files['php'] = array(
             'label'  => $labels['php'],
             'path'   => '',
             'status' => 'unavailable',
+            'target' => $php_target,
         );
     }
 
@@ -1497,9 +1523,9 @@ function e3p_logpilot_render_page() {
         }
         echo '</div>';
         // Il log di PHP non è un file da leggere (flusso del server, syslog o niente): subito sotto i pulsanti si dice perché.
-        $php_target = e3p_logpilot_php_log_target();
-        if ( 'file' !== $php_target['kind'] ) {
-            echo '<p class="e3p-logpilot-why"><span class="dashicons dashicons-info-outline" aria-hidden="true"></span><span>' . esc_html( e3p_logpilot_php_log_reason( $php_target ) ) . '</span></p>';
+        $php_unavailable = isset( $all_files['php'] ) && 'unavailable' === $all_files['php']['status'];
+        if ( $php_unavailable ) {
+            echo '<p class="e3p-logpilot-why"><span class="dashicons dashicons-info-outline" aria-hidden="true"></span><span>' . esc_html( e3p_logpilot_php_log_reason( $all_files['php']['target'] ) ) . '</span></p>';
         }
         // Il log di LogPilot è il debug.log di WordPress: lo si dice, perché da solo il nome potrebbe far pensare a un log del plugin.
         if ( isset( $all_files['protected'] ) ) {
@@ -1510,7 +1536,7 @@ function e3p_logpilot_render_page() {
         }
 
         // Come ottenere un log di PHP, se non c'è un file da leggere.
-        if ( 'file' !== $php_target['kind'] ) {
+        if ( $php_unavailable ) {
             e3p_logpilot_render_php_log_help();
         }
 
