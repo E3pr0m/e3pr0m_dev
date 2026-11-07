@@ -61,3 +61,9 @@ Modificati: `.gitignore`, `CLAUDE.md`, `Plugin/logpilot/logpilot.php`, `Plugin/l
 - **`languages/logpilot.pot` rigenerato** (279 voci) con il WP-CLI di Local e mbstring attivo; il comando è in `VINCOLI.md`.
 - `VINCOLI.md` rivisto (nuove regole di download, email, requisiti, pagina; elenco "Prima di pubblicare"). `CLAUDE.md` aggiornato (stato 1.0.0, download/email).
 - **Da fare prima di pubblicare** (decide l'utente): grafiche di WordPress.org già in `Brand/logpilot/`, prova su un sito pulito, commit e SVN. Nessun commit fatto da me.
+
+## Prova su sito live (07/11): messaggio di `wp-config.php` più chiaro
+- Il plugin caricato su www.e3pr0m.com ha rifiutato di modificare `wp-config.php` perché `WP_DEBUG` stava dentro un `if` (righe 90-91): comportamento voluto ("riconosco o rifiuto", decisione del 05/11). L'utente ha confermato la causa senza che io aprissi il file (regola: non leggere `wp-config.php` senza che lo chieda).
+- **Scelta dell'utente:** non far gestire al plugin un `define` sotto un `if` (non si sa quale valore vince, il file non è solo nostro, un errore di logica non lo vede nessun controllo); si migliora solo il messaggio.
+- **Fatto:** `e3p_logpilot_config_analyze()` registra per ogni riga rifiutata un motivo (`nested`, `notdefine`, `value`, `sameline`, `path`, `format`) e il testo della riga (120 caratteri); `e3p_logpilot_render_problems()` mostra una sola frase per riga e la riga in `<code>`. Provato con sei file di esempio e con una prova di accensione e spegnimento. `.pot` rigenerato (284 voci).
+- Da fare: l'utente sistema a mano `wp-config.php` del sito live (tre `define` standard sopra "That's all, stop editing!"), dopo una copia, e riprova.

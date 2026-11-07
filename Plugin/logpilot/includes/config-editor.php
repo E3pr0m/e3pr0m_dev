@@ -128,6 +128,9 @@ function e3p_logpilot_config_analyze( $src ) {
         }
 
         $standard = false;
+        // Perché una riga non è nella forma standard (per spiegarlo all'utente): dentro un blocco, non è un define()
+        // semplice, valore diverso da true/false, altro codice sulla stessa riga, percorso non di LogPilot, o altro.
+        $reason = ( 0 !== $sig[ $i ][3] ) ? 'nested' : 'format';
         // WP_DEBUG_LOG può avere anche un percorso tra apici singoli, ma solo se è quello di LogPilot (cartella
         // e3p-logpilot-<16 caratteri esadecimali>): un percorso scelto dall'utente resta "forma non standard".
         $is_log = ( 'WP_DEBUG_LOG' === $name );
@@ -143,6 +146,13 @@ function e3p_logpilot_config_analyze( $src ) {
                 && ')' === $sig[ $i + 3 ][1]
                 && ';' === $sig[ $i + 4 ][1];
             $same_line = $sig[ $i - 2 ][2] === $sig[ $i + 4 ][2];
+            if ( ! $prev_ok || ! $define_ok ) {
+                $reason = 'notdefine';
+            } elseif ( ! $value_ok ) {
+                $reason = 'value';
+            } elseif ( $tail_ok && ! $same_line ) {
+                $reason = 'sameline';
+            }
 
             if ( $prev_ok && $define_ok && $tail_ok && $same_line ) {
                 $index    = $sig[ $i - 2 ][2] - 1;
@@ -151,6 +161,9 @@ function e3p_logpilot_config_analyze( $src ) {
                 $re       = '/^(\s*)define\s*\(\s*([\'"])' . preg_quote( $name, '/' ) . '\2\s*,\s*' . $value_re . '\s*\)\s*;(.*)$/i';
                 if ( preg_match( $re, $text, $m ) ) {
                     $trail = trim( $m[4] );
+                    if ( '' !== $trail && ! preg_match( '/^(?:\/\/.*|#.*|\/\*.*\*\/)$/', $trail ) ) {
+                        $reason = 'sameline'; // Dopo il define() c'è altro codice sulla stessa riga.
+                    }
                     if ( preg_match( '/^(?:\/\/.*|#.*|\/\*.*\*\/)?$/', $trail ) ) {
                         $marker = null;
                         if ( preg_match( '/\s*\/\/\s*LogPilot \((?:original: (true|false)|(added))\)\s*$/', $trail, $mm ) ) {
@@ -176,16 +189,23 @@ function e3p_logpilot_config_analyze( $src ) {
                                 'marker'  => $marker,
                             );
                         }
+                        if ( ! $standard ) {
+                            $reason = 'path'; // Un percorso scelto dall'utente: si lascia com'è.
+                        }
                     }
                 }
             }
         }
 
         if ( ! $standard ) {
+            // Il testo della riga si mostra nel pannello (con l'escape), accorciato: sono righe delle costanti di debug.
+            $line_text = isset( $res['lines'][ $sig[ $i ][2] - 1 ] ) ? trim( $res['lines'][ $sig[ $i ][2] - 1 ] ) : '';
             $res['problems'][] = array(
-                'code' => 'nonstandard',
-                'name' => $name,
-                'line' => $sig[ $i ][2],
+                'code'   => 'nonstandard',
+                'name'   => $name,
+                'line'   => $sig[ $i ][2],
+                'reason' => $reason,
+                'text'   => mb_substr( $line_text, 0, 120 ),
             );
         }
     }

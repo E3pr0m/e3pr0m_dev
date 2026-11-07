@@ -1084,6 +1084,7 @@ function e3p_logpilot_enqueue_styles( $hook_suffix ) {
 .e3p-logpilot-summary .description{display:block;margin-top:4px;color:#1d2327}
 .e3p-logpilot-problems{margin:12px 0;padding:8px 12px;list-style:none;background:#fcf3e0;border:1px solid #dcc9a0;border-left:4px solid #b26200;color:#1d2327}
 .e3p-logpilot-problems li{margin:4px 0}
+.e3p-logpilot-problem-line{display:inline-block;margin-top:4px;word-break:break-all}
 .e3p-logpilot-problems ol{list-style:decimal;margin:8px 0 8px 20px}
 .e3p-logpilot-problems summary{cursor:pointer;font-weight:600}
 .e3p-logpilot-problems .dashicons{color:#b26200}

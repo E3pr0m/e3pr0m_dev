@@ -377,12 +377,30 @@ function e3p_logpilot_render_problems( $problems ) {
                 echo esc_html__( 'The line "That\'s all, stop editing!" was not found.', 'logpilot' );
                 break;
             default:
-                printf(
+                // Una sola causa per riga, quella che l'analisi ha trovato, e il testo della riga com'è scritta.
+                $reasons = array(
                     /* translators: 1: constant name, 2: line number */
-                    esc_html__( '%1$s (line %2$s) is inside a condition, shares a line with other code, or has a value other than true or false.', 'logpilot' ),
+                    'nested'    => __( '%1$s (line %2$s) is inside a block of code, such as an “if”. LogPilot cannot know which value would apply, so it does not touch it.', 'logpilot' ),
+                    /* translators: 1: constant name, 2: line number */
+                    'notdefine' => __( '%1$s (line %2$s) is not a plain define() line: for example it follows an “if”, or it only checks whether the constant exists.', 'logpilot' ),
+                    /* translators: 1: constant name, 2: line number */
+                    'value'     => __( '%1$s (line %2$s) has a value other than true or false.', 'logpilot' ),
+                    /* translators: 1: constant name, 2: line number */
+                    'sameline'  => __( '%1$s (line %2$s) shares a line with other code.', 'logpilot' ),
+                    /* translators: 1: constant name, 2: line number */
+                    'path'      => __( '%1$s (line %2$s) points to a log path that LogPilot did not create, so it is left as it is.', 'logpilot' ),
+                    /* translators: 1: constant name, 2: line number */
+                    'format'    => __( '%1$s (line %2$s) is written in a way LogPilot does not recognize.', 'logpilot' ),
+                );
+                $why = isset( $problem['reason'], $reasons[ $problem['reason'] ] ) ? $reasons[ $problem['reason'] ] : $reasons['format'];
+                printf(
+                    esc_html( $why ),
                     '<code>' . esc_html( $problem['name'] ) . '</code>',
                     esc_html( (string) (int) $problem['line'] )
                 );
+                if ( ! empty( $problem['text'] ) ) {
+                    echo '<br /><code class="e3p-logpilot-problem-line">' . esc_html( $problem['text'] ) . '</code>';
+                }
         }
         echo '</li>';
     }
