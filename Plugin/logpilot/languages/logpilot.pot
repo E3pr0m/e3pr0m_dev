@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-07T17:21:32+00:00\n"
+"POT-Creation-Date: 2026-11-07T17:32:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: logpilot\n"
@@ -523,7 +523,7 @@ msgid "Warning: the log folder can be opened from a web address, so anyone who g
 msgstr ""
 
 #: includes/log-location.php:264
-msgid "LogPilot could not check whether the log folder is protected (the site did not answer its own test request). The folder has a secret name and protection rules, but this has not been verified."
+msgid "LogPilot could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified."
 msgstr ""
 
 #: includes/log-location.php:270
@@ -542,45 +542,61 @@ msgstr ""
 msgid "LogPilot could not check whether the old wp-content/debug.log can be downloaded."
 msgstr ""
 
-#: includes/log-location.php:363
+#: includes/log-location.php:354
+msgid "How to check it yourself"
+msgstr ""
+
+#: includes/log-location.php:355
+msgid "Make sure the log exists: it appears in the list of logs above after WordPress writes its first message."
+msgstr ""
+
+#: includes/log-location.php:356
+msgid "Open this address in a private browser window:"
+msgstr ""
+
+#: includes/log-location.php:357
+msgid "A “Forbidden” (403) or “Not found” (404) page means the folder is protected. If you can read the log, turn logging off and ask your hosting provider to block access to this folder."
+msgstr ""
+
+#: includes/log-location.php:378
 msgid "Where your log is saved"
 msgstr ""
 
-#: includes/log-location.php:369
+#: includes/log-location.php:384
 msgid "In a folder with a secret name outside your website folder. No web address can reach it."
 msgstr ""
 
-#: includes/log-location.php:370
+#: includes/log-location.php:385
 msgid "In a folder with a secret name inside wp-content, with rules that block access from the web."
 msgstr ""
 
-#: includes/log-location.php:374
+#: includes/log-location.php:389
 msgid "The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder."
 msgstr ""
 
-#: includes/log-location.php:379
+#: includes/log-location.php:394
 msgid "When you turn logging on, the log is saved in a folder with a secret name outside your website folder, where no web address can reach it."
 msgstr ""
 
-#: includes/log-location.php:380
+#: includes/log-location.php:395
 msgid "When you turn logging on, the log is saved in a folder with a secret name inside wp-content, with rules that block access from the web."
 msgstr ""
 
-#: includes/log-location.php:404
+#: includes/log-location.php:422
 msgid "Check that my logs cannot be downloaded"
 msgstr ""
 
 #. translators: %s: file size, e.g. "1.2 MB"
-#: includes/log-location.php:414
+#: includes/log-location.php:432
 #, php-format
 msgid "There is an old debug.log in wp-content (%s). That file name is the first thing people try to download."
 msgstr ""
 
-#: includes/log-location.php:421
+#: includes/log-location.php:439
 msgid "Yes, delete wp-content/debug.log permanently."
 msgstr ""
 
-#: includes/log-location.php:422
+#: includes/log-location.php:440
 msgid "Delete debug.log"
 msgstr ""
 

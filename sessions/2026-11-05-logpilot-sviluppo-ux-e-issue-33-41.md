@@ -78,3 +78,8 @@ Modificati: `.gitignore`, `CLAUDE.md`, `Plugin/logpilot/logpilot.php`, `Plugin/l
 - **Fatto:** `e3p_logpilot_php_log_target()` distingue `file`, `stream` (`/dev/…`, `php://…`, `/proc/…/fd/…`, `nul`), `syslog` e `none`; se non c'è un file, nell'elenco dei log non compare più il pulsante e compare una nota ("PHP sends its errors to the server's own log …") più il dettaglio "How can I get a PHP error log?" con le due righe `log_errors` ed `error_log`. `.pot` rigenerato.
 - Su Aruba si può provare un `.user.ini` (FPM/FastCGI); da verificare dall'utente con `phpinfo`.
 - Plugin Check passato senza errori dopo la sostituzione di `unlink()` e i commenti `phpcs:ignore`.
+
+## Controllo a mano della cartella dei log (07/11)
+- Su Aruba il controllo automatico ("Check that my logs cannot be downloaded") dà "non verificabile": il sito non riesce a chiamare sé stesso. Normale su molti hosting condivisi. Verificato a mano dall'utente: la cartella `e3p-logpilot-…` in `wp-content` risponde **403 Forbidden** (protetta).
+- **Fatto:** il messaggio dice che il caso è comune e non vuol dire che la cartella sia esposta; sotto compare "How to check it yourself" con l'indirizzo pronto (`content_url( '/<cartella>/debug.log' )`) e cosa significano 403/404 o la lettura del log. Funzione `e3p_logpilot_render_manual_check()` in `includes/log-location.php`. `.pot` rigenerato.
+- Prova sul sito live riuscita: wp-config in forma standard, accensione dal pulsante, cartella creata, riga di log nel pannello, 403 sull'indirizzo del log.

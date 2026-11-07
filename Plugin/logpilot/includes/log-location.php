@@ -261,7 +261,7 @@ function e3p_logpilot_get_check_texts() {
             ),
             'unknown'   => array(
                 'type' => 'warning',
-                'text' => __( 'LogPilot could not check whether the log folder is protected (the site did not answer its own test request). The folder has a secret name and protection rules, but this has not been verified.', 'logpilot' ),
+                'text' => __( 'LogPilot could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified.', 'logpilot' ),
             ),
         ),
         'old'    => array(
@@ -344,6 +344,21 @@ function e3p_logpilot_handle_delete_old() {
 add_action( 'admin_post_e3p_logpilot_delete_old', 'e3p_logpilot_handle_delete_old' );
 
 /**
+ * Come controllare a mano che la cartella dei log non si possa scaricare, quando il controllo automatico non riesce
+ * (il sito non sa chiamare sé stesso: succede su molti hosting condivisi).
+ *
+ * @param string $name Nome della cartella dei log.
+ */
+function e3p_logpilot_render_manual_check( $name ) {
+    $url = content_url( '/' . $name . '/debug.log' );
+    echo '<details class="e3p-logpilot-details" open><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How to check it yourself', 'logpilot' ) . '</summary><ol>';
+    echo '<li>' . esc_html__( 'Make sure the log exists: it appears in the list of logs above after WordPress writes its first message.', 'logpilot' ) . '</li>';
+    echo '<li>' . esc_html__( 'Open this address in a private browser window:', 'logpilot' ) . ' <code class="e3p-logpilot-problem-line">' . esc_html( $url ) . '</code></li>';
+    echo '<li>' . esc_html__( 'A “Forbidden” (403) or “Not found” (404) page means the folder is protected. If you can read the log, turn logging off and ask your hosting provider to block access to this folder.', 'logpilot' ) . '</li>';
+    echo '</ol></details>';
+}
+
+/**
  * Parte del pannello: dove viene salvato il log, controllo di protezione e vecchio debug.log.
  *
  * @param bool $active True se il debug è acceso adesso.
@@ -394,6 +409,9 @@ function e3p_logpilot_render_location_section( $active ) {
                 esc_attr( $check_texts[ $group ][ $code ]['type'] ),
                 esc_html( $check_texts[ $group ][ $code ]['text'] )
             );
+            if ( 'folder' === $group && 'unknown' === $code ) {
+                e3p_logpilot_render_manual_check( $name );
+            }
         }
     }
     // phpcs:enable WordPress.Security.NonceVerification.Recommended
