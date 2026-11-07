@@ -53,7 +53,7 @@ It does not hook into other e-mails of your site.
 * **Database:** one option, `e3p_logpilot_settings`, with your turn-off or reminder choice. It is created when you turn logging on from the panel and removed when you turn it off. Up to two scheduled WP-Cron events go with it.
 * **Files:** `wp-config.php` (only when you press the button, with a confirmation), a safety copy `wp-config-logpilot-backup.php` next to it, and the folder of the log. If you delete the old `wp-content/debug.log` from the panel, that file is removed.
 
-Everything LogPilot creates is removed when you delete the plugin, except the lines it added to `wp-config.php`. Download your logs and turn logging off before you delete the plugin: the log folder is deleted with it, and `wp-config.php` would be left pointing to a folder that no longer exists.
+Everything LogPilot creates is removed when you delete the plugin, except the lines it added to `wp-config.php`. Download your logs and turn logging off before you delete the plugin. The log folder is deleted with it, and the lines LogPilot added to `wp-config.php` stay: if logging was still on, WordPress keeps debugging without a log file until you set `WP_DEBUG` and `WP_DEBUG_LOG` to `false` there.
 
 == Installation ==
 

@@ -83,3 +83,7 @@ Modificati: `.gitignore`, `CLAUDE.md`, `Plugin/logpilot/logpilot.php`, `Plugin/l
 - Su Aruba il controllo automatico ("Check that my logs cannot be downloaded") dà "non verificabile": il sito non riesce a chiamare sé stesso. Normale su molti hosting condivisi. Verificato a mano dall'utente: la cartella `e3p-logpilot-…` in `wp-content` risponde **403 Forbidden** (protetta).
 - **Fatto:** il messaggio dice che il caso è comune e non vuol dire che la cartella sia esposta; sotto compare "How to check it yourself" con l'indirizzo pronto (`content_url( '/<cartella>/debug.log' )`) e cosa significano 403/404 o la lettura del log. Funzione `e3p_logpilot_render_manual_check()` in `includes/log-location.php`. `.pot` rigenerato.
 - Prova sul sito live riuscita: wp-config in forma standard, accensione dal pulsante, cartella creata, riga di log nel pannello, 403 sull'indirizzo del log.
+
+## Prova di disinstallazione con il debug acceso (07/11)
+- Provato sul sito live, volutamente senza spegnere il debug: la cartella dei log sparisce, le tre righe in `wp-config.php` restano (`WP_DEBUG` true, `WP_DEBUG_LOG` con il percorso della cartella che non c'è più, `WP_DEBUG_DISPLAY` false). Come previsto dalla scelta del 05/11 (la disinstallazione non modifica `wp-config.php`); l'utente le ha rimesse a mano.
+- Valutata e scartata per ora l'alternativa di spegnerle da `uninstall.php` con il motore sicuro. Il `readme.txt` ora dice la conseguenza in chiaro (WordPress continua a fare debug senza un file di log finché `WP_DEBUG` e `WP_DEBUG_LOG` non sono messi a false).
