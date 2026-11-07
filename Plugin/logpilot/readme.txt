@@ -38,7 +38,7 @@ You find it in **Tools → LogPilot**. Only administrators can use it.
 
 = Privacy =
 
-LogPilot does not collect data and does not contact any external service.
+LogPilot does not collect data and does not contact any external service. The only request it makes goes to your own site, to check that the log folder cannot be downloaded from the web.
 
 A log can contain file paths, user names, e-mail addresses and other personal data, and the panel says so wherever you can download, copy or send one. The e-mails LogPilot sends are only its own, sent with `wp_mail()`:
 
