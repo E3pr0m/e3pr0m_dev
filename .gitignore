@@ -32,3 +32,5 @@ wordpress-org-backup-codes.txt
 /Plugin/logpilot/VINCOLI.md
 /Plugin/pluginaudit/VINCOLI.md
 
+# Free File Sync db
+sync.ffs_db

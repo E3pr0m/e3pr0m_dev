@@ -342,7 +342,7 @@ function e3p_bccpilot_enqueue_styles( $hook_suffix ) {
 .e3p-bccpilot-wrap .button.button-primary:not(:disabled):not(.disabled):hover,.e3p-bccpilot-wrap .button.button-primary:not(:disabled):not(.disabled):focus{background:#22ac5e;border-color:#22ac5e;color:#fff}
 ';
 
-    wp_register_style( 'e3p-bccpilot-admin', false, array(), false );
+    wp_register_style( 'e3p-bccpilot-admin', false, array(), '1.1.0' );
     wp_enqueue_style( 'e3p-bccpilot-admin' );
     wp_add_inline_style( 'e3p-bccpilot-admin', $css );
 }
