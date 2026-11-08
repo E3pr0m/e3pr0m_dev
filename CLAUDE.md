@@ -22,7 +22,7 @@ Plugin presenti:
 
 Lingua: commenti nel codice e risposte in italiano. Testi dell'interfaccia (`__()`) e `readme.txt` in inglese, come richiede la directory.
 
-Pagina di amministrazione dei plugin: prima di creare o modificare la schermata di un plugin leggere `Brand/PAGINA-PLUGIN.md` (testata grigia, schede, verde su chiaro, pulsanti, controlli); l'implementazione di riferimento è LogPilot.
+Pagina di amministrazione dei plugin: prima di creare o modificare la schermata di un plugin leggere `Brand/PAGINA-PLUGIN.md` (testata grigia, schede, verde su chiaro, pulsanti, controlli); l'implementazione di riferimento è LogPilot (da allineare, issue #59) e il riferimento grafico aggiornato è `Brand/pagina-plugin-riferimento/`. Ogni plugin ha nella testata la riga standard **"by E3pr0m · Support development"** (nome verso `https://www.e3pr0m.com/plugin/`, sostegno verso `https://github.com/sponsors/E3pr0m`; regole nella guida).
 
 Non ci sono build, lint o test. Per provare una modifica, copiare la cartella del plugin in `wp-content/plugins/` di un sito WordPress e attivarla.
 
@@ -57,6 +57,7 @@ Con le classi si può usare invece un namespace (`E3pr0m\<Nome>`). Il nome visib
 - Nei plugin gratuiti non devono esserci funzioni bloccate o disattivate in attesa di pagamento (regola della directory). Le funzioni Pro vivono in un plugin separato che usa i filtri di estensione del plugin gratuito.
 - Nessun indirizzo, chiave o dato personale come default nel codice.
 - Ogni dato in uscita va escapato e ogni dato in ingresso sanificato. Le scritture sul database sono ridotte al minimo, documentate nella sezione del plugin in questo file e rimosse da `uninstall.php`.
+- Testata della pagina del plugin: sempre la riga "by E3pr0m · Support development" in basso a destra, con i due link standard e nient'altro (niente avvisi, inviti o altri link promozionali; sono solo indirizzi, nessun dato inviato). Dettagli in `Brand/PAGINA-PLUGIN.md`.
 - Se cambia il comportamento o la versione, aggiornare insieme intestazione del plugin e `readme.txt` (Version e Changelog).
 - Licenza GPLv2 or later (richiesta dalla directory di WordPress.org): intestazione e `readme.txt` devono riportare `License` e `License URI`. Non aggiungere codice di terzi con licenza incompatibile con la GPL.
 
@@ -70,6 +71,8 @@ Cartella `Plugin/bccpilot/`. Aggiunge un destinatario `Bcc:` nascosto alle mail 
 - `e3p_bccpilot_register_filters()` (su `plugins_loaded`) aggancia solo le voci scelte dall'utente, e solo se esiste un indirizzo valido. I callback sono `e3p_bccpilot_add_bcc()` (array in stile `wp_mail`) e `e3p_bccpilot_add_bcc_headers()` (solo header); entrambi usano `e3p_bccpilot_append_bcc()`.
 - L'indirizzo è `e3p_bccpilot_get_email()`: viene solo dall'opzione salvata (nessuna costante in `wp-config.php`, rimandata a sviluppi futuri). Non esiste un indirizzo di default.
 - Una sola opzione, `e3p_bccpilot_settings` (`email` + `notifications`), salvata con la Settings API e rimossa da `uninstall.php`. Un indirizzo non valido dà un errore e lascia quello già salvato; il campo vuoto disattiva il plugin. Gli errori li stampa già il core nelle pagine sotto Impostazioni: non chiamare `settings_errors()` nella pagina (doppio messaggio).
+- Pagina (07/11, issue #56): stile di LogPilot secondo `Brand/PAGINA-PLUGIN.md`, testata con `assets/icon.svg`, due schede (indirizzo con stato "Active / Not active" in testo e icona, scelta delle email, con il pulsante Save dentro la scheda) più la scheda "Check that it works"; aspetto del riferimento grafico dell'08/11 (`Brand/pagina-plugin-riferimento/`: verde nuovo `#28CA6F`, schede grigie, pulsanti grigio chiaro con testo nero, spunta scura); CSS in linea in `e3p_bccpilot_enqueue_styles()` (solo su `settings_page_bccpilot`), classe `e3p-bccpilot-wrap`. Lo stato è "attivo" solo con indirizzo valido E almeno una notifica scelta (`e3p_bccpilot_get_state()`).
+- Mail di prova (#6, `e3p_bccpilot_handle_test_email()` su `admin_post_e3p_bccpilot_test_email`): `manage_options` + nonce, va all'indirizzo salvato (non a quello digitato e non salvato), `wp_mail()` chiamato direttamente senza agganciare nulla, nessun dato salvato. Esito nell'indirizzo (`e3p_bccpilot_test` = `sent`, `failed`, `noaddress`, solo codici noti) e mostrato nella scheda. Prova solo che l'indirizzo riceve: non copia nessuna notifica vera.
 
 ### Vincoli specifici
 

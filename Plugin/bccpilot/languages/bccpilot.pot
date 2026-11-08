@@ -1,66 +1,220 @@
+# Copyright (C) 2026 E3pr0m
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: BccPilot 1.0.0\n"
+"Project-Id-Version: BccPilot 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bccpilot\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-08T11:32:18+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: bccpilot\n"
 
-msgid "Critical error (recovery mode)"
-msgstr ""
-
-msgid "The \"Your Site is Experiencing a Technical Issue\" email."
-msgstr ""
-
-msgid "WordPress automatic updates"
-msgstr ""
-
-msgid "Result of automatic core updates."
-msgstr ""
-
-msgid "Plugin and theme automatic updates"
-msgstr ""
-
-msgid "Result of automatic plugin and theme updates."
-msgstr ""
-
-msgid "Automatic updates debug"
-msgstr ""
-
-msgid "Debug email about automatic updates."
-msgstr ""
-
-msgid "New user registration"
-msgstr ""
-
-msgid "Notice sent to the administrator when a new user registers."
-msgstr ""
-
-msgid "Comment awaiting moderation"
-msgstr ""
-
-msgid "Notice sent when a comment needs to be approved."
-msgstr ""
-
-msgid "The email address is not valid."
-msgstr ""
-
+#. Plugin Name of the plugin
+#: bccpilot.php
+#: bccpilot.php:272
+#: bccpilot.php:273
 msgid "BccPilot"
 msgstr ""
 
-msgid "Copy recipient"
+#. Plugin URI of the plugin
+#: bccpilot.php
+msgid "https://www.e3pr0m.com/plugin/bccpilot/"
 msgstr ""
 
-msgid "This address will receive a hidden copy (Bcc) of the emails selected below. Leave it empty to disable the plugin."
+#. Description of the plugin
+#: bccpilot.php
+msgid "Choose which WordPress notifications get a hidden Bcc copy, sent to an address of your choice. No generic email filtering: only the notifications you pick."
 msgstr ""
 
-msgid "Emails to copy"
+#. Author of the plugin
+#: bccpilot.php
+msgid "E3pr0m"
 msgstr ""
 
-msgid "Only these WordPress system emails are copied. Other emails of the site, such as WooCommerce orders, are never copied."
+#. Author URI of the plugin
+#: bccpilot.php
+msgid "https://www.e3pr0m.com"
 msgstr ""
 
+#: bccpilot.php:89
+msgid "Critical error (recovery mode)"
+msgstr ""
+
+#: bccpilot.php:90
+msgid "The \"Your Site is Experiencing a Technical Issue\" email."
+msgstr ""
+
+#: bccpilot.php:93
+msgid "WordPress automatic updates"
+msgstr ""
+
+#: bccpilot.php:94
+msgid "Result of automatic core updates."
+msgstr ""
+
+#: bccpilot.php:97
+msgid "Plugin and theme automatic updates"
+msgstr ""
+
+#: bccpilot.php:98
+msgid "Result of automatic plugin and theme updates."
+msgstr ""
+
+#: bccpilot.php:101
+msgid "Automatic updates debug"
+msgstr ""
+
+#: bccpilot.php:102
+msgid "Debug email about automatic updates."
+msgstr ""
+
+#: bccpilot.php:105
+msgid "New user registration"
+msgstr ""
+
+#: bccpilot.php:106
+msgid "Notice sent to the administrator when a new user registers."
+msgstr ""
+
+#: bccpilot.php:109
+msgid "Comment awaiting moderation"
+msgstr ""
+
+#: bccpilot.php:110
+msgid "Notice sent when a comment needs to be approved."
+msgstr ""
+
+#: bccpilot.php:239
+msgid "That email address does not look valid, so it was not changed."
+msgstr ""
+
+#: bccpilot.php:375
+msgid "Add an email address and BccPilot will start copying the emails you choose."
+msgstr ""
+
+#: bccpilot.php:385
+msgid "Choose at least one email below and BccPilot will start copying it."
+msgstr ""
+
+#. translators: 1: number of kinds of email, 2: email address that receives the copy.
+#: bccpilot.php:392
+#, php-format
+msgid "A hidden copy of %1$d kind of email goes to %2$s."
+msgid_plural "A hidden copy of %1$d kinds of email goes to %2$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: bccpilot.php:405
+msgid "You do not have permission to do this."
+msgstr ""
+
+#. translators: %s: site name.
+#: bccpilot.php:415
+#, php-format
+msgid "[%s] BccPilot test email"
+msgstr ""
+
+#. translators: %s: site address.
+#: bccpilot.php:417
+#, php-format
+msgid "This is a test email sent by BccPilot from %s."
+msgstr ""
+
+#: bccpilot.php:419
+msgid "If you can read it, this address can receive the copies you choose. It is not a copy of any other email."
+msgstr ""
+
+#: bccpilot.php:456
+msgid "Get a hidden copy of the WordPress emails that matter to you."
+msgstr ""
+
+#. translators: %s: link to the E3pr0m website (the author name).
+#: bccpilot.php:461
+#, php-format
+msgid "by %s"
+msgstr ""
+
+#: bccpilot.php:464
+msgid "Support development"
+msgstr ""
+
+#: bccpilot.php:472
+msgid "Who gets the copy?"
+msgstr ""
+
+#: bccpilot.php:472
+msgid "Choose the address that receives a hidden copy (Bcc) of the emails you pick below."
+msgstr ""
+
+#: bccpilot.php:476
+msgid "Active"
+msgstr ""
+
+#: bccpilot.php:476
+msgid "Not active"
+msgstr ""
+
+#: bccpilot.php:481
+msgid "Email address that receives the copy"
+msgstr ""
+
+#: bccpilot.php:483
+msgid "The people who normally receive these emails do not see this address. Leave it empty to turn BccPilot off. Make sure whoever reads these copies is allowed to see their content."
+msgstr ""
+
+#: bccpilot.php:488
+msgid "Which emails do you want copied?"
+msgstr ""
+
+#: bccpilot.php:488
+msgid "Tick the WordPress system emails you want a copy of."
+msgstr ""
+
+#: bccpilot.php:504
+msgid "Only the emails listed here are copied. Other emails of your site, such as WooCommerce orders, are never copied."
+msgstr ""
+
+#: bccpilot.php:507
+msgid "Save Changes"
+msgstr ""
+
+#: bccpilot.php:517
+msgid "Check that it works"
+msgstr ""
+
+#: bccpilot.php:517
+msgid "Send yourself a test email to see that the address can receive messages."
+msgstr ""
+
+#: bccpilot.php:521
+msgid "The test email was sent. Check the inbox of that address, and the spam folder too."
+msgstr ""
+
+#: bccpilot.php:526
+msgid "The test email could not be sent. Your site cannot send email right now, so neither the original emails nor their copies will leave it. Check the mail settings of your site or ask your host."
+msgstr ""
+
+#: bccpilot.php:531
+msgid "There is no saved address to send the test to. Add one above and save first."
+msgstr ""
+
+#: bccpilot.php:538
+msgid "Send a test email"
+msgstr ""
+
+#: bccpilot.php:544
+msgid "Save an email address first: the test goes to the saved address."
+msgstr ""
+
+#: bccpilot.php:546
+msgid "The test goes to the saved address, not to what you typed and have not saved yet. It only shows that the address can receive email: it does not copy any real notification."
+msgstr ""
+
+#: bccpilot.php:563
 msgid "Settings"
 msgstr ""
-

@@ -1,10 +1,11 @@
 === BccPilot ===
 Contributors:      e3pr0m
+Donate link:       https://github.com/sponsors/E3pr0m
 Tags:              email, bcc, admin, notifications, updates
 Requires at least: 5.2
 Tested up to:      7.1
 Requires PHP:      7.4
-Stable tag:        1.0.0
+Stable tag:        1.1.0
 License:           GPLv2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +25,7 @@ The plugin does not hook the generic `wp_mail` function. It only uses the filter
 * Bcc copy of automatic update results for core, plugins and themes (plugins and themes share one option), and of the updates debug email
 * Optional copy of the new user registration notice
 * Optional copy of the "comment awaiting moderation" notice
+* A "Send a test email" button that checks the address can receive messages
 
 = What this plugin does not do =
 
@@ -33,7 +35,7 @@ The plugin does not hook the generic `wp_mail` function. It only uses the filter
 
 = Privacy =
 
-The plugin does not collect or send data to any external service. The emails you select are copied to the address you set, so make sure the person who receives them is authorized to read that content.
+The plugin does not collect or send data to any external service. The emails you select are copied to the address you set, so make sure the person who receives them is authorized to read that content. The test email, sent only when you press the button, goes to the address you saved through your site's normal mail system and contains no personal data.
 
 == Installation ==
 
@@ -47,6 +49,10 @@ The plugin does not collect or send data to any external service. The emails you
 
 The plugin stays idle until a valid address is set in Settings.
 
+= The test email does not arrive =
+
+The button hands the message to your site's mail system. If nothing arrives, check the spam folder and the mail settings of your site: a site that cannot send email cannot send the copies either. The test only shows that the address can receive email: it does not copy any real notification.
+
 = Are WooCommerce emails copied? =
 
 No. Only the WordPress system notifications listed in Settings can be copied.
@@ -56,6 +62,12 @@ No. Only the WordPress system notifications listed in Settings can be copied.
 Deleting the plugin from the Plugins screen removes its only option (`e3p_bccpilot_settings`).
 
 == Changelog ==
+
+= 1.1.0 =
+* New settings page: header with the plugin icon, grey cards, a clear "Active / Not active" status and a new look for buttons and checkboxes.
+* New "Send a test email" button to check that the address can receive messages. It only sends to the saved address and does not copy any real notification.
+* The settings screen header now carries a small "by E3pr0m" link to the author's website and a "Support development" link (GitHub Sponsors, optional).
+* Added the plugin website and a donate link.
 
 = 1.0.0 =
 * First release.
