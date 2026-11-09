@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BccPilot 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bccpilot\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: bccpilot\n"
+
+msgid "BccPilot"
+msgstr "BccPilot"
+
+msgid "https://www.e3pr0m.com/plugin/bccpilot/"
+msgstr "https://www.e3pr0m.com/plugin/bccpilot/"
+
+msgid "Choose which WordPress notifications get a hidden Bcc copy, sent to an address of your choice. No generic email filtering: only the notifications you pick."
+msgstr "Scegli quali notifiche di WordPress ricevono una copia nascosta in Bcc, inviata a un indirizzo a tua scelta. Nessun filtro generico sulle email: solo le notifiche che scegli."
+
+msgid "E3pr0m"
+msgstr "E3pr0m"
+
+msgid "https://www.e3pr0m.com"
+msgstr "https://www.e3pr0m.com"
+
+msgid "Critical error (recovery mode)"
+msgstr "Errore critico (modalità di recupero)"
+
+msgid "The \"Your Site is Experiencing a Technical Issue\" email."
+msgstr "L'email \"Il tuo sito sta riscontrando un problema tecnico\"."
+
+msgid "WordPress automatic updates"
+msgstr "Aggiornamenti automatici di WordPress"
+
+msgid "Result of automatic core updates."
+msgstr "Esito degli aggiornamenti automatici del core."
+
+msgid "Plugin and theme automatic updates"
+msgstr "Aggiornamenti automatici di plugin e temi"
+
+msgid "Result of automatic plugin and theme updates."
+msgstr "Esito degli aggiornamenti automatici di plugin e temi."
+
+msgid "Automatic updates debug"
+msgstr "Debug degli aggiornamenti automatici"
+
+msgid "Debug email about automatic updates."
+msgstr "Email di debug sugli aggiornamenti automatici."
+
+msgid "New user registration"
+msgstr "Registrazione di un nuovo utente"
+
+msgid "Notice sent to the administrator when a new user registers."
+msgstr "Avviso inviato all'amministratore quando si registra un nuovo utente."
+
+msgid "Comment awaiting moderation"
+msgstr "Commento in attesa di moderazione"
+
+msgid "Notice sent when a comment needs to be approved."
+msgstr "Avviso inviato quando un commento deve essere approvato."
+
+msgid "That email address does not look valid, so it was not changed."
+msgstr "Questo indirizzo email non sembra valido, quindi non è stato modificato."
+
+msgid "Add an email address and BccPilot will start copying the emails you choose."
+msgstr "Aggiungi un indirizzo email e BccPilot inizierà a copiare le email che scegli."
+
+msgid "Choose at least one email below and BccPilot will start copying it."
+msgstr "Scegli almeno un'email qui sotto e BccPilot inizierà a copiarla."
+
+#, php-format
+msgid "A hidden copy of %1$d kind of email goes to %2$s."
+msgid_plural "A hidden copy of %1$d kinds of email goes to %2$s."
+msgstr[0] "Una copia nascosta di %1$d tipo di email viene inviata a %2$s."
+msgstr[1] "Una copia nascosta di %1$d tipi di email viene inviata a %2$s."
+
+msgid "You do not have permission to do this."
+msgstr "Non hai il permesso di farlo."
+
+#, php-format
+msgid "[%s] BccPilot test email"
+msgstr "[%s] Email di prova di BccPilot"
+
+#, php-format
+msgid "This is a test email sent by BccPilot from %s."
+msgstr "Questa è un'email di prova inviata da BccPilot da %s."
+
+msgid "If you can read it, this address can receive the copies you choose. It is not a copy of any other email."
+msgstr "Se riesci a leggerla, questo indirizzo può ricevere le copie che scegli. Non è la copia di nessun'altra email."
+
+msgid "Get a hidden copy of the WordPress emails that matter to you."
+msgstr "Ricevi una copia nascosta delle email di WordPress che contano per te."
+
+#, php-format
+msgid "by %s"
+msgstr "di %s"
+
+msgid "Support development"
+msgstr "Sostieni lo sviluppo"
+
+msgid "Who gets the copy?"
+msgstr "Chi riceve la copia?"
+
+msgid "Choose the address that receives a hidden copy (Bcc) of the emails you pick below."
+msgstr "Scegli l'indirizzo che riceve una copia nascosta (Bcc) delle email che selezioni qui sotto."
+
+msgid "Active"
+msgstr "Attivo"
+
+msgid "Not active"
+msgstr "Non attivo"
+
+msgid "Email address that receives the copy"
+msgstr "Indirizzo email che riceve la copia"
+
+msgid "The people who normally receive these emails do not see this address. Leave it empty to turn BccPilot off. Make sure whoever reads these copies is allowed to see their content."
+msgstr "Le persone che di solito ricevono queste email non vedono questo indirizzo. Lascialo vuoto per disattivare BccPilot. Assicurati che chi legge queste copie sia autorizzato a vederne il contenuto."
+
+msgid "Which emails do you want copied?"
+msgstr "Quali email vuoi copiare?"
+
+msgid "Tick the WordPress system emails you want a copy of."
+msgstr "Seleziona le email di sistema di WordPress di cui vuoi una copia."
+
+msgid "Only the emails listed here are copied. Other emails of your site, such as WooCommerce orders, are never copied."
+msgstr "Vengono copiate solo le email elencate qui. Le altre email del tuo sito, come gli ordini di WooCommerce, non vengono mai copiate."
+
+msgid "Save Changes"
+msgstr "Salva le modifiche"
+
+msgid "Check that it works"
+msgstr "Verifica che funzioni"
+
+msgid "Send yourself a test email to see that the address can receive messages."
+msgstr "Invia a te stesso un'email di prova per verificare che l'indirizzo possa ricevere messaggi."
+
+msgid "The test email was sent. Check the inbox of that address, and the spam folder too."
+msgstr "L'email di prova è stata inviata. Controlla la posta in arrivo di quell'indirizzo, e anche la cartella dello spam."
+
+msgid "The test email could not be sent. Your site cannot send email right now, so neither the original emails nor their copies will leave it. Check the mail settings of your site or ask your host."
+msgstr "Non è stato possibile inviare l'email di prova. Il tuo sito al momento non riesce a inviare email, quindi né le email originali né le loro copie partiranno. Controlla le impostazioni di posta del tuo sito o rivolgiti al tuo hosting."
+
+msgid "There is no saved address to send the test to. Add one above and save first."
+msgstr "Non c'è nessun indirizzo salvato a cui inviare la prova. Aggiungine uno qui sopra e salva prima."
+
+msgid "Send a test email"
+msgstr "Invia un'email di prova"
+
+msgid "Save an email address first: the test goes to the saved address."
+msgstr "Salva prima un indirizzo email: la prova va all'indirizzo salvato."
+
+msgid "The test goes to the saved address, not to what you typed and have not saved yet. It only shows that the address can receive email: it does not copy any real notification."
+msgstr "La prova va all'indirizzo salvato, non a quello che hai digitato e non hai ancora salvato. Mostra solo che l'indirizzo può ricevere email: non copia nessuna notifica reale."
+
+msgid "Settings"
+msgstr "Impostazioni"

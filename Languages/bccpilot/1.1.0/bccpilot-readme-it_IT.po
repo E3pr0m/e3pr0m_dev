@@ -1,0 +1,161 @@
+# Translation of Plugins - BccPilot - Stable Readme (latest release) in Italian
+# This file is distributed under the same license as the Plugins - BccPilot - Stable Readme (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: +0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: it\n"
+"Project-Id-Version: Plugins - BccPilot - Stable Readme (latest release)\n"
+
+#. Short description.
+#, gp-priority: high
+msgid "Send a hidden Bcc copy of the WordPress notifications you choose, such as critical errors and updates, to an extra address."
+msgstr "Invia a un indirizzo aggiuntivo una copia nascosta in Bcc delle notifiche di WordPress che scegli, come gli errori critici e gli aggiornamenti."
+
+#. Plugin name.
+#, gp-priority: high
+msgid "BccPilot"
+msgstr "BccPilot"
+
+#. Found in faq paragraph.
+msgid "The button hands the message to your site's mail system. If nothing arrives, check the spam folder and the mail settings of your site: a site that cannot send email cannot send the copies either. The test only shows that the address can receive email: it does not copy any real notification."
+msgstr "Il pulsante affida il messaggio al sistema di posta del tuo sito. Se non arriva nulla, controlla la cartella dello spam e le impostazioni di posta del tuo sito: un sito che non riesce a inviare email non riesce a inviare nemmeno le copie. La prova mostra solo che l'indirizzo può ricevere email: non copia nessuna notifica reale."
+
+#. Found in faq header.
+msgid "The test email does not arrive"
+msgstr "L'email di prova non arriva"
+
+#. Found in description paragraph.
+msgid "The plugin does not collect or send data to any external service. The emails you select are copied to the address you set, so make sure the person who receives them is authorized to read that content. The test email, sent only when you press the button, goes to the address you saved through your site's normal mail system and contains no personal data."
+msgstr "Il plugin non raccoglie né invia dati a nessun servizio esterno. Le email che selezioni vengono copiate all'indirizzo che imposti, quindi assicurati che la persona che le riceve sia autorizzata a leggerne il contenuto. L'email di prova, inviata solo quando premi il pulsante, va all'indirizzo che hai salvato attraverso il normale sistema di posta del tuo sito e non contiene dati personali."
+
+#. Found in description list item.
+msgid "A \"Send a test email\" button that checks the address can receive messages"
+msgstr "Un pulsante \"Invia un'email di prova\" che verifica che l'indirizzo possa ricevere messaggi"
+
+#. Found in faq paragraph.
+msgid "Deleting the plugin from the Plugins screen removes its only option (<code>e3p_bccpilot_settings</code>)."
+msgstr "Eliminare il plugin dalla schermata Plugin rimuove la sua unica opzione (<code>e3p_bccpilot_settings</code>)."
+
+#. Found in faq paragraph.
+msgid "No. Only the WordPress system notifications listed in Settings can be copied."
+msgstr "No. Si possono copiare solo le notifiche di sistema di WordPress elencate nelle Impostazioni."
+
+#. Found in faq paragraph.
+msgid "The plugin stays idle until a valid address is set in Settings."
+msgstr "Il plugin resta inattivo finché nelle Impostazioni non viene inserito un indirizzo valido."
+
+#. Found in faq header.
+msgid "How do I remove all plugin data?"
+msgstr "Come rimuovo tutti i dati del plugin?"
+
+#. Found in faq header.
+msgid "Are WooCommerce emails copied?"
+msgstr "Le email di WooCommerce vengono copiate?"
+
+#. Found in faq header.
+msgid "Nothing happens after activation"
+msgstr "Dopo l'attivazione non succede nulla"
+
+#. Found in installation list item.
+msgid "Go to <strong>Settings → BccPilot</strong>, enter the address that will receive the copy and choose the emails."
+msgstr "Vai su <strong>Impostazioni → BccPilot</strong>, inserisci l'indirizzo che riceverà la copia e scegli le email."
+
+#. Found in installation list item.
+msgid "Activate the plugin."
+msgstr "Attiva il plugin."
+
+#. Found in installation list item.
+msgid "Upload the <code>bccpilot</code> folder to <code>wp-content/plugins/</code>, or install it from the Plugins screen."
+msgstr "Carica la cartella <code>bccpilot</code> in <code>wp-content/plugins/</code>, oppure installalo dalla schermata Plugin."
+
+#. Found in description paragraph.
+msgid "The plugin does not hook the generic <code>wp_mail</code> function. It only uses the filters of the individual system notifications, so other emails of the site (WooCommerce orders, contact forms, newsletters) are never copied."
+msgstr "Il plugin non si aggancia alla funzione generica <code>wp_mail</code>. Usa solo i filtri delle singole notifiche di sistema, quindi le altre email del sito (ordini di WooCommerce, moduli di contatto, newsletter) non vengono mai copiate."
+
+#. Found in description paragraph.
+msgid "You choose the address and which emails to copy from <strong>Settings → BccPilot</strong>."
+msgstr "L'indirizzo e le email da copiare si scelgono da <strong>Impostazioni → BccPilot</strong>."
+
+#. Found in description paragraph.
+msgid "BccPilot lets you decide which WordPress notifications are copied, in Bcc, to an extra address. Today it covers the system emails sent to the site administrator: critical errors, automatic updates, new user registrations and comments awaiting moderation."
+msgstr "BccPilot ti permette di decidere quali notifiche di WordPress vengono copiate, in Bcc, a un indirizzo aggiuntivo. Oggi copre le email di sistema inviate all'amministratore del sito: errori critici, aggiornamenti automatici, nuove registrazioni di utenti e commenti in attesa di moderazione."
+
+#. Found in description list item.
+msgid "It does not fix delivery problems: if the site cannot send email (missing or wrong SMTP), neither the original email nor the copy is sent"
+msgstr "Non risolve i problemi di consegna: se il sito non riesce a inviare email (SMTP mancante o errato), non partono né l'email originale né la copia"
+
+#. Found in description list item.
+msgid "It does not replace the original recipient: the administrator still receives every email"
+msgstr "Non sostituisce il destinatario originale: l'amministratore continua a ricevere ogni email"
+
+#. Found in description list item.
+msgid "It does not copy WooCommerce emails or any other generic email of the site"
+msgstr "Non copia le email di WooCommerce né nessun'altra email generica del sito"
+
+#. Found in description list item.
+msgid "Optional copy of the \"comment awaiting moderation\" notice"
+msgstr "Copia facoltativa dell'avviso \"commento in attesa di moderazione\""
+
+#. Found in description list item.
+msgid "Optional copy of the new user registration notice"
+msgstr "Copia facoltativa dell'avviso di nuova registrazione di un utente"
+
+#. Found in description list item.
+msgid "Bcc copy of automatic update results for core, plugins and themes (plugins and themes share one option), and of the updates debug email"
+msgstr "Copia in Bcc dell'esito degli aggiornamenti automatici di core, plugin e temi (plugin e temi condividono un'unica opzione) e dell'email di debug degli aggiornamenti"
+
+#. Found in description list item.
+msgid "Hidden Bcc copy of the \"Your Site is Experiencing a Technical Issue\" email"
+msgstr "Copia nascosta in Bcc dell'email \"Il tuo sito sta riscontrando un problema tecnico\""
+
+#. Found in description header.
+msgid "Privacy"
+msgstr "Privacy"
+
+#. Found in description header.
+msgid "What this plugin does not do"
+msgstr "Cosa non fa questo plugin"
+
+#. Found in description header.
+msgid "Features"
+msgstr "Funzionalità"
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Added the plugin website and a donate link."
+msgstr "Aggiunti il sito web del plugin e un link per le donazioni."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "The settings screen header now carries a small \"by E3pr0m\" link to the author's website and a \"Support development\" link (GitHub Sponsors, optional)."
+msgstr "La testata della schermata delle impostazioni ora ha un piccolo link \"di E3pr0m\" al sito dell'autore e un link \"Sostieni lo sviluppo\" (GitHub Sponsors, facoltativo)."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New \"Send a test email\" button to check that the address can receive messages. It only sends to the saved address and does not copy any real notification."
+msgstr "Nuovo pulsante \"Invia un'email di prova\" per verificare che l'indirizzo possa ricevere messaggi. Invia solo all'indirizzo salvato e non copia nessuna notifica reale."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "New settings page: header with the plugin icon, grey cards, a clear \"Active / Not active\" status and a new look for buttons and checkboxes."
+msgstr "Nuova pagina delle impostazioni: testata con l'icona del plugin, schede grigie, uno stato chiaro \"Attivo / Non attivo\" e un nuovo aspetto per pulsanti e caselle."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Supported notifications: critical error, automatic updates (core, plugins, themes, debug), new user registration, comment awaiting moderation."
+msgstr "Notifiche supportate: errore critico, aggiornamenti automatici (core, plugin, temi, debug), nuova registrazione di un utente, commento in attesa di moderazione."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "Settings page to set the Bcc address and choose which system emails to copy."
+msgstr "Pagina delle impostazioni per impostare l'indirizzo Bcc e scegliere quali email di sistema copiare."
+
+#. Found in changelog list item.
+#, gp-priority: low
+msgid "First release."
+msgstr "Prima versione."

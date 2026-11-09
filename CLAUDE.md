@@ -49,6 +49,7 @@ Con le classi si può usare invece un namespace (`E3pr0m\<Nome>`). Il nome visib
 ## Traduzioni
 
 - Ogni plugin ha in `languages/` solo il `.pot` (modello). NON includere `.po`, `.mo` o `.php` di traduzione: la directory li rifiuta (review del 27/10/2026), le traduzioni si gestiscono su translate.wordpress.org. Se si aggiunge o cambia una stringa `__()`, rigenerare il `.pot` (stringhe estratte dal PHP).
+- I `.po` di lavoro (le traduzioni da importare su translate.wordpress.org) stanno fuori dai plugin, in `Languages/<slug>/<versione>/<slug>-<lingua>.po` nella radice del repository (esempio: `Languages/bccpilot/1.1.0/bccpilot-it_IT.po`). Una cartella per ogni versione che cambia le stringhe; non vanno mai in `Plugin/<nome>/`, nello zip né in SVN. Le stringhe del `readme.txt` sono un sotto-progetto a parte su translate.wordpress.org (Stable Readme) e non stanno nel `.po` del plugin.
 - Non si usa `load_plugin_textdomain()` (sconsigliato dalla directory): in produzione le traduzioni arrivano da translate.wordpress.org.
 - Le traduzioni non si possono chiamare prima di `init`: i testi per l'interfaccia vanno tenuti separati dalla logica che si aggancia prima (es. in `plugins_loaded`).
 

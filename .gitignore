@@ -8,6 +8,9 @@ composer.*
 settings.json
 settings.local.json
 .claude/
+sessions/
+
+
 
 Thumbs.db
 .DS_Store
