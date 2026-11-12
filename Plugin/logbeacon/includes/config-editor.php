@@ -8,8 +8,8 @@
  *
  * Ogni riga toccata porta un commento marcatore che dice com'era prima, così non serve salvare
  * niente nel database:
- *   define( 'WP_DEBUG', true ); // LogPilot (original: false)
- *   define( 'WP_DEBUG_LOG', true ); // LogPilot (added)
+ *   define( 'WP_DEBUG', true ); // LogBeacon (original: false)
+ *   define( 'WP_DEBUG_LOG', true ); // LogBeacon (added)
  *
  * Le funzioni di analisi e di trasformazione lavorano solo su stringhe (testabili senza WordPress).
  */
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return string[]
  */
-function e3p_logpilot_config_names() {
+function e3p_logbeacon_config_names() {
     return array( 'WP_DEBUG', 'WP_DEBUG_LOG', 'WP_DEBUG_DISPLAY' );
 }
 
@@ -33,27 +33,27 @@ function e3p_logpilot_config_names() {
  * @param string $path Percorso, già con le barre normali.
  * @return string
  */
-function e3p_logpilot_config_quote( $path ) {
+function e3p_logbeacon_config_quote( $path ) {
     return "'" . str_replace( array( '\\', "'" ), array( '\\\\', "\\'" ), $path ) . "'";
 }
 
 /**
- * Riga di define() con eventuale commento dell'utente e marcatore LogPilot.
+ * Riga di define() con eventuale commento dell'utente e marcatore LogBeacon.
  *
  * @param string      $indent  Rientro.
  * @param string      $name    Nome della costante.
- * @param string      $value   'true', 'false' oppure un percorso già tra apici (vedi e3p_logpilot_config_quote()).
+ * @param string      $value   'true', 'false' oppure un percorso già tra apici (vedi e3p_logbeacon_config_quote()).
  * @param string      $comment Commento già presente (senza il nostro marcatore).
  * @param string|null $marker  'added', 'original: true', 'original: false' oppure null.
  * @return string
  */
-function e3p_logpilot_config_build_line( $indent, $name, $value, $comment, $marker ) {
+function e3p_logbeacon_config_build_line( $indent, $name, $value, $comment, $marker ) {
     $line = $indent . "define( '" . $name . "', " . $value . ' );';
     if ( '' !== $comment ) {
         $line .= ' ' . $comment;
     }
     if ( null !== $marker ) {
-        $line .= ' // LogPilot (' . $marker . ')';
+        $line .= ' // LogBeacon (' . $marker . ')';
     }
     return $line;
 }
@@ -65,7 +65,7 @@ function e3p_logpilot_config_build_line( $indent, $name, $value, $comment, $mark
  * @return array{ok: bool, eol: string, lines: string[], anchor: int|null, constants: array, problems: array}
  *         Ogni costante: found, index, indent, value, comment, marker (null, 'added', 'true' o 'false').
  */
-function e3p_logpilot_config_analyze( $src ) {
+function e3p_logbeacon_config_analyze( $src ) {
     $eol = false !== strpos( $src, "\r\n" ) ? "\r\n" : "\n";
     $res = array(
         'ok'        => false,
@@ -75,7 +75,7 @@ function e3p_logpilot_config_analyze( $src ) {
         'constants' => array(),
         'problems'  => array(),
     );
-    $names = e3p_logpilot_config_names();
+    $names = e3p_logbeacon_config_names();
     foreach ( $names as $name ) {
         $res['constants'][ $name ] = array( 'found' => false );
     }
@@ -129,10 +129,10 @@ function e3p_logpilot_config_analyze( $src ) {
 
         $standard = false;
         // Perché una riga non è nella forma standard (per spiegarlo all'utente): dentro un blocco, non è un define()
-        // semplice, valore diverso da true/false, altro codice sulla stessa riga, percorso non di LogPilot, o altro.
+        // semplice, valore diverso da true/false, altro codice sulla stessa riga, percorso non di LogBeacon, o altro.
         $reason = ( 0 !== $sig[ $i ][3] ) ? 'nested' : 'format';
-        // WP_DEBUG_LOG può avere anche un percorso tra apici singoli, ma solo se è quello di LogPilot (cartella
-        // e3p-logpilot-<16 caratteri esadecimali>): un percorso scelto dall'utente resta "forma non standard".
+        // WP_DEBUG_LOG può avere anche un percorso tra apici singoli, ma solo se è quello di LogBeacon (cartella
+        // e3p-logbeacon-<16 caratteri esadecimali>): un percorso scelto dall'utente resta "forma non standard".
         $is_log = ( 'WP_DEBUG_LOG' === $name );
         if ( $i >= 3 && $i + 4 < $total && 0 === $sig[ $i ][3] ) {
             $prev      = $sig[ $i - 3 ];
@@ -166,9 +166,9 @@ function e3p_logpilot_config_analyze( $src ) {
                     }
                     if ( preg_match( '/^(?:\/\/.*|#.*|\/\*.*\*\/)?$/', $trail ) ) {
                         $marker = null;
-                        if ( preg_match( '/\s*\/\/\s*LogPilot \((?:original: (true|false)|(added))\)\s*$/', $trail, $mm ) ) {
+                        if ( preg_match( '/\s*\/\/\s*LogBeacon \((?:original: (true|false)|(added))\)\s*$/', $trail, $mm ) ) {
                             $marker = ( isset( $mm[1] ) && '' !== $mm[1] ) ? $mm[1] : 'added';
-                            $trail  = trim( (string) preg_replace( '/\s*\/\/\s*LogPilot \((?:original: (?:true|false)|added)\)\s*$/', '', $trail ) );
+                            $trail  = trim( (string) preg_replace( '/\s*\/\/\s*LogBeacon \((?:original: (?:true|false)|added)\)\s*$/', '', $trail ) );
                         }
                         $value = strtolower( $m[3] );
                         $path  = '';
@@ -177,7 +177,7 @@ function e3p_logpilot_config_analyze( $src ) {
                             $value = 'path';
                             $path  = strtr( substr( $m[3], 1, -1 ), array( '\\\\' => '\\', "\\'" => "'" ) );
                         }
-                        if ( 'path' !== $value || preg_match( '#/e3p-logpilot-[a-f0-9]{16}(?:/|$)#', $path ) ) {
+                        if ( 'path' !== $value || preg_match( '#/e3p-logbeacon-[a-f0-9]{16}(?:/|$)#', $path ) ) {
                             $standard         = true;
                             $found[ $name ][] = array(
                                 'found'   => true,
@@ -250,12 +250,12 @@ function e3p_logpilot_config_analyze( $src ) {
 }
 
 /**
- * Stato letto dall'analisi: cosa è gestito da LogPilot e se il debug era già acceso prima.
+ * Stato letto dall'analisi: cosa è gestito da LogBeacon e se il debug era già acceso prima.
  *
- * @param array $analysis Risultato di e3p_logpilot_config_analyze().
+ * @param array $analysis Risultato di e3p_logbeacon_config_analyze().
  * @return array{managed: bool, was_on: bool, unmanaged_on: bool}
  */
-function e3p_logpilot_config_state( $analysis ) {
+function e3p_logbeacon_config_state( $analysis ) {
     $state = array(
         'managed'      => false,
         'was_on'       => false,
@@ -286,12 +286,12 @@ function e3p_logpilot_config_state( $analysis ) {
  *
  * @param string      $src      Contenuto attuale.
  * @param bool        $on       True per accendere, false per spegnere.
- * @param string|null $log_path Percorso del log di LogPilot (barre normali): se c'è, accendendo WP_DEBUG_LOG
+ * @param string|null $log_path Percorso del log di LogBeacon (barre normali): se c'è, accendendo WP_DEBUG_LOG
  *                              prende quel percorso al posto di `true`.
  * @return array{src: string|null, error: string, analysis: array} `error` vuoto se tutto è andato bene.
  */
-function e3p_logpilot_config_apply( $src, $on, $log_path = null ) {
-    $a = e3p_logpilot_config_analyze( $src );
+function e3p_logbeacon_config_apply( $src, $on, $log_path = null ) {
+    $a = e3p_logbeacon_config_analyze( $src );
     if ( ! $a['ok'] ) {
         return array(
             'src'      => null,
@@ -304,23 +304,23 @@ function e3p_logpilot_config_apply( $src, $on, $log_path = null ) {
     $remove = array();
     $add    = array();
 
-    foreach ( e3p_logpilot_config_names() as $name ) {
+    foreach ( e3p_logbeacon_config_names() as $name ) {
         $c       = $a['constants'][ $name ];
         $display = ( 'WP_DEBUG_DISPLAY' === $name );
 
         if ( $on ) {
             $target = $display ? 'false' : 'true';
             if ( 'WP_DEBUG_LOG' === $name && null !== $log_path ) {
-                $target = e3p_logpilot_config_quote( $log_path );
+                $target = e3p_logbeacon_config_quote( $log_path );
             }
             if ( $c['found'] ) {
                 $orig = null !== $c['marker'] ? $c['marker'] : $c['value'];
                 if ( 'path' === $orig ) {
                     $orig = 'false'; // Un percorso nostro senza marcatore: si tratta come se fosse spento in origine.
                 }
-                $lines[ $c['index'] ] = e3p_logpilot_config_build_line( $c['indent'], $name, $target, $c['comment'], 'added' === $orig ? 'added' : 'original: ' . $orig );
+                $lines[ $c['index'] ] = e3p_logbeacon_config_build_line( $c['indent'], $name, $target, $c['comment'], 'added' === $orig ? 'added' : 'original: ' . $orig );
             } else {
-                $add[] = e3p_logpilot_config_build_line( '', $name, $target, '', 'added' );
+                $add[] = e3p_logbeacon_config_build_line( '', $name, $target, '', 'added' );
             }
             continue;
         }
@@ -335,7 +335,7 @@ function e3p_logpilot_config_apply( $src, $on, $log_path = null ) {
             if ( 'added' === $c['marker'] ) {
                 $remove[] = $c['index'];
             } else {
-                $lines[ $c['index'] ] = e3p_logpilot_config_build_line( $c['indent'], $name, $c['marker'], $c['comment'], null );
+                $lines[ $c['index'] ] = e3p_logbeacon_config_build_line( $c['indent'], $name, $c['marker'], $c['comment'], null );
             }
             continue;
         }
@@ -347,10 +347,10 @@ function e3p_logpilot_config_apply( $src, $on, $log_path = null ) {
         if ( 'added' === $orig ) {
             $remove[] = $c['index'];
         } elseif ( 'true' === $orig ) {
-            // Era già acceso prima di LogPilot: si spegne, ma il marcatore resta per segnalarlo.
-            $lines[ $c['index'] ] = e3p_logpilot_config_build_line( $c['indent'], $name, 'false', $c['comment'], 'original: true' );
+            // Era già acceso prima di LogBeacon: si spegne, ma il marcatore resta per segnalarlo.
+            $lines[ $c['index'] ] = e3p_logbeacon_config_build_line( $c['indent'], $name, 'false', $c['comment'], 'original: true' );
         } else {
-            $lines[ $c['index'] ] = e3p_logpilot_config_build_line( $c['indent'], $name, 'false', $c['comment'], null );
+            $lines[ $c['index'] ] = e3p_logbeacon_config_build_line( $c['indent'], $name, 'false', $c['comment'], null );
         }
     }
 
@@ -369,13 +369,13 @@ function e3p_logpilot_config_apply( $src, $on, $log_path = null ) {
     $new = implode( $a['eol'], $out );
 
     // Controllo: il risultato deve avere la sintassi giusta e le costanti con i valori voluti.
-    $check = e3p_logpilot_config_analyze( $new );
+    $check = e3p_logbeacon_config_analyze( $new );
     $good  = $check['ok'];
     if ( $good ) {
         foreach ( array( 'WP_DEBUG', 'WP_DEBUG_LOG' ) as $name ) {
             $c = $check['constants'][ $name ];
             if ( $on && 'WP_DEBUG_LOG' === $name && null !== $log_path ) {
-                // Con il percorso di LogPilot, WP_DEBUG_LOG deve valere proprio quel percorso.
+                // Con il percorso di LogBeacon, WP_DEBUG_LOG deve valere proprio quel percorso.
                 if ( empty( $c['found'] ) || 'path' !== $c['value'] || $log_path !== $c['path'] ) {
                     $good = false;
                 }
@@ -404,7 +404,7 @@ function e3p_logpilot_config_apply( $src, $on, $log_path = null ) {
  *
  * @return string Percorso, o stringa vuota se non si trova.
  */
-function e3p_logpilot_config_path() {
+function e3p_logbeacon_config_path() {
     if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
         return ABSPATH . 'wp-config.php';
     }
@@ -416,23 +416,12 @@ function e3p_logpilot_config_path() {
 }
 
 /**
- * Nome del file di backup: ha estensione .php perché con un'altra (es. .bak) il server potrebbe
- * mostrarlo come testo, con le password del database dentro.
- *
- * @param string $path Percorso di wp-config.php.
- * @return string
- */
-function e3p_logpilot_config_backup_path( $path ) {
-    return dirname( $path ) . '/wp-config-logpilot-backup.php';
-}
-
-/**
  * Sintassi PHP corretta? Si controlla senza eseguire nulla.
  *
  * @param string $src Codice.
  * @return bool
  */
-function e3p_logpilot_config_syntax_ok( $src ) {
+function e3p_logbeacon_config_syntax_ok( $src ) {
     try {
         token_get_all( $src, TOKEN_PARSE );
         return true;
@@ -442,16 +431,15 @@ function e3p_logpilot_config_syntax_ok( $src ) {
 }
 
 /**
- * Scrive il nuovo wp-config.php in modo sicuro: backup, file temporaneo, controllo di sintassi,
- * sostituzione atomica, rilettura e ripristino automatico se qualcosa non torna.
+ * Scrive il nuovo wp-config.php in modo sicuro: file temporaneo, controllo di sintassi, sostituzione atomica,
+ * rilettura e ripristino automatico se qualcosa non torna. Non si crea nessuna copia su disco: il ripristino
+ * usa il contenuto letto qui, in memoria.
  *
- * @param string $path        Percorso di wp-config.php.
- * @param string $new_src     Nuovo contenuto.
- * @param bool   $make_backup True per (ri)creare il backup prima di scrivere. Il ripristino automatico non
- *                            dipende dal file di backup: usa il contenuto letto qui.
- * @return string Codice di errore (`read`, `not_writable`, `syntax`, `backup`, `write`, `verify`) o stringa vuota.
+ * @param string $path    Percorso di wp-config.php.
+ * @param string $new_src Nuovo contenuto.
+ * @return string Codice di errore (`read`, `not_writable`, `syntax`, `write`, `verify`) o stringa vuota.
  */
-function e3p_logpilot_config_write( $path, $new_src, $make_backup = true ) {
+function e3p_logbeacon_config_write( $path, $new_src ) {
     $old = file_get_contents( $path );
     if ( false === $old ) {
         return 'read';
@@ -459,15 +447,11 @@ function e3p_logpilot_config_write( $path, $new_src, $make_backup = true ) {
     if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
         return 'not_writable';
     }
-    if ( ! e3p_logpilot_config_syntax_ok( $new_src ) ) {
+    if ( ! e3p_logbeacon_config_syntax_ok( $new_src ) ) {
         return 'syntax';
     }
 
-    if ( $make_backup && ! copy( $path, e3p_logpilot_config_backup_path( $path ) ) ) {
-        return 'backup';
-    }
-
-    $temp  = dirname( $path ) . '/wp-config-logpilot-tmp.php';
+    $temp  = dirname( $path ) . '/wp-config-logbeacon-tmp.php';
     $bytes = file_put_contents( $temp, $new_src, LOCK_EX );
     if ( strlen( $new_src ) !== $bytes ) {
         if ( file_exists( $temp ) ) {
@@ -492,7 +476,7 @@ function e3p_logpilot_config_write( $path, $new_src, $make_backup = true ) {
 
     // Rilettura: se non è identico o la sintassi non è valida, si ripristina il contenuto di prima.
     $after = file_get_contents( $path );
-    if ( $after !== $new_src || ! e3p_logpilot_config_syntax_ok( $after ) ) {
+    if ( $after !== $new_src || ! e3p_logbeacon_config_syntax_ok( $after ) ) {
         file_put_contents( $path, $old, LOCK_EX );
         if ( function_exists( 'opcache_invalidate' ) ) {
             opcache_invalidate( $path, true );

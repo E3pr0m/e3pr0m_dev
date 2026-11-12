@@ -33,7 +33,7 @@ wordpress-org-backup-codes.txt
 /svn/
 
 # Ignore Vincoli.md
-/Plugin/logpilot/VINCOLI.md
+/Plugin/logbeacon/VINCOLI.md
 /Plugin/pluginaudit/VINCOLI.md
 
 # Free File Sync db

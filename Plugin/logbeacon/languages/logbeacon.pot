@@ -2,8 +2,8 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: LogPilot 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/logpilot\n"
+"Project-Id-Version: LogBeacon 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/logbeacon\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12,27 +12,27 @@ msgstr ""
 "POT-Creation-Date: 2026-11-07T18:07:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: logpilot\n"
+"X-Domain: logbeacon\n"
 
 #. Plugin Name of the plugin
-#: logpilot.php
-#: logpilot.php:767
-#: logpilot.php:768
-msgid "LogPilot"
+#: logbeacon.php
+#: logbeacon.php:767
+#: logbeacon.php:768
+msgid "LogBeacon"
 msgstr ""
 
 #. Description of the plugin
-#: logpilot.php
+#: logbeacon.php
 msgid "Read the PHP and WordPress error logs, see which errors matter, and turn debug logging on and off from a panel, without editing files."
 msgstr ""
 
 #. Author of the plugin
-#: logpilot.php
+#: logbeacon.php
 msgid "E3pr0m"
 msgstr ""
 
 #. Author URI of the plugin
-#: logpilot.php
+#: logbeacon.php
 msgid "https://www.e3pr0m.com"
 msgstr ""
 
@@ -71,10 +71,10 @@ msgstr ""
 #. translators: %s: site name
 #: includes/auto-off.php:221
 #, php-format
-msgid "[%s] LogPilot could not turn debug logging off"
+msgid "[%s] LogBeacon could not turn debug logging off"
 msgstr ""
 
-#. translators: 1: site name, 2: reason, 3: link to the LogPilot page
+#. translators: 1: site name, 2: reason, 3: link to the LogBeacon page
 #: includes/auto-off.php:224
 #, php-format
 msgid ""
@@ -92,7 +92,7 @@ msgstr ""
 msgid "[%s] Debug logging is still on"
 msgstr ""
 
-#. translators: 1: site name, 2: how long logging has been on, e.g. "3 days", 3: link to the LogPilot page
+#. translators: 1: site name, 2: how long logging has been on, e.g. "3 days", 3: link to the LogBeacon page
 #: includes/auto-off.php:251
 #, php-format
 msgid ""
@@ -101,7 +101,7 @@ msgid ""
 "The log can contain private information, so turn it off when you no longer need it. You can do it here:\n"
 "%3$s\n"
 "\n"
-"You asked LogPilot to remind you about this."
+"You asked LogBeacon to remind you about this."
 msgstr ""
 
 #: includes/auto-off.php:269
@@ -119,7 +119,7 @@ msgstr ""
 #. translators: %s: site administrator e-mail address
 #: includes/auto-off.php:281
 #, php-format
-msgid "If the automatic turn-off ever fails, LogPilot sends an e-mail to the site administrator address (%s)."
+msgid "If the automatic turn-off ever fails, LogBeacon sends an e-mail to the site administrator address (%s)."
 msgstr ""
 
 #: includes/auto-off.php:287
@@ -131,7 +131,7 @@ msgid "Send the reminder to"
 msgstr ""
 
 #: includes/auto-off.php:296
-msgid "Logging stays on until you turn it off. LogPilot only uses this address to send the reminder."
+msgid "Logging stays on until you turn it off. LogBeacon only uses this address to send the reminder."
 msgstr ""
 
 #: includes/auto-off.php:317
@@ -147,7 +147,7 @@ msgstr ""
 #. translators: 1: reminder interval, e.g. "every 3 days", 2: e-mail address
 #: includes/auto-off.php:336
 #, php-format
-msgid "Logging will stay on. LogPilot reminds you %1$s at %2$s."
+msgid "Logging will stay on. LogBeacon reminds you %1$s at %2$s."
 msgstr ""
 
 #. translators: %s: date and time of the next reminder
@@ -169,11 +169,15 @@ msgid "Debug logging is now off."
 msgstr ""
 
 #: includes/debug-switch.php:28
+#: includes/debug-switch.php
+msgid "Nothing was changed: this site is part of a network, and wp-config.php is shared by every site in it."
+msgstr ""
+
 msgid "Nothing was changed: tick the confirmation box first."
 msgstr ""
 
 #: includes/debug-switch.php:32
-msgid "Nothing was changed: LogPilot could not create the folder where the log is saved."
+msgid "Nothing was changed: LogBeacon could not create the folder where the log is saved."
 msgstr ""
 
 #: includes/debug-switch.php:36
@@ -225,11 +229,11 @@ msgid "Nothing was changed: enter a valid e-mail address for the reminder, or ch
 msgstr ""
 
 #: includes/debug-switch.php:84
-msgid "Nothing was changed: wp-config.php is not written in a form LogPilot recognizes."
+msgid "Nothing was changed: wp-config.php is not written in a form LogBeacon recognizes."
 msgstr ""
 
 #: includes/debug-switch.php:88
-msgid "Nothing was changed: LogPilot could not produce a safe version of wp-config.php."
+msgid "Nothing was changed: LogBeacon could not produce a safe version of wp-config.php."
 msgstr ""
 
 #: includes/debug-switch.php:92
@@ -244,16 +248,12 @@ msgstr ""
 msgid "Nothing was changed: the new wp-config.php would have a syntax error."
 msgstr ""
 
-#: includes/debug-switch.php:104
-msgid "Nothing was changed: the backup copy could not be created."
-msgstr ""
-
 #: includes/debug-switch.php:108
 msgid "The new wp-config.php could not be written. The original file was kept."
 msgstr ""
 
 #: includes/debug-switch.php:112
-msgid "The written file did not pass the final check, so the original wp-config.php was restored from the backup."
+msgid "The written file did not pass the final check, so the original wp-config.php was restored to how it was."
 msgstr ""
 
 #: includes/debug-switch.php:122
@@ -321,31 +321,35 @@ msgid "To find out what is going wrong, turn logging on, repeat the action that 
 msgstr ""
 
 #: includes/debug-switch.php:264
-msgid "This switch only controls the WordPress log (debug.log). The PHP error log belongs to your server: LogPilot shows it below when it exists, but it cannot turn it on."
+msgid "This switch only controls the WordPress log (debug.log). The PHP error log belongs to your server: LogBeacon shows it below when it exists, but it cannot turn it on."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "This site is part of a network, and wp-config.php is shared by every site in it, so LogBeacon does not change it from here. To turn logging on or off for the whole network, these lines have to be set by hand:"
 msgstr ""
 
 #: includes/debug-switch.php:270
-msgid "LogPilot could not read wp-config.php, so it cannot change it. To turn logging on or off, these lines have to be set by hand:"
+msgid "LogBeacon could not read wp-config.php, so it cannot change it. To turn logging on or off, these lines have to be set by hand:"
 msgstr ""
 
 #: includes/debug-switch.php:293
-msgid "Warning: debug logging was already on in wp-config.php before LogPilot changed it. If you turn it off here, LogPilot sets it to false."
+msgid "Warning: debug logging was already on in wp-config.php before LogBeacon changed it. If you turn it off here, LogBeacon sets it to false."
 msgstr ""
 
 #: includes/debug-switch.php:294
-msgid "Note: debug logging was already on in wp-config.php before LogPilot first changed it. LogPilot has set it to false, so it is off now."
+msgid "Note: debug logging was already on in wp-config.php before LogBeacon first changed it. LogBeacon has set it to false, so it is off now."
 msgstr ""
 
 #: includes/debug-switch.php:299
-msgid "Warning: debug logging was turned on in wp-config.php, not by LogPilot. If you turn it off here, LogPilot sets WP_DEBUG and WP_DEBUG_LOG to false in that file."
+msgid "Warning: debug logging was turned on in wp-config.php, not by LogBeacon. If you turn it off here, LogBeacon sets WP_DEBUG and WP_DEBUG_LOG to false in that file."
 msgstr ""
 
 #: includes/debug-switch.php:304
-msgid "wp-config.php (or its folder) is not writable, so LogPilot cannot change it. To turn logging on or off, these lines have to be set by hand:"
+msgid "wp-config.php (or its folder) is not writable, so LogBeacon cannot change it. To turn logging on or off, these lines have to be set by hand:"
 msgstr ""
 
 #: includes/debug-switch.php:339
-msgid "Yes, change the setting for me (LogPilot edits wp-config.php and keeps a safety copy)."
+msgid "Yes, change the setting for me (LogBeacon edits wp-config.php, checks it and restores it if anything goes wrong)."
 msgstr ""
 
 #: includes/debug-switch.php:340
@@ -369,11 +373,11 @@ msgid "(no debug lines)"
 msgstr ""
 
 #: includes/debug-switch.php:346
-msgid "WP_DEBUG_DISPLAY is always kept off, so errors are never shown on the pages of your site. When you turn logging on, a copy of wp-config.php as it was before is saved as wp-config-logpilot-backup.php in the same folder."
+msgid "WP_DEBUG_DISPLAY is always kept off, so errors are never shown on the pages of your site."
 msgstr ""
 
 #: includes/debug-switch.php:362
-msgid "LogPilot did not change anything: wp-config.php is not written in a form it can safely edit."
+msgid "LogBeacon did not change anything: wp-config.php is not written in a form it can safely edit."
 msgstr ""
 
 #: includes/debug-switch.php:367
@@ -393,7 +397,7 @@ msgstr ""
 #. translators: 1: constant name, 2: line number
 #: includes/debug-switch.php:383
 #, php-format
-msgid "%1$s (line %2$s) is inside a block of code, such as an “if”. LogPilot cannot know which value would apply, so it does not touch it."
+msgid "%1$s (line %2$s) is inside a block of code, such as an “if”. LogBeacon cannot know which value would apply, so it does not touch it."
 msgstr ""
 
 #. translators: 1: constant name, 2: line number
@@ -417,13 +421,13 @@ msgstr ""
 #. translators: 1: constant name, 2: line number
 #: includes/debug-switch.php:391
 #, php-format
-msgid "%1$s (line %2$s) points to a log path that LogPilot did not create, so it is left as it is."
+msgid "%1$s (line %2$s) points to a log path that LogBeacon did not create, so it is left as it is."
 msgstr ""
 
 #. translators: 1: constant name, 2: line number
 #: includes/debug-switch.php:393
 #, php-format
-msgid "%1$s (line %2$s) is written in a way LogPilot does not recognize."
+msgid "%1$s (line %2$s) is written in a way LogBeacon does not recognize."
 msgstr ""
 
 #: includes/download.php:130
@@ -433,14 +437,14 @@ msgstr ""
 #. translators: 1: site name, 2: log name, e.g. "PHP error_log"
 #: includes/email-excerpt.php:112
 #, php-format
-msgid "[%1$s] LogPilot: excerpt of the %2$s"
+msgid "[%1$s] LogBeacon: excerpt of the %2$s"
 msgstr ""
 
 #. translators: 1: number of lines, 2: log name, 3: site address
 #: includes/email-excerpt.php:118
 #, php-format
 msgid ""
-"This is the end of the %2$s (up to %1$d lines), sent from %3$s with LogPilot.\n"
+"This is the end of the %2$s (up to %1$d lines), sent from %3$s with LogBeacon.\n"
 ""
 msgstr ""
 
@@ -510,20 +514,16 @@ msgstr ""
 msgid "The address is used only for this message and is not saved. If your site cannot send e-mail, the message will not arrive."
 msgstr ""
 
-#: includes/log-location.php:252
-msgid "The log is saved outside your website folder, so no web address can reach it."
-msgstr ""
-
 #: includes/log-location.php:256
 msgid "Checked: your server refuses to hand out the files in the log folder."
 msgstr ""
 
 #: includes/log-location.php:260
-msgid "Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules LogPilot writes (this is common on Nginx). Ask your hosting provider to block access to this folder, or move the log outside your website folder."
+msgid "Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules LogBeacon writes (this is common on Nginx). Ask your hosting provider to block access to this folder."
 msgstr ""
 
 #: includes/log-location.php:264
-msgid "LogPilot could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified."
+msgid "LogBeacon could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified."
 msgstr ""
 
 #: includes/log-location.php:270
@@ -539,7 +539,7 @@ msgid "Warning: the old wp-content/debug.log can be downloaded by anyone who ope
 msgstr ""
 
 #: includes/log-location.php:282
-msgid "LogPilot could not check whether the old wp-content/debug.log can be downloaded."
+msgid "LogBeacon could not check whether the old wp-content/debug.log can be downloaded."
 msgstr ""
 
 #: includes/log-location.php:354
@@ -563,11 +563,7 @@ msgid "Where your log is saved"
 msgstr ""
 
 #: includes/log-location.php:384
-msgid "In a folder with a secret name outside your website folder. No web address can reach it."
-msgstr ""
-
-#: includes/log-location.php:385
-msgid "In a folder with a secret name inside wp-content, with rules that block access from the web."
+msgid "In a folder with a secret name inside your uploads folder, with rules that block access from the web."
 msgstr ""
 
 #: includes/log-location.php:389
@@ -575,11 +571,7 @@ msgid "The log is in the usual place, wp-content/debug.log: it is the first addr
 msgstr ""
 
 #: includes/log-location.php:394
-msgid "When you turn logging on, the log is saved in a folder with a secret name outside your website folder, where no web address can reach it."
-msgstr ""
-
-#: includes/log-location.php:395
-msgid "When you turn logging on, the log is saved in a folder with a secret name inside wp-content, with rules that block access from the web."
+msgid "When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder, with rules that block access from the web."
 msgstr ""
 
 #: includes/log-location.php:422
@@ -600,483 +592,488 @@ msgstr ""
 msgid "Delete debug.log"
 msgstr ""
 
-#: logpilot.php:60
+#: logbeacon.php:60
 msgid "Fatal error"
 msgstr ""
 
-#: logpilot.php:61
+#: logbeacon.php:61
 msgid "PHP stopped running a request, so the page or feature that was running may have failed."
 msgstr ""
 
-#: logpilot.php:65
+#: logbeacon.php:65
 msgid "Parse error"
 msgstr ""
 
-#: logpilot.php:66
+#: logbeacon.php:66
 msgid "PHP could not read a file because of a syntax mistake in its code."
 msgstr ""
 
-#: logpilot.php:70
+#: logbeacon.php:70
 msgid "Database error"
 msgstr ""
 
-#: logpilot.php:71
+#: logbeacon.php:71
 msgid "A database query failed or reported a problem."
 msgstr ""
 
-#: logpilot.php:75
+#: logbeacon.php:75
 msgid "Warning"
 msgstr ""
 
-#: logpilot.php:76
+#: logbeacon.php:76
 msgid "Something went wrong, but PHP kept running. It may or may not affect the site."
 msgstr ""
 
-#: logpilot.php:80
+#: logbeacon.php:80
 msgid "Notice"
 msgstr ""
 
-#: logpilot.php:81
+#: logbeacon.php:81
 msgid "A minor issue in the code, normally harmless on its own."
 msgstr ""
 
-#: logpilot.php:85
+#: logbeacon.php:85
 msgid "Deprecated"
 msgstr ""
 
-#: logpilot.php:86
+#: logbeacon.php:86
 msgid "The code uses something that is planned to stop working in a future version."
 msgstr ""
 
-#: logpilot.php:90
+#: logbeacon.php:90
 msgid "Unclassified"
 msgstr ""
 
-#: logpilot.php:91
-msgid "LogPilot did not recognize the type of this entry."
+#: logbeacon.php:91
+msgid "LogBeacon did not recognize the type of this entry."
 msgstr ""
 
-#: logpilot.php:106
+#: logbeacon.php:106
 msgid "Serious problems"
 msgstr ""
 
-#: logpilot.php:107
+#: logbeacon.php:107
 msgid "Something failed or stopped running. Look at these first."
 msgstr ""
 
-#: logpilot.php:113
+#: logbeacon.php:113
 msgid "Warnings"
 msgstr ""
 
-#: logpilot.php:114
+#: logbeacon.php:114
 msgid "Something went wrong, but the site kept running."
 msgstr ""
 
-#: logpilot.php:120
+#: logbeacon.php:120
 msgid "Minor notes"
 msgstr ""
 
-#: logpilot.php:121
-msgid "Small remarks, things that will change in future versions, and entries LogPilot could not sort."
+#: logbeacon.php:121
+msgid "Small remarks, things that will change in future versions, and entries LogBeacon could not sort."
 msgstr ""
 
 #. translators: %s: where PHP sends its errors, the value of its error_log setting, e.g. /dev/stderr
-#: logpilot.php:196
+#: logbeacon.php:196
 #, php-format
 msgid "PHP sends its errors to %s, which is not a file (usually they end up in the server’s own log): there is no file to read."
 msgstr ""
 
-#: logpilot.php:200
+#: logbeacon.php:200
 msgid "PHP sends its errors to the system log (syslog), which is not a file: there is no file to read."
 msgstr ""
 
-#: logpilot.php:202
+#. translators: %s: path of the PHP error log set in php.ini
+#: logbeacon.php
+msgid "PHP is set to write its errors to %s, but that folder does not exist or PHP cannot write to it, so the file will never be created."
+msgstr ""
+
+#: logbeacon.php:202
 msgid "PHP error logging is turned off (log_errors), so PHP does not record its errors anywhere: there is no log to read."
 msgstr ""
 
-#: logpilot.php:204
+#: logbeacon.php:204
 msgid "PHP is not set to write its errors to a file: there is no file to read."
 msgstr ""
 
-#: logpilot.php:206
+#: logbeacon.php:206
 msgid "The WordPress debug.log still records the errors WordPress can see."
 msgstr ""
 
-#: logpilot.php:213
+#: logbeacon.php:213
 msgid "How can I get a PHP error log?"
 msgstr ""
 
-#: logpilot.php:214
+#: logbeacon.php:214
 msgid "If your hosting lets you change PHP settings (in the hosting panel, in php.ini or in a .user.ini file), set these two lines, with a path that PHP can write to and that is outside your website folder. Some hosts do not allow it: ask them."
 msgstr ""
 
-#: logpilot.php:260
+#: logbeacon.php:260
 msgid "WordPress debug.log"
 msgstr ""
 
-#: logpilot.php:261
-msgid "LogPilot protected debug.log"
+#: logbeacon.php:261
+msgid "LogBeacon protected debug.log"
 msgstr ""
 
-#: logpilot.php:262
+#: logbeacon.php:262
 msgid "PHP error_log"
 msgstr ""
 
 #. translators: %s: PHP memory limit, e.g. "64 MB"
-#: logpilot.php:722
+#: logbeacon.php:722
 #, php-format
-msgid "There is not enough free PHP memory (limit: %s) to read the log safely, so LogPilot does not load it."
+msgid "There is not enough free PHP memory (limit: %s) to read the log safely, so LogBeacon does not load it."
 msgstr ""
 
 #. translators: 1: PHP memory limit, 2: log size that can be loaded, 3: usual log size limit
-#: logpilot.php:728
+#: logbeacon.php:728
 #, php-format
-msgid "Your PHP memory limit (%1$s) leaves room for about %2$s of log at a time, less than the usual %3$s. LogPilot lowers its limit so it does not run out of memory."
+msgid "Your PHP memory limit (%1$s) leaves room for about %2$s of log at a time, less than the usual %3$s. LogBeacon lowers its limit so it does not run out of memory."
 msgstr ""
 
-#: logpilot.php:736
+#: logbeacon.php:736
 msgid "How to get more memory"
 msgstr ""
 
 #. translators: 1: PHP constant line, 2: file name, 3: comment text found in that file
-#: logpilot.php:741
+#: logbeacon.php:741
 #, php-format
 msgid "In the %2$s file, in the site root, add the line %1$s above the line that says \"%3$s\". Take a backup of the file first."
 msgstr ""
 
 #. translators: 1: php.ini setting, 2: file name
-#: logpilot.php:750
+#: logbeacon.php:750
 #, php-format
 msgid "Or raise it in the PHP settings: many hosting control panels have a \"PHP settings\" or \"PHP version\" page with a memory limit field. On your own server, set %1$s in %2$s."
 msgstr ""
 
-#: logpilot.php:755
+#: logbeacon.php:755
 msgid "If neither works, your hosting plan probably caps the memory. Ask your hosting provider's support to raise the PHP \"memory_limit\" to at least 256M, or ask the person who manages the site."
 msgstr ""
 
-#: logpilot.php:757
+#: logbeacon.php:757
 msgid "Changing WP_MEMORY_LIMIT cannot exceed the cap set by the host. Reload this page afterwards to see the new limit."
 msgstr ""
 
-#: logpilot.php:787
+#: logbeacon.php:787
 msgid "PHP ran out of memory while running something."
 msgstr ""
 
-#: logpilot.php:788
+#: logbeacon.php:788
 msgid "Something took too long to run, so PHP stopped it."
 msgstr ""
 
-#: logpilot.php:789
+#: logbeacon.php:789
 msgid "The code tried to use a function that does not exist. This often happens when a plugin or theme is missing, disabled or out of date."
 msgstr ""
 
-#: logpilot.php:790
+#: logbeacon.php:790
 msgid "The code tried to use a class that was not found. This often happens when a plugin or theme is missing, disabled or out of date."
 msgstr ""
 
-#: logpilot.php:791
+#: logbeacon.php:791
 msgid "The code used a value that was never set."
 msgstr ""
 
-#: logpilot.php:792
+#: logbeacon.php:792
 msgid "Something printed text before WordPress could send the page headers."
 msgstr ""
 
-#: logpilot.php:793
+#: logbeacon.php:793
 msgid "A plugin or theme loaded its translations too early."
 msgstr ""
 
-#: logpilot.php:794
+#: logbeacon.php:794
 msgid "The code tried to open a file that is missing or cannot be read."
 msgstr ""
 
-#: logpilot.php:795
+#: logbeacon.php:795
 msgid "The code looked for a database table that does not exist."
 msgstr ""
 
-#: logpilot.php:796
+#: logbeacon.php:796
 msgid "The connection to the database was lost."
 msgstr ""
 
-#: logpilot.php:797
+#: logbeacon.php:797
 msgid "The database refused the login details it was given."
 msgstr ""
 
-#: logpilot.php:840
+#: logbeacon.php:840
 msgid "Out of memory"
 msgstr ""
 
-#: logpilot.php:844
+#: logbeacon.php:844
 msgid "Took too long"
 msgstr ""
 
-#: logpilot.php:848
+#: logbeacon.php:848
 msgid "Something not set or missing"
 msgstr ""
 
-#: logpilot.php:852
+#: logbeacon.php:852
 msgid "Text printed too early"
 msgstr ""
 
-#: logpilot.php:856
+#: logbeacon.php:856
 msgid "File not found"
 msgstr ""
 
-#: logpilot.php:860
+#: logbeacon.php:860
 msgid "Missing database table"
 msgstr ""
 
-#: logpilot.php:864
+#: logbeacon.php:864
 msgid "Translations loaded too early"
 msgstr ""
 
-#: logpilot.php:868
+#: logbeacon.php:868
 msgid "Database connection failed"
 msgstr ""
 
-#: logpilot.php:872
+#: logbeacon.php:872
 msgid "Method called on an empty value"
 msgstr ""
 
-#: logpilot.php:876
+#: logbeacon.php:876
 msgid "Database connection lost"
 msgstr ""
 
-#: logpilot.php:880
+#: logbeacon.php:880
 msgid "Database login refused"
 msgstr ""
 
-#: logpilot.php:999
+#: logbeacon.php:999
 msgid "WordPress itself (a core file)"
 msgstr ""
 
 #. translators: %s: plugin name
-#: logpilot.php:1018
+#: logbeacon.php:1018
 #, php-format
 msgid "Plugin: %s"
 msgstr ""
 
 #. translators: %s: theme name
-#: logpilot.php:1030
+#: logbeacon.php:1030
 #, php-format
 msgid "Theme: %s"
 msgstr ""
 
 #. translators: %s: must-use plugin folder or file name
-#: logpilot.php:1034
+#: logbeacon.php:1034
 #, php-format
 msgid "Must-use plugin: %s"
 msgstr ""
 
 #. translators: %s: time elapsed, e.g. "5 minutes"
-#: logpilot.php:1128
+#: logbeacon.php:1128
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#. translators: 1: size of the chosen period, 2: most LogPilot loads at once
-#: logpilot.php:1146
+#. translators: 1: size of the chosen period, 2: most LogBeacon loads at once
+#: logbeacon.php:1146
 #, php-format
-msgid "This period is too big to show (about %1$s). The most LogPilot loads at once is %2$s. Choose fewer days."
+msgid "This period is too big to show (about %1$s). The most LogBeacon loads at once is %2$s. Choose fewer days."
 msgstr ""
 
-#. translators: 1: size of the chosen period, 2: most LogPilot loads at once
-#: logpilot.php:1153
+#. translators: 1: size of the chosen period, 2: most LogBeacon loads at once
+#: logbeacon.php:1153
 #, php-format
-msgid "This period is small enough to show (about %1$s). The most LogPilot loads at once is %2$s."
+msgid "This period is small enough to show (about %1$s). The most LogBeacon loads at once is %2$s."
 msgstr ""
 
-#: logpilot.php:1433
+#: logbeacon.php:1433
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: logpilot.php:1473
+#: logbeacon.php:1473
 msgid "Read your WordPress error logs and see what each message means."
 msgstr ""
 
-#: logpilot.php:1483
+#: logbeacon.php:1483
 msgid "Which log do you want to read?"
 msgstr ""
 
-#: logpilot.php:1483
+#: logbeacon.php:1483
 msgid "Pick the log you want to look at. You can also download it or send an excerpt by e-mail."
 msgstr ""
 
-#: logpilot.php:1484
+#: logbeacon.php:1484
 msgid "Log files"
 msgstr ""
 
 #. translators: %s: log name
-#: logpilot.php:1505
+#: logbeacon.php:1505
 #, php-format
 msgid "%s — not available"
 msgstr ""
 
 #. translators: %s: log name
-#: logpilot.php:1511
+#: logbeacon.php:1511
 #, php-format
 msgid "%s — cannot be read"
 msgstr ""
 
 #. translators: %s: log name
-#: logpilot.php:1518
+#: logbeacon.php:1518
 #, php-format
 msgid "%s — not created yet"
 msgstr ""
 
-#: logpilot.php:1532
-msgid "LogPilot protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place."
+#: logbeacon.php:1532
+msgid "LogBeacon protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place."
 msgstr ""
 
-#: logpilot.php:1535
+#: logbeacon.php:1535
 msgid "A log marked “not created yet” does not exist: WordPress and PHP (if available) create their logs when the first message is written to them."
 msgstr ""
 
 #. translators: 1: log name, 2: file path
-#: logpilot.php:1549
+#: logbeacon.php:1549
 #, php-format
 msgid "%1$s (%2$s): the file exists, but PHP cannot read it. Check its permissions."
 msgstr ""
 
-#: logpilot.php:1562
+#: logbeacon.php:1562
 msgid "Nothing to read yet"
 msgstr ""
 
-#: logpilot.php:1565
+#: logbeacon.php:1565
 msgid "Logging is on, but no log file has been created yet. Repeat the action that causes the problem, then reload this page."
 msgstr ""
 
-#: logpilot.php:1566
+#: logbeacon.php:1566
 msgid "No log file exists yet. Turn logging on in the box above, repeat the action that causes the problem, then reload this page."
 msgstr ""
 
-#: logpilot.php:1568
+#: logbeacon.php:1568
 msgid "WordPress only writes debug.log while logging is on, and PHP only writes its own log if your server is set up to do so."
 msgstr ""
 
-#: logpilot.php:1577
-#: logpilot.php:1775
-#: logpilot.php:1790
-#: logpilot.php:1797
+#: logbeacon.php:1577
+#: logbeacon.php:1775
+#: logbeacon.php:1790
+#: logbeacon.php:1797
 msgid "The log file could not be read."
 msgstr ""
 
 #. translators: %s: log name, e.g. "PHP error_log"
-#: logpilot.php:1627
+#: logbeacon.php:1627
 #, php-format
 msgid "You are reading: %s"
 msgstr ""
 
-#: logpilot.php:1631
-msgid "This is WordPress’s own debug.log, saved by LogPilot in a protected folder."
+#: logbeacon.php:1631
+msgid "This is WordPress’s own debug.log, saved by LogBeacon in a protected folder."
 msgstr ""
 
 #. translators: 1: file size, 2: last modified date and time
-#: logpilot.php:1636
+#: logbeacon.php:1636
 #, php-format
 msgid "%1$s · last modified %2$s"
 msgstr ""
 
-#: logpilot.php:1672
+#: logbeacon.php:1672
 msgid "Which period do you want to see?"
 msgstr ""
 
-#: logpilot.php:1672
+#: logbeacon.php:1672
 msgid "Choose which days of the log you want to look at."
 msgstr ""
 
-#: logpilot.php:1678
+#: logbeacon.php:1678
 msgid "All viewable entries"
 msgstr ""
 
-#: logpilot.php:1683
+#: logbeacon.php:1683
 msgid "Last day in the log"
 msgstr ""
 
-#: logpilot.php:1694
+#: logbeacon.php:1694
 msgid "Last 7 days in the log"
 msgstr ""
 
-#: logpilot.php:1706
+#: logbeacon.php:1706
 msgid "Quick choices"
 msgstr ""
 
-#: logpilot.php:1711
+#: logbeacon.php:1711
 msgid "Click again to go back to all viewable entries"
 msgstr ""
 
-#: logpilot.php:1717
+#: logbeacon.php:1717
 msgid "Pick your own dates"
 msgstr ""
 
-#: logpilot.php:1721
+#: logbeacon.php:1721
 msgid "From"
 msgstr ""
 
-#: logpilot.php:1723
+#: logbeacon.php:1723
 msgid "To"
 msgstr ""
 
-#: logpilot.php:1725
+#: logbeacon.php:1725
 msgid "Show these dates"
 msgstr ""
 
-#: logpilot.php:1728
+#: logbeacon.php:1728
 msgid "Clear dates"
 msgstr ""
 
 #. translators: 1: first date in the log, 2: last date in the log
-#: logpilot.php:1735
+#: logbeacon.php:1735
 #, php-format
 msgid "This log covers %1$s to %2$s."
 msgstr ""
 
-#: logpilot.php:1742
+#: logbeacon.php:1742
 msgid "Why can't I load everything at once?"
 msgstr ""
 
-#: logpilot.php:1743
-msgid "Very large logs can make the page slow or run out of memory, so LogPilot only loads a limited amount at a time. Dates are the ones written in the log (usually UTC), not your site time."
+#: logbeacon.php:1743
+msgid "Very large logs can make the page slow or run out of memory, so LogBeacon only loads a limited amount at a time. Dates are the ones written in the log (usually UTC), not your site time."
 msgstr ""
 
 #. translators: %s: size limit, e.g. "2 MB"
-#: logpilot.php:1747
+#: logbeacon.php:1747
 #, php-format
 msgid "A period can load at most %s of log."
 msgstr ""
 
 #. translators: 1: average log growth per day, 2: size limit
-#: logpilot.php:1754
+#: logbeacon.php:1754
 #, php-format
 msgid "On average it grows about %1$s per day, more than the %2$s limit: some single days may be too large to load."
 msgstr ""
 
 #. translators: 1: average log growth per day, 2: number of days, 3: size limit
-#: logpilot.php:1761
+#: logbeacon.php:1761
 #, php-format
 msgid "On average it grows about %1$s per day, so ranges of about %2$s days or less stay under the %3$s limit."
 msgstr ""
 
-#: logpilot.php:1769
-msgid "This log has no dates LogPilot can read, so only its latest part can be shown."
+#: logbeacon.php:1769
+msgid "This log has no dates LogBeacon can read, so only its latest part can be shown."
 msgstr ""
 
 #. translators: %s: size of the whole log file
-#: logpilot.php:1809
+#: logbeacon.php:1809
 #, php-format
 msgid "This log is large (%s), so only its most recent part is shown. Pick a period above to look at older days."
 msgstr ""
 
-#: logpilot.php:1819
+#: logbeacon.php:1819
 msgid "There are no entries in this range."
 msgstr ""
 
-#: logpilot.php:1819
+#: logbeacon.php:1819
 msgid "The log file is empty: nothing has been recorded in it yet."
 msgstr ""
 
 #. translators: %s: number of serious problems
-#: logpilot.php:1931
+#: logbeacon.php:1931
 #, php-format
 msgid "%s serious problem"
 msgid_plural "%s serious problems"
@@ -1084,7 +1081,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of warnings
-#: logpilot.php:1934
+#: logbeacon.php:1934
 #, php-format
 msgid "%s warning"
 msgid_plural "%s warnings"
@@ -1092,242 +1089,242 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: number of minor notes
-#: logpilot.php:1937
+#: logbeacon.php:1937
 #, php-format
 msgid "%s minor note"
 msgid_plural "%s minor notes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: logpilot.php:1942
+#: logbeacon.php:1942
 msgid "Which entries do you want to see?"
 msgstr ""
 
-#: logpilot.php:1942
+#: logbeacon.php:1942
 msgid "Narrow down the list below by type, by message or by where it comes from."
 msgstr ""
 
 #. translators: %s: counts, e.g. "2 serious problems, 14 warnings, 1,402 minor notes"
-#: logpilot.php:1947
+#: logbeacon.php:1947
 #, php-format
 msgid "In the part of the log shown: %s."
 msgstr ""
 
-#: logpilot.php:1998
+#: logbeacon.php:1998
 msgid "Copy a summary for support"
 msgstr ""
 
-#: logpilot.php:1999
+#: logbeacon.php:1999
 msgid "Asking someone for help? Copy one of these summaries and paste it into your message."
 msgstr ""
 
-#: logpilot.php:2002
+#: logbeacon.php:2002
 msgid "Safe summary (recommended)"
 msgstr ""
 
-#: logpilot.php:2003
+#: logbeacon.php:2003
 msgid "Counts, versions and the most repeated messages. File paths, web addresses, e-mail addresses and IP addresses are removed automatically, but please read it before you share it."
 msgstr ""
 
-#: logpilot.php:2005
-#: logpilot.php:2010
-#: logpilot.php:2404
-#: logpilot.php:2405
+#: logbeacon.php:2005
+#: logbeacon.php:2010
+#: logbeacon.php:2404
+#: logbeacon.php:2405
 msgid "Copy"
 msgstr ""
 
-#: logpilot.php:2005
-#: logpilot.php:2010
-#: logpilot.php:2404
+#: logbeacon.php:2005
+#: logbeacon.php:2010
+#: logbeacon.php:2404
 msgid "Copied"
 msgstr ""
 
-#: logpilot.php:2005
-#: logpilot.php:2010
-#: logpilot.php:2404
+#: logbeacon.php:2005
+#: logbeacon.php:2010
+#: logbeacon.php:2404
 msgid "Press Ctrl+C to copy"
 msgstr ""
 
-#: logpilot.php:2007
+#: logbeacon.php:2007
 msgid "Complete summary"
 msgstr ""
 
-#: logpilot.php:2008
+#: logbeacon.php:2008
 msgid "Includes personal data."
 msgstr ""
 
-#: logpilot.php:2008
+#: logbeacon.php:2008
 msgid "It adds the latest entries exactly as written in the log. They can contain file paths, web addresses, e-mail addresses or IP addresses. Share it only with people you trust."
 msgstr ""
 
-#: logpilot.php:2034
+#: logbeacon.php:2034
 msgid "Filter by exact type"
 msgstr ""
 
-#: logpilot.php:2067
+#: logbeacon.php:2067
 msgid "Search in “What happened”"
 msgstr ""
 
-#: logpilot.php:2068
+#: logbeacon.php:2068
 msgid "e.g. memory, undefined, table"
 msgstr ""
 
-#: logpilot.php:2069
+#: logbeacon.php:2069
 msgid "Search in “Reported in”"
 msgstr ""
 
-#: logpilot.php:2070
+#: logbeacon.php:2070
 msgid "e.g. a plugin or theme name"
 msgstr ""
 
-#: logpilot.php:2076
+#: logbeacon.php:2076
 msgid "Search"
 msgstr ""
 
-#: logpilot.php:2077
+#: logbeacon.php:2077
 msgid "You can use one field or both. They only search the part of the log loaded above."
 msgstr ""
 
 #. translators: %s: keyword that will be searched for
-#: logpilot.php:2182
+#: logbeacon.php:2182
 msgid "Click again to remove this search"
 msgstr ""
 
 #. translators: %s: keyword that will be searched for
-#: logpilot.php:2182
+#: logbeacon.php:2182
 #, php-format
 msgid "Search “What happened” for “%s”"
 msgstr ""
 
-#: logpilot.php:2208
+#: logbeacon.php:2208
 msgid "Most repeated messages (search “What happened”):"
 msgstr ""
 
-#: logpilot.php:2209
+#: logbeacon.php:2209
 msgid "Known problems (search “What happened”):"
 msgstr ""
 
 #. translators: %s: text searched for
-#: logpilot.php:2214
+#: logbeacon.php:2214
 #, php-format
 msgid "what happened: “%s”"
 msgstr ""
 
 #. translators: %s: text searched for in the "Reported in" column
-#: logpilot.php:2230
+#: logbeacon.php:2230
 #, php-format
 msgid "reported in: “%s”"
 msgstr ""
 
-#: logpilot.php:2238
+#: logbeacon.php:2238
 msgid "one repeated message"
 msgstr ""
 
 #. translators: 1: active filters, e.g. "Warnings, Plugin: Akismet", 2: number of matching entries
-#: logpilot.php:2257
+#: logbeacon.php:2257
 #, php-format
 msgid "Showing only: %1$s (%2$s entries)."
 msgstr ""
 
-#: logpilot.php:2272
+#: logbeacon.php:2272
 msgid "Show all"
 msgstr ""
 
-#: logpilot.php:2276
+#: logbeacon.php:2276
 msgid "Nothing found in the part of the log shown. Try another period or clear the filters."
 msgstr ""
 
-#: logpilot.php:2322
+#: logbeacon.php:2322
 msgid "Every entry of this message is listed."
 msgstr ""
 
-#: logpilot.php:2323
-#: logpilot.php:2326
+#: logbeacon.php:2323
+#: logbeacon.php:2326
 msgid "Group identical messages"
 msgstr ""
 
-#: logpilot.php:2325
+#: logbeacon.php:2325
 msgid "Every entry is listed."
 msgstr ""
 
-#: logpilot.php:2328
+#: logbeacon.php:2328
 msgid "Identical messages are shown once, with how many times they appear."
 msgstr ""
 
-#: logpilot.php:2329
+#: logbeacon.php:2329
 msgid "Show every entry"
 msgstr ""
 
-#: logpilot.php:2336
+#: logbeacon.php:2336
 msgid "Level"
 msgstr ""
 
-#: logpilot.php:2337
+#: logbeacon.php:2337
 msgid "When"
 msgstr ""
 
-#: logpilot.php:2338
+#: logbeacon.php:2338
 msgid "What happened"
 msgstr ""
 
-#: logpilot.php:2339
+#: logbeacon.php:2339
 msgid "Reported in"
 msgstr ""
 
 #. translators: %s: date and time of the first occurrence
-#: logpilot.php:2362
+#: logbeacon.php:2362
 #, php-format
 msgid "First seen: %s"
 msgstr ""
 
-#: logpilot.php:2382
+#: logbeacon.php:2382
 msgid "Click again to remove this filter"
 msgstr ""
 
-#: logpilot.php:2382
+#: logbeacon.php:2382
 msgid "Show only the entries from this source"
 msgstr ""
 
-#: logpilot.php:2387
+#: logbeacon.php:2387
 msgid "Several sources"
 msgstr ""
 
 #. translators: %s: number of times the same message appears
-#: logpilot.php:2395
+#: logbeacon.php:2395
 #, php-format
 msgid "Repeated %s time"
 msgid_plural "Repeated %s times"
 msgstr[0] ""
 msgstr[1] ""
 
-#: logpilot.php:2396
+#: logbeacon.php:2396
 msgid "See each entry"
 msgstr ""
 
-#: logpilot.php:2401
+#: logbeacon.php:2401
 msgid "Show the technical text"
 msgstr ""
 
-#: logpilot.php:2408
+#: logbeacon.php:2408
 msgid "Not identified"
 msgstr ""
 
 #. translators: 1: first row number, 2: last row number, 3: total different messages
-#: logpilot.php:2439
+#: logbeacon.php:2439
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s different messages"
 msgstr ""
 
 #. translators: 1: first entry number, 2: last entry number, 3: total entries
-#: logpilot.php:2441
+#: logbeacon.php:2441
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s entries"
 msgstr ""
 
-#: logpilot.php:2454
+#: logbeacon.php:2454
 msgid "‹ Newer"
 msgstr ""
 
-#: logpilot.php:2455
+#: logbeacon.php:2455
 msgid "Older ›"
 msgstr ""
