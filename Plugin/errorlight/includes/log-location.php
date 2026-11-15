@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return string
  */
-function e3p_logbeacon_log_token() {
-    return substr( wp_hash( 'e3p-logbeacon-log' ), 0, 16 );
+function e3p_errorlight_log_token() {
+    return substr( wp_hash( 'e3p-errorlight-log' ), 0, 16 );
 }
 
 /**
@@ -27,8 +27,8 @@ function e3p_logbeacon_log_token() {
  *
  * @return string
  */
-function e3p_logbeacon_log_folder_name() {
-    return 'e3p-logbeacon-' . e3p_logbeacon_log_token();
+function e3p_errorlight_log_folder_name() {
+    return 'e3p-errorlight-' . e3p_errorlight_log_token();
 }
 
 /**
@@ -36,7 +36,7 @@ function e3p_logbeacon_log_folder_name() {
  *
  * @return array{dir: string, url: string}|null
  */
-function e3p_logbeacon_uploads() {
+function e3p_errorlight_uploads() {
     $uploads = wp_upload_dir( null, false );
     if ( ! empty( $uploads['error'] ) || empty( $uploads['basedir'] ) || empty( $uploads['baseurl'] ) ) {
         return null;
@@ -52,10 +52,10 @@ function e3p_logbeacon_uploads() {
  *
  * @return array{dir: string, file: string}
  */
-function e3p_logbeacon_plan_log_location() {
-    $uploads = e3p_logbeacon_uploads();
+function e3p_errorlight_plan_log_location() {
+    $uploads = e3p_errorlight_uploads();
     $base    = $uploads ? $uploads['dir'] : untrailingslashit( wp_normalize_path( WP_CONTENT_DIR ) ) . '/uploads';
-    $dir     = $base . '/' . e3p_logbeacon_log_folder_name();
+    $dir     = $base . '/' . e3p_errorlight_log_folder_name();
 
     return array(
         'dir'  => $dir,
@@ -70,8 +70,8 @@ function e3p_logbeacon_plan_log_location() {
  * @param array{dir: string, file: string} $loc Posto scelto.
  * @return bool True se è tutto a posto.
  */
-function e3p_logbeacon_prepare_log_location( $loc ) {
-    if ( null === e3p_logbeacon_uploads() ) {
+function e3p_errorlight_prepare_log_location( $loc ) {
+    if ( null === e3p_errorlight_uploads() ) {
         return false;
     }
     if ( ! wp_mkdir_p( $loc['dir'] ) || ! is_writable( $loc['dir'] ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
@@ -80,7 +80,7 @@ function e3p_logbeacon_prepare_log_location( $loc ) {
 
     $files = array(
         'index.php'  => "<?php\n// Silence is golden.\n",
-        '.htaccess'  => "# Written by LogBeacon: nobody can open the logs from a web address.\n"
+        '.htaccess'  => "# Written by ErrorLight: nobody can open the logs from a web address.\n"
             . "<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n"
             . "<IfModule !mod_authz_core.c>\nOrder allow,deny\nDeny from all\n</IfModule>\n",
         'web.config' => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration>\n<system.webServer>\n<security>\n<authorization>\n"
@@ -99,18 +99,18 @@ function e3p_logbeacon_prepare_log_location( $loc ) {
  *
  * @return array{dir: string, file: string}|null Posto pronto, o null se non si riesce.
  */
-function e3p_logbeacon_setup_log_location() {
-    $loc = e3p_logbeacon_plan_log_location();
-    return e3p_logbeacon_prepare_log_location( $loc ) ? $loc : null;
+function e3p_errorlight_setup_log_location() {
+    $loc = e3p_errorlight_plan_log_location();
+    return e3p_errorlight_prepare_log_location( $loc ) ? $loc : null;
 }
 
 /**
- * File di log di LogBeacon già presenti.
+ * File di log di ErrorLight già presenti.
  *
  * @return string[]
  */
-function e3p_logbeacon_existing_log_files() {
-    $loc = e3p_logbeacon_plan_log_location();
+function e3p_errorlight_existing_log_files() {
+    $loc = e3p_errorlight_plan_log_location();
     // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- open_basedir.
     return @is_file( $loc['file'] ) ? array( $loc['file'] ) : array();
 }
@@ -122,7 +122,7 @@ function e3p_logbeacon_existing_log_files() {
  * @param string $method GET o HEAD.
  * @return array{code: int, body: string}|null
  */
-function e3p_logbeacon_http_probe( $url, $method = 'GET' ) {
+function e3p_errorlight_http_probe( $url, $method = 'GET' ) {
     $response = wp_remote_request(
         $url,
         array(
@@ -149,7 +149,7 @@ function e3p_logbeacon_http_probe( $url, $method = 'GET' ) {
  * @param array{dir: string, file: string} $loc Posto del log nuovo.
  * @return array{folder: string, old: string} `folder`: protected, exposed, unknown. `old`: none, protected, exposed, unknown.
  */
-function e3p_logbeacon_run_checks( $loc ) {
+function e3p_errorlight_run_checks( $loc ) {
     $result = array(
         'folder' => 'unknown',
         'old'    => 'unknown',
@@ -160,19 +160,19 @@ function e3p_logbeacon_run_checks( $loc ) {
     if ( ! $old_here ) {
         $result['old'] = 'none';
     }
-    $uploads = e3p_logbeacon_uploads();
+    $uploads = e3p_errorlight_uploads();
     if ( null === $uploads ) {
         return $result;
     }
 
     // File di controllo nella cartella degli upload (dove i file di un plugin possono stare): se il sito non lo
     // serve, l'indirizzo non corrisponde alla cartella e nessun "403" o "404" può essere interpretato.
-    $marker  = 'e3p-logbeacon-probe-' . wp_generate_password( 12, false );
-    $control = $uploads['dir'] . '/e3p-logbeacon-control-' . wp_generate_password( 8, false ) . '.txt';
+    $marker  = 'e3p-errorlight-probe-' . wp_generate_password( 12, false );
+    $control = $uploads['dir'] . '/e3p-errorlight-control-' . wp_generate_password( 8, false ) . '.txt';
     if ( false === file_put_contents( $control, $marker ) ) {
         return $result;
     }
-    $answer = e3p_logbeacon_http_probe( $uploads['url'] . '/' . basename( $control ) );
+    $answer = e3p_errorlight_http_probe( $uploads['url'] . '/' . basename( $control ) );
     wp_delete_file( $control );
     if ( ! $answer || 200 !== $answer['code'] || false === strpos( $answer['body'], $marker ) ) {
         return $result;
@@ -180,7 +180,7 @@ function e3p_logbeacon_run_checks( $loc ) {
 
     $probe = $loc['dir'] . '/probe.txt';
     if ( is_dir( $loc['dir'] ) && false !== file_put_contents( $probe, $marker ) ) {
-        $answer = e3p_logbeacon_http_probe( $uploads['url'] . '/' . basename( $loc['dir'] ) . '/probe.txt' );
+        $answer = e3p_errorlight_http_probe( $uploads['url'] . '/' . basename( $loc['dir'] ) . '/probe.txt' );
         wp_delete_file( $probe );
         if ( $answer ) {
             if ( 200 === $answer['code'] && false !== strpos( $answer['body'], $marker ) ) {
@@ -192,7 +192,7 @@ function e3p_logbeacon_run_checks( $loc ) {
     }
 
     if ( $old_here ) {
-        $answer = e3p_logbeacon_http_probe( content_url( '/debug.log' ), 'HEAD' );
+        $answer = e3p_errorlight_http_probe( content_url( '/debug.log' ), 'HEAD' );
         if ( $answer ) {
             if ( 200 === $answer['code'] ) {
                 $result['old'] = 'exposed';
@@ -210,38 +210,38 @@ function e3p_logbeacon_run_checks( $loc ) {
  *
  * @return array<string, array<string, array{type: string, text: string}>> Due gruppi: `folder` e `old`.
  */
-function e3p_logbeacon_get_check_texts() {
+function e3p_errorlight_get_check_texts() {
     return array(
         'folder' => array(
             'protected' => array(
                 'type' => 'success',
-                'text' => __( 'Checked: your server refuses to hand out the files in the log folder.', 'logbeacon' ),
+                'text' => __( 'Checked: your server refuses to hand out the files in the log folder.', 'errorlight' ),
             ),
             'exposed'   => array(
                 'type' => 'error',
-                'text' => __( 'Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules LogBeacon writes (this is common on Nginx). Ask your hosting provider to block access to this folder.', 'logbeacon' ),
+                'text' => __( 'Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules ErrorLight writes (this is common on Nginx). Ask your hosting provider to block access to this folder.', 'errorlight' ),
             ),
             'unknown'   => array(
                 'type' => 'warning',
-                'text' => __( 'LogBeacon could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified.', 'logbeacon' ),
+                'text' => __( 'ErrorLight could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified.', 'errorlight' ),
             ),
         ),
         'old'    => array(
             'none'      => array(
                 'type' => 'info',
-                'text' => __( 'There is no old debug.log in wp-content.', 'logbeacon' ),
+                'text' => __( 'There is no old debug.log in wp-content.', 'errorlight' ),
             ),
             'protected' => array(
                 'type' => 'success',
-                'text' => __( 'Checked: the old wp-content/debug.log cannot be downloaded from a web address.', 'logbeacon' ),
+                'text' => __( 'Checked: the old wp-content/debug.log cannot be downloaded from a web address.', 'errorlight' ),
             ),
             'exposed'   => array(
                 'type' => 'error',
-                'text' => __( 'Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it with the button below.', 'logbeacon' ),
+                'text' => __( 'Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it with the button below.', 'errorlight' ),
             ),
             'unknown'   => array(
                 'type' => 'warning',
-                'text' => __( 'LogBeacon could not check whether the old wp-content/debug.log can be downloaded.', 'logbeacon' ),
+                'text' => __( 'ErrorLight could not check whether the old wp-content/debug.log can be downloaded.', 'errorlight' ),
             ),
         ),
     );
@@ -250,40 +250,40 @@ function e3p_logbeacon_get_check_texts() {
 /**
  * Pulsante "Check": controlla il posto del log e il vecchio debug.log, poi torna al pannello con l'esito.
  */
-function e3p_logbeacon_handle_check() {
-    if ( ! current_user_can( e3p_logbeacon_capability() ) ) {
-        wp_die( esc_html__( 'You do not have permission to do this.', 'logbeacon' ), '', array( 'response' => 403 ) );
+function e3p_errorlight_handle_check() {
+    if ( ! current_user_can( e3p_errorlight_capability() ) ) {
+        wp_die( esc_html__( 'You do not have permission to do this.', 'errorlight' ), '', array( 'response' => 403 ) );
     }
-    check_admin_referer( 'e3p_logbeacon_check' );
+    check_admin_referer( 'e3p_errorlight_check' );
 
-    $loc    = e3p_logbeacon_plan_log_location();
-    $checks = e3p_logbeacon_run_checks( $loc );
+    $loc    = e3p_errorlight_plan_log_location();
+    $checks = e3p_errorlight_run_checks( $loc );
 
     wp_safe_redirect(
         add_query_arg(
             array(
-                'page'            => 'logbeacon',
-                'e3p_logbeacon_pr' => $checks['folder'],
-                'e3p_logbeacon_od' => $checks['old'],
+                'page'            => 'errorlight',
+                'e3p_errorlight_pr' => $checks['folder'],
+                'e3p_errorlight_od' => $checks['old'],
             ),
             admin_url( 'tools.php' )
         )
     );
     exit;
 }
-add_action( 'admin_post_e3p_logbeacon_check', 'e3p_logbeacon_handle_check' );
+add_action( 'admin_post_e3p_errorlight_check', 'e3p_errorlight_handle_check' );
 
 /**
  * Elimina il vecchio wp-content/debug.log. Solo quel file, con conferma esplicita.
  */
-function e3p_logbeacon_handle_delete_old() {
-    if ( ! current_user_can( e3p_logbeacon_capability() ) ) {
-        wp_die( esc_html__( 'You do not have permission to do this.', 'logbeacon' ), '', array( 'response' => 403 ) );
+function e3p_errorlight_handle_delete_old() {
+    if ( ! current_user_can( e3p_errorlight_capability() ) ) {
+        wp_die( esc_html__( 'You do not have permission to do this.', 'errorlight' ), '', array( 'response' => 403 ) );
     }
-    check_admin_referer( 'e3p_logbeacon_delete_old' );
+    check_admin_referer( 'e3p_errorlight_delete_old' );
 
     $file = wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
-    if ( empty( $_POST['e3p_logbeacon_confirm_delete'] ) ) {
+    if ( empty( $_POST['e3p_errorlight_confirm_delete'] ) ) {
         $result = 'confirm_delete';
     } elseif ( ! is_file( $file ) || is_link( $file ) ) {
         $result = 'old_none';
@@ -295,15 +295,15 @@ function e3p_logbeacon_handle_delete_old() {
     wp_safe_redirect(
         add_query_arg(
             array(
-                'page'            => 'logbeacon',
-                'e3p_logbeacon_rs' => $result,
+                'page'            => 'errorlight',
+                'e3p_errorlight_rs' => $result,
             ),
             admin_url( 'tools.php' )
         )
     );
     exit;
 }
-add_action( 'admin_post_e3p_logbeacon_delete_old', 'e3p_logbeacon_handle_delete_old' );
+add_action( 'admin_post_e3p_errorlight_delete_old', 'e3p_errorlight_handle_delete_old' );
 
 /**
  * Come controllare a mano che la cartella dei log non si possa scaricare, quando il controllo automatico non riesce
@@ -311,13 +311,13 @@ add_action( 'admin_post_e3p_logbeacon_delete_old', 'e3p_logbeacon_handle_delete_
  *
  * @param string $name Nome della cartella dei log.
  */
-function e3p_logbeacon_render_manual_check( $name ) {
-    $uploads = e3p_logbeacon_uploads();
+function e3p_errorlight_render_manual_check( $name ) {
+    $uploads = e3p_errorlight_uploads();
     $url     = ( $uploads ? $uploads['url'] : content_url( '/uploads' ) ) . '/' . $name . '/debug.log';
-    echo '<details class="e3p-logbeacon-details" open><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How to check it yourself', 'logbeacon' ) . '</summary><ol>';
-    echo '<li>' . esc_html__( 'Make sure the log exists: it appears in the list of logs above after WordPress writes its first message.', 'logbeacon' ) . '</li>';
-    echo '<li>' . esc_html__( 'Open this address in a private browser window:', 'logbeacon' ) . ' <code class="e3p-logbeacon-problem-line">' . esc_html( $url ) . '</code></li>';
-    echo '<li>' . esc_html__( 'A “Forbidden” (403) or “Not found” (404) page means the folder is protected. If you can read the log, turn logging off and ask your hosting provider to block access to this folder.', 'logbeacon' ) . '</li>';
+    echo '<details class="e3p-errorlight-details" open><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How to check it yourself', 'errorlight' ) . '</summary><ol>';
+    echo '<li>' . esc_html__( 'Make sure the log exists: it appears in the list of logs above after WordPress writes its first message.', 'errorlight' ) . '</li>';
+    echo '<li>' . esc_html__( 'Open this address in a private browser window:', 'errorlight' ) . ' <code class="e3p-errorlight-problem-line">' . esc_html( $url ) . '</code></li>';
+    echo '<li>' . esc_html__( 'A “Forbidden” (403) or “Not found” (404) page means the folder is protected. If you can read the log, turn logging off and ask your hosting provider to block access to this folder.', 'errorlight' ) . '</li>';
     echo '</ol></details>';
 }
 
@@ -326,34 +326,34 @@ function e3p_logbeacon_render_manual_check( $name ) {
  *
  * @param bool $active True se il debug è acceso adesso.
  */
-function e3p_logbeacon_render_location_section( $active ) {
-    $check_texts = e3p_logbeacon_get_check_texts();
-    $name        = e3p_logbeacon_log_folder_name();
+function e3p_errorlight_render_location_section( $active ) {
+    $check_texts = e3p_errorlight_get_check_texts();
+    $name        = e3p_errorlight_log_folder_name();
 
-    // Dove scrive WordPress adesso (se è acceso) e dove scriverebbe con LogBeacon.
+    // Dove scrive WordPress adesso (se è acceso) e dove scriverebbe con ErrorLight.
     $current = '';
     if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
         $current = is_string( WP_DEBUG_LOG ) ? wp_normalize_path( WP_DEBUG_LOG ) : wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
     }
     $ours_now = $active && false !== strpos( $current, '/' . $name . '/' );
 
-    echo '<div class="e3p-logbeacon-location"><h3><span class="dashicons dashicons-shield-alt" aria-hidden="true"></span>' . esc_html__( 'Where your log is saved', 'logbeacon' ) . '</h3>';
+    echo '<div class="e3p-errorlight-location"><h3><span class="dashicons dashicons-shield-alt" aria-hidden="true"></span>' . esc_html__( 'Where your log is saved', 'errorlight' ) . '</h3>';
 
     if ( $ours_now ) {
-        echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'logbeacon' ) . '</p>';
+        echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'errorlight' ) . '</p>';
     } elseif ( $active ) {
-        echo '<div class="e3p-logbeacon-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
-        echo esc_html__( 'The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder.', 'logbeacon' );
+        echo '<div class="e3p-errorlight-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
+        echo esc_html__( 'The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder.', 'errorlight' );
         echo '</p></div>';
     } else {
-        echo '<p>' . esc_html__( 'When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'logbeacon' ) . '</p>';
+        echo '<p>' . esc_html__( 'When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'errorlight' ) . '</p>';
     }
 
     // Esiti dell'ultimo controllo (solo codici noti).
     // phpcs:disable WordPress.Security.NonceVerification.Recommended
     foreach ( array(
-        'e3p_logbeacon_pr' => 'folder',
-        'e3p_logbeacon_od' => 'old',
+        'e3p_errorlight_pr' => 'folder',
+        'e3p_errorlight_od' => 'old',
     ) as $param => $group ) {
         $code = isset( $_GET[ $param ] ) ? sanitize_key( wp_unslash( $_GET[ $param ] ) ) : '';
         if ( isset( $check_texts[ $group ][ $code ] ) ) {
@@ -363,34 +363,34 @@ function e3p_logbeacon_render_location_section( $active ) {
                 esc_html( $check_texts[ $group ][ $code ]['text'] )
             );
             if ( 'folder' === $group && 'unknown' === $code ) {
-                e3p_logbeacon_render_manual_check( $name );
+                e3p_errorlight_render_manual_check( $name );
             }
         }
     }
     // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="e3p-logbeacon-inline-form">';
-    echo '<input type="hidden" name="action" value="e3p_logbeacon_check" />';
-    wp_nonce_field( 'e3p_logbeacon_check' );
-    echo '<button type="submit" class="button e3p-logbeacon-iconbtn"><span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>' . esc_html__( 'Check that my logs cannot be downloaded', 'logbeacon' ) . '</button>';
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="e3p-errorlight-inline-form">';
+    echo '<input type="hidden" name="action" value="e3p_errorlight_check" />';
+    wp_nonce_field( 'e3p_errorlight_check' );
+    echo '<button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>' . esc_html__( 'Check that my logs cannot be downloaded', 'errorlight' ) . '</button>';
     echo '</form>';
 
     // Vecchio debug.log: il primo indirizzo che chiunque proverebbe.
     $old = wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
     if ( is_file( $old ) && $old !== $current ) {
         $size = filesize( $old );
-        echo '<div class="e3p-logbeacon-old"><p><span class="dashicons dashicons-media-text" aria-hidden="true"></span>';
+        echo '<div class="e3p-errorlight-old"><p><span class="dashicons dashicons-media-text" aria-hidden="true"></span>';
         printf(
             /* translators: %s: file size, e.g. "1.2 MB" */
-            esc_html__( 'There is an old debug.log in wp-content (%s). That file name is the first thing people try to download.', 'logbeacon' ),
+            esc_html__( 'There is an old debug.log in wp-content (%s). That file name is the first thing people try to download.', 'errorlight' ),
             esc_html( false !== $size ? size_format( $size ) : '—' )
         );
         echo '</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
-        echo '<input type="hidden" name="action" value="e3p_logbeacon_delete_old" />';
-        wp_nonce_field( 'e3p_logbeacon_delete_old' );
-        echo '<p><label><input type="checkbox" name="e3p_logbeacon_confirm_delete" value="1" required /> ' . esc_html__( 'Yes, delete wp-content/debug.log permanently.', 'logbeacon' ) . '</label></p>';
-        echo '<p><button type="submit" class="button e3p-logbeacon-iconbtn"><span class="dashicons dashicons-trash" aria-hidden="true"></span>' . esc_html__( 'Delete debug.log', 'logbeacon' ) . '</button></p>';
+        echo '<input type="hidden" name="action" value="e3p_errorlight_delete_old" />';
+        wp_nonce_field( 'e3p_errorlight_delete_old' );
+        echo '<p><label><input type="checkbox" name="e3p_errorlight_confirm_delete" value="1" required /> ' . esc_html__( 'Yes, delete wp-content/debug.log permanently.', 'errorlight' ) . '</label></p>';
+        echo '<p><button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-trash" aria-hidden="true"></span>' . esc_html__( 'Delete debug.log', 'errorlight' ) . '</button></p>';
         echo '</form></div>';
     }
 
