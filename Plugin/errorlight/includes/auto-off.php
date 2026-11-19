@@ -167,7 +167,7 @@ function e3p_errorlight_turn_off_now() {
     if ( '' !== $applied['error'] ) {
         return $applied['error'];
     }
-    return e3p_errorlight_config_write( $path, $applied['src'] );
+    return e3p_errorlight_config_write( $path, $applied['src'], $src );
 }
 
 /**

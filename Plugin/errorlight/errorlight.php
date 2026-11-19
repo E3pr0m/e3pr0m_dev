@@ -238,7 +238,7 @@ function e3p_errorlight_get_log_files() {
     $custom = ( defined( 'WP_DEBUG_LOG' ) && is_string( WP_DEBUG_LOG ) && '' !== WP_DEBUG_LOG ) ? wp_normalize_path( WP_DEBUG_LOG ) : '';
     $folder = '/' . e3p_errorlight_log_folder_name() . '/';
     $own    = e3p_errorlight_existing_log_files();
-    $old    = wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
+    $old    = e3p_errorlight_default_log_path();
 
     if ( $own ) {
         $candidates['protected'] = $own[0];
@@ -252,7 +252,10 @@ function e3p_errorlight_get_log_files() {
     }
     if ( ! isset( $candidates['protected'] ) && ! isset( $candidates['debug'] ) ) {
         // Nessun debug.log ancora: si mostra dove sarà quello di ErrorLight, come "non ancora creato".
-        $candidates['protected'] = e3p_errorlight_plan_log_location()['file'];
+        $plan = e3p_errorlight_plan_log_location();
+        if ( null !== $plan ) {
+            $candidates['protected'] = $plan['file'];
+        }
     }
 
     // error_log di PHP: l'ini può essere vuoto o puntare a syslog. Con WP_DEBUG_LOG attivo WordPress
@@ -267,6 +270,18 @@ function e3p_errorlight_get_log_files() {
         'protected' => __( 'ErrorLight protected debug.log', 'errorlight' ),
         'php'       => __( 'PHP error_log', 'errorlight' ),
     );
+
+    // Il log di PHP coincide con un altro log elencato (con il debug acceso WordPress manda gli errori di PHP nel suo
+    // debug.log): non si mostra due volte, si dice che sono lo stesso file. Vale anche se il file non esiste ancora.
+    if ( isset( $candidates['php'] ) ) {
+        foreach ( $candidates as $other_key => $other_path ) {
+            if ( 'php' !== $other_key && wp_normalize_path( $other_path ) === wp_normalize_path( $candidates['php'] ) ) {
+                unset( $candidates['php'] );
+                $php_target['kind'] = 'merged';
+                break;
+            }
+        }
+    }
 
     $files = array();
     $seen  = array();
@@ -284,6 +299,9 @@ function e3p_errorlight_get_log_files() {
                 $status = 'unreadable';
                 $real   = $path;
             } elseif ( isset( $seen[ $real ] ) ) {
+                if ( 'php' === $key ) {
+                    $php_target['kind'] = 'merged'; // Stesso file di un altro log (per esempio per un collegamento simbolico).
+                }
                 continue; // Stesso file indicato due volte.
             } else {
                 $seen[ $real ] = true;
@@ -313,7 +331,7 @@ function e3p_errorlight_get_log_files() {
         $files['php'] = array(
             'label'  => $labels['php'],
             'path'   => '',
-            'status' => 'unavailable',
+            'status' => 'merged' === $php_target['kind'] ? 'merged' : 'unavailable',
             'target' => $php_target,
         );
     }
@@ -1329,6 +1347,7 @@ function e3p_errorlight_enqueue_styles( $hook_suffix ) {
 .e3p-errorlight-band .e3p-errorlight-accent{color:#2BD576}
 .e3p-errorlight-tagline{margin:4px 0 0 60px;font-size:14px;color:#dfe3e8}
 @media (max-width:600px){.e3p-errorlight-tagline{margin-left:0}}
+.e3p-errorlight-step,.e3p-errorlight-box,.e3p-errorlight-location,#e3p-errorlight-table{scroll-margin-top:48px}
 .e3p-errorlight-step{margin:16px 0;padding:20px 24px 16px;background:#fff;border:1px solid #c3c4c7;border-left:4px solid #2BD576;border-radius:8px}
 .e3p-errorlight-step .e3p-errorlight-empty{margin:8px 0 0;padding:0;border:0;border-radius:0}
 .e3p-errorlight-actions{margin:12px 0 0}
@@ -1386,6 +1405,40 @@ function e3p_errorlight_enqueue_styles( $hook_suffix ) {
             setTimeout(function () { send.disabled = true; }, 0);
         });
     }
+    // Filtri e pulsanti ricaricano la pagina (gli indirizzi hanno l'ancora della scheda, che resta come ripiego senza
+    // JavaScript): qui si ricorda dove eri e, dopo il ricaricamento, si torna esattamente lì. Vale solo 15 secondi.
+    // I collegamenti delle pagine della tabella e i moduli di scarico ed email (che hanno la loro ancora) sono esclusi.
+    var scrollKey = 'e3pErrorlightScroll';
+    function restoreScroll() {
+        try {
+            var saved = JSON.parse(window.sessionStorage.getItem(scrollKey) || 'null');
+            if (!saved || saved.p !== window.location.pathname || Date.now() - saved.t > 15000) { return; }
+            window.scrollTo(0, saved.y);
+        } catch (e) {}
+    }
+    restoreScroll();
+    // Il browser va all'ancora quando la pagina è pronta: si ripete il ripristino dopo, e poi si cancella il ricordo.
+    window.addEventListener('load', function () {
+        restoreScroll();
+        setTimeout(function () {
+            restoreScroll();
+            try { window.sessionStorage.removeItem(scrollKey); } catch (e) {}
+        }, 50);
+    });
+    function rememberScroll() {
+        try {
+            window.sessionStorage.setItem(scrollKey, JSON.stringify({ y: window.pageYOffset, t: Date.now(), p: window.location.pathname }));
+        } catch (e) {}
+    }
+    document.addEventListener('click', function (event) {
+        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !event.target.closest) { return; }
+        var link = event.target.closest('.e3p-errorlight-wrap a[href*="page=errorlight"]');
+        if (link && !link.closest('.e3p-errorlight-pager') && link.target !== '_blank') { rememberScroll(); }
+    });
+    document.addEventListener('submit', function (event) {
+        var form = event.target;
+        if (form.closest && form.closest('.e3p-errorlight-wrap') && !form.closest('.e3p-errorlight-actions')) { rememberScroll(); }
+    });
     document.addEventListener('click', function (event) {
         // Pulsante "Email an excerpt": apre e chiude il modulo sotto la riga delle azioni.
         var toggle = event.target.closest ? event.target.closest('.e3p-errorlight-mail-toggle') : null;
@@ -1501,7 +1554,7 @@ function e3p_errorlight_render_page() {
     // Tutti i log noti, anche quelli che non esistono ancora: si vede sempre quale si sta leggendo e perché
     // un altro non c'è. Un log che esiste si sceglie con un clic; gli altri sono grigi e dicono perché.
     // Scheda "Quale log": la scelta, il log che si sta leggendo e le azioni su di esso (scarica, email).
-    echo '<div class="e3p-errorlight-step">';
+    echo '<div class="e3p-errorlight-step" id="e3p-errorlight-log">';
     if ( $all_files ) {
         e3p_errorlight_render_step_head( 'media-text', __( 'Which log do you want to read?', 'errorlight' ), __( 'Pick the log you want to look at. You can also download it or send an excerpt by e-mail.', 'errorlight' ) );
         echo '<div class="e3p-errorlight-shortcuts" role="group" aria-label="' . esc_attr__( 'Log files', 'errorlight' ) . '">';
@@ -1518,11 +1571,17 @@ function e3p_errorlight_render_page() {
                             'log'  => $key,
                         ),
                         admin_url( 'tools.php' )
-                    )
+                    ) . '#e3p-errorlight-log'
                 ) . '"' . ( $is_shown ? ' aria-current="true"' : '' ) . '>' . esc_html( $log_text ) . '</a>';
                 continue;
             }
-            if ( 'unavailable' === $log_info['status'] ) {
+            if ( 'merged' === $log_info['status'] ) {
+                $log_text = sprintf(
+                    /* translators: %s: log name */
+                    __( '%s — merged with the debug.log', 'errorlight' ),
+                    $log_info['label']
+                );
+            } elseif ( 'unavailable' === $log_info['status'] ) {
                 $log_text = sprintf(
                     /* translators: %s: log name */
                     __( '%s — not available', 'errorlight' ),
@@ -1549,6 +1608,9 @@ function e3p_errorlight_render_page() {
         $php_unavailable = isset( $all_files['php'] ) && 'unavailable' === $all_files['php']['status'];
         if ( $php_unavailable ) {
             echo '<p class="e3p-errorlight-why"><span class="dashicons dashicons-info-outline" aria-hidden="true"></span><span>' . esc_html( e3p_errorlight_php_log_reason( $all_files['php']['target'] ) ) . '</span></p>';
+        }
+        if ( isset( $all_files['php'] ) && 'merged' === $all_files['php']['status'] ) {
+            echo '<p class="e3p-errorlight-why"><span class="dashicons dashicons-info-outline" aria-hidden="true"></span><span>' . esc_html__( 'PHP’s error log is written to the same file as the WordPress debug.log (WordPress does this while logging is on), so you read both in the debug.log.', 'errorlight' ) . '</span></p>';
         }
         // Il log di ErrorLight è il debug.log di WordPress: lo si dice, perché da solo il nome potrebbe far pensare a un log del plugin.
         if ( isset( $all_files['protected'] ) ) {
@@ -1675,7 +1737,7 @@ function e3p_errorlight_render_page() {
     }
 
     // Scheda "Quale periodo": scelta dei giorni, peso di quanto si carica e avvisi sul limite.
-    echo '<div class="e3p-errorlight-step">';
+    echo '<div class="e3p-errorlight-step" id="e3p-errorlight-period">';
 
     // Selettore di giorni, solo se il log ha date riconoscibili.
     if ( $bounds ) {
@@ -1726,19 +1788,25 @@ function e3p_errorlight_render_page() {
             ),
         );
 
+        // Con un log di un solo giorno "ultimi 7 giorni" è lo stesso intervallo di "ultimo giorno": si nasconde, per non
+        // far credere che il clic non funzioni (si illuminerebbe sempre "ultimo giorno").
+        if ( $week === $bounds['last'] ) {
+            array_pop( $shortcuts );
+        }
+
         echo '<div class="e3p-errorlight-shortcuts" role="group" aria-label="' . esc_attr__( 'Quick choices', 'errorlight' ) . '">';
         $shortcut_active = false;
         foreach ( $shortcuts as $shortcut ) {
             // Un secondo clic su un periodo attivo lo toglie e torna alle voci più recenti.
             $shortcut_back = $shortcut['active'] && $range;
-            echo '<a class="button' . ( $shortcut['active'] ? ' is-active' : '' ) . '" href="' . esc_url( $shortcut_back ? $log_url : $shortcut['url'] ) . '"' . ( $shortcut['active'] ? ' aria-current="true"' : '' ) . ( $shortcut_back ? ' title="' . esc_attr__( 'Click again to go back to all viewable entries', 'errorlight' ) . '"' : '' ) . '>' . esc_html( $shortcut['label'] ) . '</a>';
+            echo '<a class="button' . ( $shortcut['active'] ? ' is-active' : '' ) . '" href="' . esc_url( ( $shortcut_back ? $log_url : $shortcut['url'] ) . '#e3p-errorlight-period' ) . '"' . ( $shortcut['active'] ? ' aria-current="true"' : '' ) . ( $shortcut_back ? ' title="' . esc_attr__( 'Click again to go back to all viewable entries', 'errorlight' ) . '"' : '' ) . '>' . esc_html( $shortcut['label'] ) . '</a>';
             $shortcut_active = $shortcut_active || $shortcut['active'];
         }
         echo '</div>';
 
         // Date a scelta: si apre da sola solo se è in uso un intervallo che non è una scorciatoia.
         echo '<details class="e3p-errorlight-details"' . ( $range && ! $shortcut_active ? ' open' : '' ) . '><summary><span class="dashicons dashicons-edit" aria-hidden="true"></span>' . esc_html__( 'Pick your own dates', 'errorlight' ) . '</summary>';
-        echo '<form method="get" action="" class="e3p-errorlight-range">';
+        echo '<form method="get" action="#e3p-errorlight-period" class="e3p-errorlight-range">';
         echo '<input type="hidden" name="page" value="errorlight" />';
         echo '<input type="hidden" name="log" value="' . esc_attr( $selected ) . '" />';
         echo '<label for="e3p-errorlight-from">' . esc_html__( 'From', 'errorlight' ) . '</label> ';
@@ -1748,7 +1816,7 @@ function e3p_errorlight_render_page() {
         echo '<button type="submit" class="button">' . esc_html__( 'Show these dates', 'errorlight' ) . '</button>';
         if ( $range ) {
             // Toglie le date e torna a "All viewable entries".
-            echo ' <a class="e3p-errorlight-clear" href="' . esc_url( $log_url ) . '"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span>' . esc_html__( 'Clear dates', 'errorlight' ) . '</a>';
+            echo ' <a class="e3p-errorlight-clear" href="' . esc_url( $log_url . '#e3p-errorlight-period' ) . '"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span>' . esc_html__( 'Clear dates', 'errorlight' ) . '</a>';
         }
         echo '</form></details>';
 
@@ -1928,7 +1996,7 @@ function e3p_errorlight_render_page() {
      * Indirizzo della lista con i filtri attivi, cambiando solo quelli passati (valore vuoto = toglie il filtro).
      * Livello e gruppo si escludono a vicenda.
      */
-    $make_url = function ( $over = array() ) use ( $view ) {
+    $make_url = function ( $over = array(), $anchor = '#e3p-errorlight-entries' ) use ( $view ) {
         if ( ! empty( $over['group'] ) ) {
             unset( $view['level'] );
         }
@@ -1941,7 +2009,7 @@ function e3p_errorlight_render_page() {
                 return '' !== $value && null !== $value;
             }
         );
-        return add_query_arg( $args, admin_url( 'tools.php' ) );
+        return add_query_arg( $args, admin_url( 'tools.php' ) ) . $anchor;
     };
 
     // Tre schede: i gruppi sono sempre tutti visibili; quelli a zero sono attenuati e senza link.
@@ -1961,7 +2029,7 @@ function e3p_errorlight_render_page() {
         }
     }
     // Scheda "Quali voci": riepilogo, livelli, filtri e ricerche. La tabella resta fuori, in fondo alla pagina.
-    echo '<div class="e3p-errorlight-step">';
+    echo '<div class="e3p-errorlight-step" id="e3p-errorlight-entries">';
     e3p_errorlight_render_step_head( 'filter', __( 'Which entries do you want to see?', 'errorlight' ), __( 'Narrow down the list below by type, by message or by where it comes from.', 'errorlight' ) );
 
     // Il testo sta in un solo <span>: il paragrafo è flex e senza il contenitore ogni pezzo diventerebbe un elemento separato.
@@ -2081,7 +2149,7 @@ function e3p_errorlight_render_page() {
     arsort( $source_options );
     $source_options = array_slice( array_keys( $source_options ), 0, 50 );
 
-    echo '<form method="get" action="" class="e3p-errorlight-search" role="search">';
+    echo '<form method="get" action="#e3p-errorlight-entries" class="e3p-errorlight-search" role="search">';
     foreach ( $view as $view_key => $view_value ) {
         if ( 's' !== $view_key && 'src' !== $view_key ) {
             echo '<input type="hidden" name="' . esc_attr( $view_key ) . '" value="' . esc_attr( $view_value ) . '" />';
@@ -2273,6 +2341,7 @@ function e3p_errorlight_render_page() {
     $entries = array_reverse( $entries );
     $total   = count( $entries );
 
+    echo '<div id="e3p-errorlight-table"></div>';
     if ( $active_filters ) {
         echo '<p>';
         printf(
@@ -2290,7 +2359,8 @@ function e3p_errorlight_render_page() {
                     's'      => '',
                     'src'    => '',
                     'grp'    => '',
-                )
+                ),
+                '#e3p-errorlight-table'
             )
         ) . '">' . esc_html__( 'Show all', 'errorlight' ) . '</a></p>';
     }
@@ -2331,7 +2401,7 @@ function e3p_errorlight_render_page() {
     }
 
     // Pagine: solo sulle righe già lette. I filtri attivi fanno parte dell'indirizzo.
-    $list_url     = $make_url();
+    $list_url     = $make_url( array(), '' ); // Senza ancora: la aggiunge il paginatore.
     $total_rows   = count( $rows );
     $pages        = max( 1, (int) ceil( $total_rows / $per_page ) );
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -2343,13 +2413,13 @@ function e3p_errorlight_render_page() {
     echo '<p class="description e3p-errorlight-groupnote">';
     if ( '' !== $grp_filter ) {
         echo esc_html__( 'Every entry of this message is listed.', 'errorlight' ) . ' ';
-        echo '<a href="' . esc_url( $make_url( array( 'grp' => '' ) ) ) . '">' . esc_html__( 'Group identical messages', 'errorlight' ) . '</a>';
+        echo '<a href="' . esc_url( $make_url( array( 'grp' => '' ), '#e3p-errorlight-table' ) ) . '">' . esc_html__( 'Group identical messages', 'errorlight' ) . '</a>';
     } elseif ( $flat ) {
         echo esc_html__( 'Every entry is listed.', 'errorlight' ) . ' ';
-        echo '<a href="' . esc_url( $make_url( array( 'flat' => '' ) ) ) . '">' . esc_html__( 'Group identical messages', 'errorlight' ) . '</a>';
+        echo '<a href="' . esc_url( $make_url( array( 'flat' => '' ), '#e3p-errorlight-table' ) ) . '">' . esc_html__( 'Group identical messages', 'errorlight' ) . '</a>';
     } else {
         echo esc_html__( 'Identical messages are shown once, with how many times they appear.', 'errorlight' ) . ' ';
-        echo '<a href="' . esc_url( $make_url( array( 'flat' => '1' ) ) ) . '">' . esc_html__( 'Show every entry', 'errorlight' ) . '</a>';
+        echo '<a href="' . esc_url( $make_url( array( 'flat' => '1' ), '#e3p-errorlight-table' ) ) . '">' . esc_html__( 'Show every entry', 'errorlight' ) . '</a>';
     }
     echo '</p>';
 
@@ -2402,7 +2472,7 @@ function e3p_errorlight_render_page() {
             $origin_name = '<strong>' . esc_html( e3p_errorlight_origin_label( $origin ) ) . '</strong>';
             // Un clic sul nome mostra solo le voci di quel plugin, tema o del core; un secondo clic toglie il filtro.
             $origin_active = ( $origin_key === $origin_filter );
-            $origin_name   = '<a class="e3p-errorlight-origin-link" href="' . esc_url( $make_url( array( 'origin' => $origin_active ? '' : $origin_key ) ) ) . '" title="' . esc_attr( $origin_active ? __( 'Click again to remove this filter', 'errorlight' ) : __( 'Show only the entries from this source', 'errorlight' ) ) . '">' . $origin_name . '</a>';
+            $origin_name   = '<a class="e3p-errorlight-origin-link" href="' . esc_url( $make_url( array( 'origin' => $origin_active ? '' : $origin_key ), '#e3p-errorlight-table' ) ) . '" title="' . esc_attr( $origin_active ? __( 'Click again to remove this filter', 'errorlight' ) : __( 'Show only the entries from this source', 'errorlight' ) ) . '">' . $origin_name . '</a>';
             $origin_html = '<span class="dashicons dashicons-' . esc_attr( $origin_icons[ $origin['type'] ] ) . '" aria-hidden="true"></span> ' . $origin_name;
         }
         // Una riga raggruppata con voci da fonti diverse non ne indica una sola.
@@ -2416,7 +2486,7 @@ function e3p_errorlight_render_page() {
             echo '<p class="e3p-errorlight-repeats"><span class="dashicons dashicons-controls-repeat" aria-hidden="true"></span><strong>';
             /* translators: %s: number of times the same message appears */
             echo esc_html( sprintf( _n( 'Repeated %s time', 'Repeated %s times', $count, 'errorlight' ), number_format_i18n( $count ) ) );
-            echo '</strong> <a href="' . esc_url( $make_url( array( 'grp' => $entry['hash'] ) ) ) . '">' . esc_html__( 'See each entry', 'errorlight' ) . '</a></p>';
+            echo '</strong> <a href="' . esc_url( $make_url( array( 'grp' => $entry['hash'] ), '#e3p-errorlight-table' ) ) . '">' . esc_html__( 'See each entry', 'errorlight' ) . '</a></p>';
         }
         if ( '' !== $origin_html ) {
             echo '<p class="e3p-errorlight-origin e3p-errorlight-origin-inline">' . $origin_html . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- già escapato sopra.
@@ -2477,6 +2547,7 @@ function e3p_errorlight_render_pager( $total, $from, $to, $pages, $current, $lis
             'prev_text' => esc_html__( '‹ Newer', 'errorlight' ),
             'next_text' => esc_html__( 'Older ›', 'errorlight' ),
             'mid_size'  => 2,
+            'add_fragment' => '#e3p-errorlight-table',
         )
     );
     echo wp_kses_post( (string) $links );

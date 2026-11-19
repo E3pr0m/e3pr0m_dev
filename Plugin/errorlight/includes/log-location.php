@@ -1,11 +1,12 @@
 <?php
 /**
- * Posto del log (#41): cartella con nome non indovinabile dentro la cartella degli upload (wp_upload_dir()),
- * con regole di protezione; verifica con una richiesta al sito stesso; controllo ed eliminazione del vecchio
- * wp-content/debug.log.
+ * Posto del log (#41): cartella del plugin `errorlight` dentro la cartella degli upload (wp_upload_dir()) e, dentro
+ * di essa, una cartella con nome non indovinabile per i log, con regole di protezione; verifica con una richiesta
+ * al sito stesso; controllo (sola lettura) del vecchio debug.log di WordPress. Il plugin non scrive né cancella
+ * nulla fuori da questa cartella (a parte wp-config.php, a richiesta).
  *
- * Il nome della cartella deriva dai salt del sito: è sempre lo stesso, quindi non va salvato in nessun posto
- * (nessuna scrittura nel database) e si ritrova anche quando il debug è spento.
+ * Il nome della cartella dei log deriva dai salt del sito: è sempre lo stesso, quindi non va salvato in nessun
+ * posto (nessuna scrittura nel database) e si ritrova anche quando il debug è spento.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,14 +49,62 @@ function e3p_errorlight_uploads() {
 }
 
 /**
- * Dove andrebbe il log: in una cartella con nome non indovinabile dentro gli upload. Non crea nulla.
+ * Cartella del plugin dentro gli upload (nome uguale allo slug), percorso e indirizzo. Non crea nulla. Senza la
+ * cartella degli upload di WordPress non si inventa nessun percorso: risposta null.
  *
- * @return array{dir: string, file: string}
+ * @return array{dir: string, url: string}|null
+ */
+function e3p_errorlight_base_location() {
+    $uploads = e3p_errorlight_uploads();
+    if ( null === $uploads ) {
+        return null;
+    }
+    return array(
+        'dir' => $uploads['dir'] . '/errorlight',
+        'url' => $uploads['url'] . '/errorlight',
+    );
+}
+
+/**
+ * Crea la cartella del plugin negli upload, con un index.php vuoto.
+ *
+ * @return array{dir: string, url: string}|null La cartella pronta, o null se non si riesce.
+ */
+function e3p_errorlight_ensure_base_location() {
+    $base = e3p_errorlight_base_location();
+    if ( null === $base || ! wp_mkdir_p( $base['dir'] ) ) {
+        return null;
+    }
+    $index = $base['dir'] . '/index.php';
+    if ( ! is_file( $index ) ) {
+        file_put_contents( $index, "<?php\n// Silence is golden.\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Writes only inside the plugin folder in the uploads directory.
+    }
+    return $base;
+}
+
+/**
+ * Percorso del debug.log che WordPress scrive di suo quando WP_DEBUG_LOG vale true. Solo per leggerlo e
+ * segnalarlo: il core lo costruisce con WP_CONTENT_DIR, quindi è l'unico modo di sapere dov'è. Il plugin non
+ * scrive e non cancella questo file.
+ *
+ * @return string
+ */
+function e3p_errorlight_default_log_path() {
+    return wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
+}
+
+/**
+ * Dove andrebbe il log: in una cartella con nome non indovinabile dentro la cartella del plugin negli upload.
+ * Non crea nulla.
+ *
+ * @return array{dir: string, file: string}|null Null se WordPress non indica la cartella degli upload.
  */
 function e3p_errorlight_plan_log_location() {
-    $uploads = e3p_errorlight_uploads();
-    $base    = $uploads ? $uploads['dir'] : untrailingslashit( wp_normalize_path( WP_CONTENT_DIR ) ) . '/uploads';
-    $dir     = $base . '/' . e3p_errorlight_log_folder_name();
+    $base = e3p_errorlight_base_location();
+    if ( null === $base ) {
+        return null;
+    }
+    $dir = $base['dir'] . '/' . e3p_errorlight_log_folder_name();
 
     return array(
         'dir'  => $dir,
@@ -67,11 +116,11 @@ function e3p_errorlight_plan_log_location() {
  * Crea la cartella con le regole che negano l'accesso dal web (Apache e IIS) e un index.php vuoto. Nginx ignora
  * questi file: per questo c'è la verifica con la richiesta di prova.
  *
- * @param array{dir: string, file: string} $loc Posto scelto.
+ * @param array{dir: string, file: string}|null $loc Posto scelto.
  * @return bool True se è tutto a posto.
  */
 function e3p_errorlight_prepare_log_location( $loc ) {
-    if ( null === e3p_errorlight_uploads() ) {
+    if ( null === $loc || null === e3p_errorlight_ensure_base_location() ) {
         return false;
     }
     if ( ! wp_mkdir_p( $loc['dir'] ) || ! is_writable( $loc['dir'] ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
@@ -101,7 +150,7 @@ function e3p_errorlight_prepare_log_location( $loc ) {
  */
 function e3p_errorlight_setup_log_location() {
     $loc = e3p_errorlight_plan_log_location();
-    return e3p_errorlight_prepare_log_location( $loc ) ? $loc : null;
+    return ( null !== $loc && e3p_errorlight_prepare_log_location( $loc ) ) ? $loc : null;
 }
 
 /**
@@ -112,7 +161,7 @@ function e3p_errorlight_setup_log_location() {
 function e3p_errorlight_existing_log_files() {
     $loc = e3p_errorlight_plan_log_location();
     // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- open_basedir.
-    return @is_file( $loc['file'] ) ? array( $loc['file'] ) : array();
+    return ( null !== $loc && @is_file( $loc['file'] ) ) ? array( $loc['file'] ) : array();
 }
 
 /**
@@ -142,11 +191,11 @@ function e3p_errorlight_http_probe( $url, $method = 'GET' ) {
 }
 
 /**
- * Verifica se i log si possono scaricare dal web. Scrive un file di controllo nella cartella degli upload (per
- * essere sicuri che l'indirizzo della richiesta corrisponda alla cartella) e un file di prova nella cartella dei
- * log, li chiede al sito e li cancella subito.
+ * Verifica se i log si possono scaricare dal web. Scrive un file di controllo nella cartella del plugin negli
+ * upload (per essere sicuri che l'indirizzo della richiesta corrisponda alla cartella) e un file di prova nella
+ * cartella dei log, li chiede al sito e li cancella subito.
  *
- * @param array{dir: string, file: string} $loc Posto del log nuovo.
+ * @param array{dir: string, file: string}|null $loc Posto del log nuovo.
  * @return array{folder: string, old: string} `folder`: protected, exposed, unknown. `old`: none, protected, exposed, unknown.
  */
 function e3p_errorlight_run_checks( $loc ) {
@@ -155,32 +204,31 @@ function e3p_errorlight_run_checks( $loc ) {
         'old'    => 'unknown',
     );
 
-    $old_file = wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
-    $old_here = is_file( $old_file );
+    $old_here = is_file( e3p_errorlight_default_log_path() );
     if ( ! $old_here ) {
         $result['old'] = 'none';
     }
-    $uploads = e3p_errorlight_uploads();
-    if ( null === $uploads ) {
+    $base = e3p_errorlight_ensure_base_location();
+    if ( null === $base || null === $loc ) {
         return $result;
     }
 
-    // File di controllo nella cartella degli upload (dove i file di un plugin possono stare): se il sito non lo
-    // serve, l'indirizzo non corrisponde alla cartella e nessun "403" o "404" può essere interpretato.
+    // File di controllo nella cartella del plugin: se il sito non lo serve, l'indirizzo non corrisponde alla
+    // cartella e nessun "403" o "404" può essere interpretato.
     $marker  = 'e3p-errorlight-probe-' . wp_generate_password( 12, false );
-    $control = $uploads['dir'] . '/e3p-errorlight-control-' . wp_generate_password( 8, false ) . '.txt';
-    if ( false === file_put_contents( $control, $marker ) ) {
+    $control = $base['dir'] . '/control-' . wp_generate_password( 8, false ) . '.txt';
+    if ( false === file_put_contents( $control, $marker ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Temporary control file inside the plugin folder in uploads, deleted right after the request.
         return $result;
     }
-    $answer = e3p_errorlight_http_probe( $uploads['url'] . '/' . basename( $control ) );
+    $answer = e3p_errorlight_http_probe( $base['url'] . '/' . basename( $control ) );
     wp_delete_file( $control );
     if ( ! $answer || 200 !== $answer['code'] || false === strpos( $answer['body'], $marker ) ) {
         return $result;
     }
 
     $probe = $loc['dir'] . '/probe.txt';
-    if ( is_dir( $loc['dir'] ) && false !== file_put_contents( $probe, $marker ) ) {
-        $answer = e3p_errorlight_http_probe( $uploads['url'] . '/' . basename( $loc['dir'] ) . '/probe.txt' );
+    if ( is_dir( $loc['dir'] ) && false !== file_put_contents( $probe, $marker ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Temporary probe file inside the log folder, deleted right after the request.
+        $answer = e3p_errorlight_http_probe( $base['url'] . '/' . basename( $loc['dir'] ) . '/probe.txt' );
         wp_delete_file( $probe );
         if ( $answer ) {
             if ( 200 === $answer['code'] && false !== strpos( $answer['body'], $marker ) ) {
@@ -237,7 +285,7 @@ function e3p_errorlight_get_check_texts() {
             ),
             'exposed'   => array(
                 'type' => 'error',
-                'text' => __( 'Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it with the button below.', 'errorlight' ),
+                'text' => __( 'Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it: the advice below explains how.', 'errorlight' ),
             ),
             'unknown'   => array(
                 'type' => 'warning',
@@ -267,43 +315,11 @@ function e3p_errorlight_handle_check() {
                 'e3p_errorlight_od' => $checks['old'],
             ),
             admin_url( 'tools.php' )
-        )
+        ) . '#e3p-errorlight-location'
     );
     exit;
 }
 add_action( 'admin_post_e3p_errorlight_check', 'e3p_errorlight_handle_check' );
-
-/**
- * Elimina il vecchio wp-content/debug.log. Solo quel file, con conferma esplicita.
- */
-function e3p_errorlight_handle_delete_old() {
-    if ( ! current_user_can( e3p_errorlight_capability() ) ) {
-        wp_die( esc_html__( 'You do not have permission to do this.', 'errorlight' ), '', array( 'response' => 403 ) );
-    }
-    check_admin_referer( 'e3p_errorlight_delete_old' );
-
-    $file = wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
-    if ( empty( $_POST['e3p_errorlight_confirm_delete'] ) ) {
-        $result = 'confirm_delete';
-    } elseif ( ! is_file( $file ) || is_link( $file ) ) {
-        $result = 'old_none';
-    } else {
-        wp_delete_file( $file );
-        $result = is_file( $file ) ? 'old_failed' : 'old_deleted';
-    }
-
-    wp_safe_redirect(
-        add_query_arg(
-            array(
-                'page'            => 'errorlight',
-                'e3p_errorlight_rs' => $result,
-            ),
-            admin_url( 'tools.php' )
-        )
-    );
-    exit;
-}
-add_action( 'admin_post_e3p_errorlight_delete_old', 'e3p_errorlight_handle_delete_old' );
 
 /**
  * Come controllare a mano che la cartella dei log non si possa scaricare, quando il controllo automatico non riesce
@@ -312,8 +328,11 @@ add_action( 'admin_post_e3p_errorlight_delete_old', 'e3p_errorlight_handle_delet
  * @param string $name Nome della cartella dei log.
  */
 function e3p_errorlight_render_manual_check( $name ) {
-    $uploads = e3p_errorlight_uploads();
-    $url     = ( $uploads ? $uploads['url'] : content_url( '/uploads' ) ) . '/' . $name . '/debug.log';
+    $base = e3p_errorlight_base_location();
+    if ( null === $base ) {
+        return;
+    }
+    $url = $base['url'] . '/' . $name . '/debug.log';
     echo '<details class="e3p-errorlight-details" open><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How to check it yourself', 'errorlight' ) . '</summary><ol>';
     echo '<li>' . esc_html__( 'Make sure the log exists: it appears in the list of logs above after WordPress writes its first message.', 'errorlight' ) . '</li>';
     echo '<li>' . esc_html__( 'Open this address in a private browser window:', 'errorlight' ) . ' <code class="e3p-errorlight-problem-line">' . esc_html( $url ) . '</code></li>';
@@ -333,11 +352,11 @@ function e3p_errorlight_render_location_section( $active ) {
     // Dove scrive WordPress adesso (se è acceso) e dove scriverebbe con ErrorLight.
     $current = '';
     if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-        $current = is_string( WP_DEBUG_LOG ) ? wp_normalize_path( WP_DEBUG_LOG ) : wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
+        $current = is_string( WP_DEBUG_LOG ) ? wp_normalize_path( WP_DEBUG_LOG ) : e3p_errorlight_default_log_path();
     }
     $ours_now = $active && false !== strpos( $current, '/' . $name . '/' );
 
-    echo '<div class="e3p-errorlight-location"><h3><span class="dashicons dashicons-shield-alt" aria-hidden="true"></span>' . esc_html__( 'Where your log is saved', 'errorlight' ) . '</h3>';
+    echo '<div id="e3p-errorlight-location" class="e3p-errorlight-location"><h3><span class="dashicons dashicons-shield-alt" aria-hidden="true"></span>' . esc_html__( 'Where your log is saved', 'errorlight' ) . '</h3>';
 
     if ( $ours_now ) {
         echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'errorlight' ) . '</p>';
@@ -375,8 +394,9 @@ function e3p_errorlight_render_location_section( $active ) {
     echo '<button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>' . esc_html__( 'Check that my logs cannot be downloaded', 'errorlight' ) . '</button>';
     echo '</form>';
 
-    // Vecchio debug.log: il primo indirizzo che chiunque proverebbe.
-    $old = wp_normalize_path( WP_CONTENT_DIR ) . '/debug.log';
+    // Vecchio debug.log: il primo indirizzo che chiunque proverebbe. Il plugin non lo cancella (è fuori dalla sua
+    // cartella): mostra dov'è e consiglia come toglierlo.
+    $old = e3p_errorlight_default_log_path();
     if ( is_file( $old ) && $old !== $current ) {
         $size = filesize( $old );
         echo '<div class="e3p-errorlight-old"><p><span class="dashicons dashicons-media-text" aria-hidden="true"></span>';
@@ -386,12 +406,14 @@ function e3p_errorlight_render_location_section( $active ) {
             esc_html( false !== $size ? size_format( $size ) : '—' )
         );
         echo '</p>';
-        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
-        echo '<input type="hidden" name="action" value="e3p_errorlight_delete_old" />';
-        wp_nonce_field( 'e3p_errorlight_delete_old' );
-        echo '<p><label><input type="checkbox" name="e3p_errorlight_confirm_delete" value="1" required /> ' . esc_html__( 'Yes, delete wp-content/debug.log permanently.', 'errorlight' ) . '</label></p>';
-        echo '<p><button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-trash" aria-hidden="true"></span>' . esc_html__( 'Delete debug.log', 'errorlight' ) . '</button></p>';
-        echo '</form></div>';
+        echo '<details class="e3p-errorlight-details" open><summary><span class="dashicons dashicons-editor-help" aria-hidden="true"></span>' . esc_html__( 'How to remove it', 'errorlight' ) . '</summary>';
+        echo '<p>' . esc_html__( 'ErrorLight does not delete files outside its own folder, so we suggest you remove it yourself. This is its location:', 'errorlight' ) . '</p>';
+        echo '<p><code class="e3p-errorlight-problem-line">' . esc_html( $old ) . '</code></p>';
+        echo '<ol>';
+        echo '<li>' . esc_html__( 'If you still need what is in it, download or copy it first.', 'errorlight' ) . '</li>';
+        echo '<li>' . esc_html__( 'Delete it with the file manager of your hosting control panel (for example cPanel or Plesk), or with an FTP/SFTP program such as FileZilla: open the wp-content folder and delete the file debug.log.', 'errorlight' ) . '</li>';
+        echo '<li>' . esc_html__( 'If you have SSH access, you can delete it from the command line with the location shown above.', 'errorlight' ) . '</li>';
+        echo '</ol></details></div>';
     }
 
     echo '</div>';

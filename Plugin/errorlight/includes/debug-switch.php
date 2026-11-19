@@ -35,22 +35,6 @@ function e3p_errorlight_get_result_texts() {
             'type' => 'error',
             'text' => __( 'Nothing was changed: ErrorLight could not create the folder where the log is saved.', 'errorlight' ),
         ),
-        'confirm_delete' => array(
-            'type' => 'warning',
-            'text' => __( 'Nothing was deleted: tick the confirmation box first.', 'errorlight' ),
-        ),
-        'old_deleted'  => array(
-            'type' => 'success',
-            'text' => __( 'The old wp-content/debug.log was deleted.', 'errorlight' ),
-        ),
-        'old_failed'   => array(
-            'type' => 'error',
-            'text' => __( 'The old wp-content/debug.log could not be deleted. Check its permissions or delete it by hand.', 'errorlight' ),
-        ),
-        'old_none'     => array(
-            'type' => 'info',
-            'text' => __( 'There was no wp-content/debug.log to delete.', 'errorlight' ),
-        ),
         'email_sent'      => array(
             'type' => 'success',
             'text' => __( 'The excerpt was handed over to your site’s mail system. If it does not arrive, check the spam folder and your site’s e-mail setup.', 'errorlight' ),
@@ -111,6 +95,14 @@ function e3p_errorlight_get_result_texts() {
             'type' => 'error',
             'text' => __( 'The written file did not pass the final check, so the original wp-config.php was restored to how it was.', 'errorlight' ),
         ),
+        'restore_failed' => array(
+            'type' => 'error',
+            'text' => __( 'The written file did not pass the final check and the original wp-config.php could not be restored with certainty. Please open wp-config.php and check that it is complete; your hosting provider can restore it from a backup.', 'errorlight' ),
+        ),
+        'busy'         => array(
+            'type' => 'warning',
+            'text' => __( 'Nothing was changed: wp-config.php was being changed by another request or had just changed. Please try again.', 'errorlight' ),
+        ),
     );
 }
 
@@ -158,7 +150,7 @@ function e3p_errorlight_handle_toggle() {
             if ( '' !== $applied['error'] ) {
                 $result = $applied['error'];
             } else {
-                $result = e3p_errorlight_config_write( $path, $applied['src'] );
+                $result = e3p_errorlight_config_write( $path, $applied['src'], $src );
                 if ( '' === $result ) {
                     $result = $on ? 'on_ok' : 'off_ok';
                     // Acceso: si pianifica lo spegnimento o il promemoria, e si controlla se i log si possono
@@ -182,7 +174,7 @@ function e3p_errorlight_handle_toggle() {
         $args['e3p_errorlight_pr'] = $checks['folder'];
         $args['e3p_errorlight_od'] = $checks['old'];
     }
-    wp_safe_redirect( add_query_arg( $args, admin_url( 'tools.php' ) ) );
+    wp_safe_redirect( add_query_arg( $args, admin_url( 'tools.php' ) ) . '#e3p-errorlight-debug' );
     exit;
 }
 add_action( 'admin_post_e3p_errorlight_toggle', 'e3p_errorlight_handle_toggle' );
@@ -234,7 +226,7 @@ function e3p_errorlight_render_debug_section() {
     $texts  = e3p_errorlight_get_result_texts();
     $active = defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
 
-    echo '<div class="e3p-errorlight-box e3p-errorlight-friendly' . ( $active ? ' is-on' : '' ) . '">';
+    echo '<div id="e3p-errorlight-debug" class="e3p-errorlight-box e3p-errorlight-friendly' . ( $active ? ' is-on' : '' ) . '">';
     echo '<div class="e3p-errorlight-head"><span class="e3p-errorlight-head-icon dashicons dashicons-search" aria-hidden="true"></span><div>';
     echo '<h2>' . esc_html__( 'Find your error - check your logs', 'errorlight' ) . '</h2>';
     echo '<p class="e3p-errorlight-subtitle">' . esc_html__( 'Use this box to turn logging on easily, and let WordPress write down what goes wrong.', 'errorlight' ) . '</p>';
@@ -318,7 +310,7 @@ function e3p_errorlight_render_debug_section() {
 
     // Anteprima: le righe che risulteranno nel file.
     // Accendendo, WP_DEBUG_LOG prenderà il percorso del log di ErrorLight: l'anteprima lo mostra (senza creare nulla).
-    $preview = e3p_errorlight_config_apply( $src, ! $active, $active ? null : e3p_errorlight_plan_log_location()['file'] );
+    $preview = e3p_errorlight_config_apply( $src, ! $active, $active ? null : ( e3p_errorlight_plan_log_location()['file'] ?? null ) );
     if ( '' !== $preview['error'] ) {
         echo '<p>' . esc_html( $texts['selfcheck']['text'] ) . '</p></div>';
         return;

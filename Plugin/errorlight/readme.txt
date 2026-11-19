@@ -26,7 +26,7 @@ You find it in **Tools → ErrorLight**. Only administrators can use it. On a mu
 * **Find what you need:** identical messages are shown once with how many times they appear, buttons for the most repeated messages and for common problems, a filter by exact type, and two search fields (what happened, and where it was reported).
 * **Download a log**, or **e-mail an excerpt** of it (the last 20, 50 or 100 lines) to an address you choose, with an option to replace file paths, web addresses, e-mail addresses and IP addresses with placeholders.
 * **Copy a summary for support** when you ask someone for help, in a safe version with no personal data and a complete version with a warning.
-* **Delete the old `wp-content/debug.log`**, the file name everyone tries first, when you no longer need it.
+* **Spot the old `wp-content/debug.log`**, the file name everyone tries first. ErrorLight shows where it is and suggests how to remove it (it never deletes files outside its own folder).
 
 = What this plugin does not do =
 
@@ -51,9 +51,9 @@ It does not hook into other e-mails of your site.
 = What ErrorLight writes =
 
 * **Database:** one option, `e3p_errorlight_settings`, with your turn-off or reminder choice. It is created when you turn logging on from the panel and removed when you turn it off. Up to two scheduled WP-Cron events go with it.
-* **Files:** `wp-config.php` (only when you press the button, with a confirmation), and the folder of the log. If you delete the old `wp-content/debug.log` from the panel, that file is removed.
+* **Files:** `wp-config.php` (only when you press the button, with a confirmation), and a folder named `errorlight` inside your uploads folder, with the log folder, a lock file and short-lived test files. ErrorLight never writes to or deletes any other file: the old `wp-content/debug.log` is only read, and you remove it yourself.
 
-Everything ErrorLight creates is removed when you delete the plugin, except the lines it added to `wp-config.php`. Download your logs and turn logging off before you delete the plugin. The log folder is deleted with it, and the lines ErrorLight added to `wp-config.php` stay: if logging was still on, WordPress keeps debugging without a log file until you set `WP_DEBUG` and `WP_DEBUG_LOG` to `false` there.
+Everything ErrorLight creates is removed when you delete the plugin, except the lines it added to `wp-config.php`. Download your logs and turn logging off before you delete the plugin. The `errorlight` folder in uploads is deleted with it, and the lines ErrorLight added to `wp-config.php` stay: if logging was still on, WordPress keeps debugging without a log file until you set `WP_DEBUG` and `WP_DEBUG_LOG` to `false` there.
 
 == Installation ==
 
@@ -69,7 +69,7 @@ ErrorLight only edits `wp-config.php` when the debug lines are written in the st
 
 = Does it change my wp-config.php safely? =
 
-It writes the new version of the file in one step, checks that the result is valid PHP and restores the original automatically if anything is wrong. It does not leave any backup copy of `wp-config.php` on your server. Only the three debug constants are touched, and every line ErrorLight changes or adds is marked with an `ErrorLight` comment.
+It writes the new version of the file in one step (through a temporary file with a random name that only the server can read), checks that the result is valid PHP and restores the original automatically if anything is wrong, then checks that the restore worked. Two requests at the same time cannot overwrite each other. It does not leave any backup copy of `wp-config.php` on your server. Only the three debug constants are touched, and every line ErrorLight changes or adds is marked with an `ErrorLight` comment.
 
 = Does it work on a multisite network? =
 

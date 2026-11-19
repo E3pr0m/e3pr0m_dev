@@ -39,4 +39,6 @@ wordpress-org-backup-codes.txt
 # Free File Sync db
 sync.ffs_db
 
-Versioning/
+
+# Work Folder
+TEMP/

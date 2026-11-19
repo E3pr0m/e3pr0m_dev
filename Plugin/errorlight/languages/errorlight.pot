@@ -9,15 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-07T18:07:01+00:00\n"
+"POT-Creation-Date: 2026-11-19T11:05:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: errorlight\n"
 
 #. Plugin Name of the plugin
 #: errorlight.php
-#: errorlight.php:767
-#: errorlight.php:768
+#: errorlight.php:808
+#: errorlight.php:809
 msgid "ErrorLight"
 msgstr ""
 
@@ -34,6 +34,754 @@ msgstr ""
 #. Author URI of the plugin
 #: errorlight.php
 msgid "https://www.e3pr0m.com"
+msgstr ""
+
+#: errorlight.php:60
+msgid "Fatal error"
+msgstr ""
+
+#: errorlight.php:61
+msgid "PHP stopped running a request, so the page or feature that was running may have failed."
+msgstr ""
+
+#: errorlight.php:65
+msgid "Parse error"
+msgstr ""
+
+#: errorlight.php:66
+msgid "PHP could not read a file because of a syntax mistake in its code."
+msgstr ""
+
+#: errorlight.php:70
+msgid "Database error"
+msgstr ""
+
+#: errorlight.php:71
+msgid "A database query failed or reported a problem."
+msgstr ""
+
+#: errorlight.php:75
+msgid "Warning"
+msgstr ""
+
+#: errorlight.php:76
+msgid "Something went wrong, but PHP kept running. It may or may not affect the site."
+msgstr ""
+
+#: errorlight.php:80
+msgid "Notice"
+msgstr ""
+
+#: errorlight.php:81
+msgid "A minor issue in the code, normally harmless on its own."
+msgstr ""
+
+#: errorlight.php:85
+msgid "Deprecated"
+msgstr ""
+
+#: errorlight.php:86
+msgid "The code uses something that is planned to stop working in a future version."
+msgstr ""
+
+#: errorlight.php:90
+msgid "Unclassified"
+msgstr ""
+
+#: errorlight.php:91
+msgid "ErrorLight did not recognize the type of this entry."
+msgstr ""
+
+#: errorlight.php:106
+msgid "Serious problems"
+msgstr ""
+
+#: errorlight.php:107
+msgid "Something failed or stopped running. Look at these first."
+msgstr ""
+
+#: errorlight.php:113
+msgid "Warnings"
+msgstr ""
+
+#: errorlight.php:114
+msgid "Something went wrong, but the site kept running."
+msgstr ""
+
+#: errorlight.php:120
+msgid "Minor notes"
+msgstr ""
+
+#: errorlight.php:121
+msgid "Small remarks, things that will change in future versions, and entries ErrorLight could not sort."
+msgstr ""
+
+#. translators: %s: where PHP sends its errors, the value of its error_log setting, e.g. /dev/stderr
+#: errorlight.php:196
+#, php-format
+msgid "PHP sends its errors to %s, which is not a file (usually they end up in the server’s own log): there is no file to read."
+msgstr ""
+
+#: errorlight.php:200
+msgid "PHP sends its errors to the system log (syslog), which is not a file: there is no file to read."
+msgstr ""
+
+#. translators: %s: path of the PHP error log set in php.ini
+#: errorlight.php:204
+#, php-format
+msgid "PHP is set to write its errors to %s, but that folder does not exist or PHP cannot write to it, so the file will never be created."
+msgstr ""
+
+#: errorlight.php:208
+msgid "PHP error logging is turned off (log_errors), so PHP does not record its errors anywhere: there is no log to read."
+msgstr ""
+
+#: errorlight.php:210
+msgid "PHP is not set to write its errors to a file: there is no file to read."
+msgstr ""
+
+#: errorlight.php:212
+msgid "The WordPress debug.log still records the errors WordPress can see."
+msgstr ""
+
+#: errorlight.php:219
+msgid "How can I get a PHP error log?"
+msgstr ""
+
+#: errorlight.php:220
+msgid "If your hosting lets you change PHP settings (in the hosting panel, in php.ini or in a .user.ini file), set these two lines, with a path that PHP can write to and that is outside your website folder. Some hosts do not allow it: ask them."
+msgstr ""
+
+#: errorlight.php:269
+msgid "WordPress debug.log"
+msgstr ""
+
+#: errorlight.php:270
+msgid "ErrorLight protected debug.log"
+msgstr ""
+
+#: errorlight.php:271
+msgid "PHP error_log"
+msgstr ""
+
+#. translators: %s: PHP memory limit, e.g. "64 MB"
+#: errorlight.php:753
+#, php-format
+msgid "There is not enough free PHP memory (limit: %s) to read the log safely, so ErrorLight does not load it."
+msgstr ""
+
+#. translators: 1: PHP memory limit, 2: log size that can be loaded, 3: usual log size limit
+#: errorlight.php:759
+#, php-format
+msgid "Your PHP memory limit (%1$s) leaves room for about %2$s of log at a time, less than the usual %3$s. ErrorLight lowers its limit so it does not run out of memory."
+msgstr ""
+
+#: errorlight.php:767
+msgid "How to get more memory"
+msgstr ""
+
+#. translators: 1: PHP constant line, 2: file name, 3: comment text found in that file
+#: errorlight.php:772
+#, php-format
+msgid "In the %2$s file, in the site root, add the line %1$s above the line that says \"%3$s\". Take a backup of the file first."
+msgstr ""
+
+#. translators: 1: php.ini setting, 2: file name
+#: errorlight.php:781
+#, php-format
+msgid "Or raise it in the PHP settings: many hosting control panels have a \"PHP settings\" or \"PHP version\" page with a memory limit field. On your own server, set %1$s in %2$s."
+msgstr ""
+
+#: errorlight.php:786
+msgid "If neither works, your hosting plan probably caps the memory. Ask your hosting provider's support to raise the PHP \"memory_limit\" to at least 256M, or ask the person who manages the site."
+msgstr ""
+
+#: errorlight.php:788
+msgid "Changing WP_MEMORY_LIMIT cannot exceed the cap set by the host. Reload this page afterwards to see the new limit."
+msgstr ""
+
+#: errorlight.php:828
+msgid "PHP ran out of memory while running something."
+msgstr ""
+
+#: errorlight.php:829
+msgid "Something took too long to run, so PHP stopped it."
+msgstr ""
+
+#: errorlight.php:830
+msgid "The code tried to use a function that does not exist. This often happens when a plugin or theme is missing, disabled or out of date."
+msgstr ""
+
+#: errorlight.php:831
+msgid "The code tried to use a class that was not found. This often happens when a plugin or theme is missing, disabled or out of date."
+msgstr ""
+
+#: errorlight.php:832
+msgid "The code used a value that was never set."
+msgstr ""
+
+#: errorlight.php:833
+msgid "Something printed text before WordPress could send the page headers."
+msgstr ""
+
+#: errorlight.php:834
+msgid "A plugin or theme loaded its translations too early."
+msgstr ""
+
+#: errorlight.php:835
+msgid "The code tried to open a file that is missing or cannot be read."
+msgstr ""
+
+#: errorlight.php:836
+msgid "The code looked for a database table that does not exist."
+msgstr ""
+
+#: errorlight.php:837
+msgid "The connection to the database was lost."
+msgstr ""
+
+#: errorlight.php:838
+msgid "The database refused the login details it was given."
+msgstr ""
+
+#: errorlight.php:881
+msgid "Out of memory"
+msgstr ""
+
+#: errorlight.php:885
+msgid "Took too long"
+msgstr ""
+
+#: errorlight.php:889
+msgid "Something not set or missing"
+msgstr ""
+
+#: errorlight.php:893
+msgid "Text printed too early"
+msgstr ""
+
+#: errorlight.php:897
+msgid "File not found"
+msgstr ""
+
+#: errorlight.php:901
+msgid "Missing database table"
+msgstr ""
+
+#: errorlight.php:905
+msgid "Translations loaded too early"
+msgstr ""
+
+#: errorlight.php:909
+msgid "Database connection failed"
+msgstr ""
+
+#: errorlight.php:913
+msgid "Method called on an empty value"
+msgstr ""
+
+#: errorlight.php:917
+msgid "Database connection lost"
+msgstr ""
+
+#: errorlight.php:921
+msgid "Database login refused"
+msgstr ""
+
+#: errorlight.php:1040
+msgid "WordPress itself (a core file)"
+msgstr ""
+
+#. translators: %s: plugin name
+#: errorlight.php:1059
+#, php-format
+msgid "Plugin: %s"
+msgstr ""
+
+#. translators: %s: theme name
+#: errorlight.php:1071
+#, php-format
+msgid "Theme: %s"
+msgstr ""
+
+#. translators: %s: must-use plugin folder or file name
+#: errorlight.php:1075
+#, php-format
+msgid "Must-use plugin: %s"
+msgstr ""
+
+#. translators: %s: time elapsed, e.g. "5 minutes"
+#: errorlight.php:1169
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#. translators: 1: size of the chosen period, 2: most ErrorLight loads at once
+#: errorlight.php:1187
+#, php-format
+msgid "This period is too big to show (about %1$s). The most ErrorLight loads at once is %2$s. Choose fewer days."
+msgstr ""
+
+#. translators: 1: size of the chosen period, 2: most ErrorLight loads at once
+#: errorlight.php:1194
+#, php-format
+msgid "This period is small enough to show (about %1$s). The most ErrorLight loads at once is %2$s."
+msgstr ""
+
+#: errorlight.php:1509
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: errorlight.php:1549
+msgid "Read your WordPress error logs and see what each message means."
+msgstr ""
+
+#: errorlight.php:1559
+msgid "Which log do you want to read?"
+msgstr ""
+
+#: errorlight.php:1559
+msgid "Pick the log you want to look at. You can also download it or send an excerpt by e-mail."
+msgstr ""
+
+#: errorlight.php:1560
+msgid "Log files"
+msgstr ""
+
+#. translators: %s: log name
+#: errorlight.php:1581
+#, php-format
+msgid "%s — merged with the debug.log"
+msgstr ""
+
+#. translators: %s: log name
+#: errorlight.php:1587
+#, php-format
+msgid "%s — not available"
+msgstr ""
+
+#. translators: %s: log name
+#: errorlight.php:1593
+#, php-format
+msgid "%s — cannot be read"
+msgstr ""
+
+#. translators: %s: log name
+#: errorlight.php:1600
+#, php-format
+msgid "%s — not created yet"
+msgstr ""
+
+#: errorlight.php:1613
+msgid "PHP’s error log is written to the same file as the WordPress debug.log (WordPress does this while logging is on), so you read both in the debug.log."
+msgstr ""
+
+#: errorlight.php:1617
+msgid "ErrorLight protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place."
+msgstr ""
+
+#: errorlight.php:1620
+msgid "A log marked “not created yet” does not exist: WordPress and PHP (if available) create their logs when the first message is written to them."
+msgstr ""
+
+#. translators: 1: log name, 2: file path
+#: errorlight.php:1634
+#, php-format
+msgid "%1$s (%2$s): the file exists, but PHP cannot read it. Check its permissions."
+msgstr ""
+
+#: errorlight.php:1647
+msgid "Nothing to read yet"
+msgstr ""
+
+#: errorlight.php:1650
+msgid "Logging is on, but no log file has been created yet. Repeat the action that causes the problem, then reload this page."
+msgstr ""
+
+#: errorlight.php:1651
+msgid "No log file exists yet. Turn logging on in the box above, repeat the action that causes the problem, then reload this page."
+msgstr ""
+
+#: errorlight.php:1653
+msgid "WordPress only writes debug.log while logging is on, and PHP only writes its own log if your server is set up to do so."
+msgstr ""
+
+#: errorlight.php:1662
+#: errorlight.php:1860
+#: errorlight.php:1875
+#: errorlight.php:1882
+msgid "The log file could not be read."
+msgstr ""
+
+#. translators: %s: log name, e.g. "PHP error_log"
+#: errorlight.php:1712
+#, php-format
+msgid "You are reading: %s"
+msgstr ""
+
+#: errorlight.php:1716
+msgid "This is WordPress’s own debug.log, saved by ErrorLight in a protected folder."
+msgstr ""
+
+#. translators: 1: file size, 2: last modified date and time
+#: errorlight.php:1721
+#, php-format
+msgid "%1$s · last modified %2$s"
+msgstr ""
+
+#: errorlight.php:1757
+msgid "Which period do you want to see?"
+msgstr ""
+
+#: errorlight.php:1757
+msgid "Choose which days of the log you want to look at."
+msgstr ""
+
+#: errorlight.php:1763
+msgid "All viewable entries"
+msgstr ""
+
+#: errorlight.php:1768
+msgid "Last day in the log"
+msgstr ""
+
+#: errorlight.php:1779
+msgid "Last 7 days in the log"
+msgstr ""
+
+#: errorlight.php:1791
+msgid "Quick choices"
+msgstr ""
+
+#: errorlight.php:1796
+msgid "Click again to go back to all viewable entries"
+msgstr ""
+
+#: errorlight.php:1802
+msgid "Pick your own dates"
+msgstr ""
+
+#: errorlight.php:1806
+msgid "From"
+msgstr ""
+
+#: errorlight.php:1808
+msgid "To"
+msgstr ""
+
+#: errorlight.php:1810
+msgid "Show these dates"
+msgstr ""
+
+#: errorlight.php:1813
+msgid "Clear dates"
+msgstr ""
+
+#. translators: 1: first date in the log, 2: last date in the log
+#: errorlight.php:1820
+#, php-format
+msgid "This log covers %1$s to %2$s."
+msgstr ""
+
+#: errorlight.php:1827
+msgid "Why can't I load everything at once?"
+msgstr ""
+
+#: errorlight.php:1828
+msgid "Very large logs can make the page slow or run out of memory, so ErrorLight only loads a limited amount at a time. Dates are the ones written in the log (usually UTC), not your site time."
+msgstr ""
+
+#. translators: %s: size limit, e.g. "2 MB"
+#: errorlight.php:1832
+#, php-format
+msgid "A period can load at most %s of log."
+msgstr ""
+
+#. translators: 1: average log growth per day, 2: size limit
+#: errorlight.php:1839
+#, php-format
+msgid "On average it grows about %1$s per day, more than the %2$s limit: some single days may be too large to load."
+msgstr ""
+
+#. translators: 1: average log growth per day, 2: number of days, 3: size limit
+#: errorlight.php:1846
+#, php-format
+msgid "On average it grows about %1$s per day, so ranges of about %2$s days or less stay under the %3$s limit."
+msgstr ""
+
+#: errorlight.php:1854
+msgid "This log has no dates ErrorLight can read, so only its latest part can be shown."
+msgstr ""
+
+#. translators: %s: size of the whole log file
+#: errorlight.php:1894
+#, php-format
+msgid "This log is large (%s), so only its most recent part is shown. Pick a period above to look at older days."
+msgstr ""
+
+#: errorlight.php:1904
+msgid "There are no entries in this range."
+msgstr ""
+
+#: errorlight.php:1904
+msgid "The log file is empty: nothing has been recorded in it yet."
+msgstr ""
+
+#. translators: %s: number of serious problems
+#: errorlight.php:2016
+#, php-format
+msgid "%s serious problem"
+msgid_plural "%s serious problems"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of warnings
+#: errorlight.php:2019
+#, php-format
+msgid "%s warning"
+msgid_plural "%s warnings"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of minor notes
+#: errorlight.php:2022
+#, php-format
+msgid "%s minor note"
+msgid_plural "%s minor notes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: errorlight.php:2027
+msgid "Which entries do you want to see?"
+msgstr ""
+
+#: errorlight.php:2027
+msgid "Narrow down the list below by type, by message or by where it comes from."
+msgstr ""
+
+#. translators: %s: counts, e.g. "2 serious problems, 14 warnings, 1,402 minor notes"
+#: errorlight.php:2032
+#, php-format
+msgid "In the part of the log shown: %s."
+msgstr ""
+
+#: errorlight.php:2083
+msgid "Copy a summary for support"
+msgstr ""
+
+#: errorlight.php:2084
+msgid "Asking someone for help? Copy one of these summaries and paste it into your message."
+msgstr ""
+
+#: errorlight.php:2087
+msgid "Safe summary (recommended)"
+msgstr ""
+
+#: errorlight.php:2088
+msgid "Counts, versions and the most repeated messages. File paths, web addresses, e-mail addresses and IP addresses are removed automatically, but please read it before you share it."
+msgstr ""
+
+#: errorlight.php:2090
+#: errorlight.php:2095
+#: errorlight.php:2491
+#: errorlight.php:2492
+msgid "Copy"
+msgstr ""
+
+#: errorlight.php:2090
+#: errorlight.php:2095
+#: errorlight.php:2491
+msgid "Copied"
+msgstr ""
+
+#: errorlight.php:2090
+#: errorlight.php:2095
+#: errorlight.php:2491
+msgid "Press Ctrl+C to copy"
+msgstr ""
+
+#: errorlight.php:2092
+msgid "Complete summary"
+msgstr ""
+
+#: errorlight.php:2093
+msgid "Includes personal data."
+msgstr ""
+
+#: errorlight.php:2093
+msgid "It adds the latest entries exactly as written in the log. They can contain file paths, web addresses, e-mail addresses or IP addresses. Share it only with people you trust."
+msgstr ""
+
+#: errorlight.php:2119
+msgid "Filter by exact type"
+msgstr ""
+
+#: errorlight.php:2152
+msgid "Search in “What happened”"
+msgstr ""
+
+#: errorlight.php:2153
+msgid "e.g. memory, undefined, table"
+msgstr ""
+
+#: errorlight.php:2154
+msgid "Search in “Reported in”"
+msgstr ""
+
+#: errorlight.php:2155
+msgid "e.g. a plugin or theme name"
+msgstr ""
+
+#: errorlight.php:2161
+msgid "Search"
+msgstr ""
+
+#: errorlight.php:2162
+msgid "You can use one field or both. They only search the part of the log loaded above."
+msgstr ""
+
+#. translators: %s: keyword that will be searched for
+#: errorlight.php:2267
+msgid "Click again to remove this search"
+msgstr ""
+
+#. translators: %s: keyword that will be searched for
+#: errorlight.php:2267
+#, php-format
+msgid "Search “What happened” for “%s”"
+msgstr ""
+
+#: errorlight.php:2293
+msgid "Most repeated messages (search “What happened”):"
+msgstr ""
+
+#: errorlight.php:2294
+msgid "Known problems (search “What happened”):"
+msgstr ""
+
+#. translators: %s: text searched for
+#: errorlight.php:2299
+#, php-format
+msgid "what happened: “%s”"
+msgstr ""
+
+#. translators: %s: text searched for in the "Reported in" column
+#: errorlight.php:2315
+#, php-format
+msgid "reported in: “%s”"
+msgstr ""
+
+#: errorlight.php:2323
+msgid "one repeated message"
+msgstr ""
+
+#. translators: 1: active filters, e.g. "Warnings, Plugin: Akismet", 2: number of matching entries
+#: errorlight.php:2343
+#, php-format
+msgid "Showing only: %1$s (%2$s entries)."
+msgstr ""
+
+#: errorlight.php:2359
+msgid "Show all"
+msgstr ""
+
+#: errorlight.php:2363
+msgid "Nothing found in the part of the log shown. Try another period or clear the filters."
+msgstr ""
+
+#: errorlight.php:2409
+msgid "Every entry of this message is listed."
+msgstr ""
+
+#: errorlight.php:2410
+#: errorlight.php:2413
+msgid "Group identical messages"
+msgstr ""
+
+#: errorlight.php:2412
+msgid "Every entry is listed."
+msgstr ""
+
+#: errorlight.php:2415
+msgid "Identical messages are shown once, with how many times they appear."
+msgstr ""
+
+#: errorlight.php:2416
+msgid "Show every entry"
+msgstr ""
+
+#: errorlight.php:2423
+msgid "Level"
+msgstr ""
+
+#: errorlight.php:2424
+msgid "When"
+msgstr ""
+
+#: errorlight.php:2425
+msgid "What happened"
+msgstr ""
+
+#: errorlight.php:2426
+msgid "Reported in"
+msgstr ""
+
+#. translators: %s: date and time of the first occurrence
+#: errorlight.php:2449
+#, php-format
+msgid "First seen: %s"
+msgstr ""
+
+#: errorlight.php:2469
+msgid "Click again to remove this filter"
+msgstr ""
+
+#: errorlight.php:2469
+msgid "Show only the entries from this source"
+msgstr ""
+
+#: errorlight.php:2474
+msgid "Several sources"
+msgstr ""
+
+#. translators: %s: number of times the same message appears
+#: errorlight.php:2482
+#, php-format
+msgid "Repeated %s time"
+msgid_plural "Repeated %s times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: errorlight.php:2483
+msgid "See each entry"
+msgstr ""
+
+#: errorlight.php:2488
+msgid "Show the technical text"
+msgstr ""
+
+#: errorlight.php:2495
+msgid "Not identified"
+msgstr ""
+
+#. translators: 1: first row number, 2: last row number, 3: total different messages
+#: errorlight.php:2526
+#, php-format
+msgid "Showing %1$s–%2$s of %3$s different messages"
+msgstr ""
+
+#. translators: 1: first entry number, 2: last entry number, 3: total entries
+#: errorlight.php:2528
+#, php-format
+msgid "Showing %1$s–%2$s of %3$s entries"
+msgstr ""
+
+#: errorlight.php:2541
+msgid "‹ Newer"
+msgstr ""
+
+#: errorlight.php:2542
+msgid "Older ›"
 msgstr ""
 
 #: includes/auto-off.php:21
@@ -69,13 +817,13 @@ msgid "every 7 days"
 msgstr ""
 
 #. translators: %s: site name
-#: includes/auto-off.php:221
+#: includes/auto-off.php:223
 #, php-format
 msgid "[%s] ErrorLight could not turn debug logging off"
 msgstr ""
 
 #. translators: 1: site name, 2: reason, 3: link to the ErrorLight page
-#: includes/auto-off.php:224
+#: includes/auto-off.php:226
 #, php-format
 msgid ""
 "The automatic turn-off of debug logging did not work on %1$s, so logging is still on.\n"
@@ -87,13 +835,13 @@ msgid ""
 msgstr ""
 
 #. translators: %s: site name
-#: includes/auto-off.php:248
+#: includes/auto-off.php:250
 #, php-format
 msgid "[%s] Debug logging is still on"
 msgstr ""
 
 #. translators: 1: site name, 2: how long logging has been on, e.g. "3 days", 3: link to the ErrorLight page
-#: includes/auto-off.php:251
+#: includes/auto-off.php:253
 #, php-format
 msgid ""
 "Debug logging has been on for %2$s on %1$s.\n"
@@ -104,59 +852,59 @@ msgid ""
 "You asked ErrorLight to remind you about this."
 msgstr ""
 
-#: includes/auto-off.php:269
+#: includes/auto-off.php:271
 msgid "Turn logging off automatically"
 msgstr ""
 
-#: includes/auto-off.php:270
+#: includes/auto-off.php:272
 msgid "After"
 msgstr ""
 
-#: includes/auto-off.php:275
+#: includes/auto-off.php:277
 msgid "Don’t turn it off, remind me"
 msgstr ""
 
 #. translators: %s: site administrator e-mail address
-#: includes/auto-off.php:281
+#: includes/auto-off.php:283
 #, php-format
 msgid "If the automatic turn-off ever fails, ErrorLight sends an e-mail to the site administrator address (%s)."
 msgstr ""
 
-#: includes/auto-off.php:287
+#: includes/auto-off.php:289
 msgid "Remind me"
 msgstr ""
 
-#: includes/auto-off.php:294
+#: includes/auto-off.php:296
 msgid "Send the reminder to"
 msgstr ""
 
-#: includes/auto-off.php:296
+#: includes/auto-off.php:298
 msgid "Logging stays on until you turn it off. ErrorLight only uses this address to send the reminder."
 msgstr ""
 
-#: includes/auto-off.php:317
+#: includes/auto-off.php:319
 msgid "The automatic turn-off could not change wp-config.php, so logging is still on. Turn it off with the button below, or by hand."
 msgstr ""
 
 #. translators: 1: date and time, 2: time left, e.g. "5 hours"
-#: includes/auto-off.php:326
+#: includes/auto-off.php:328
 #, php-format
 msgid "It will turn off automatically on %1$s (in %2$s)."
 msgstr ""
 
 #. translators: 1: reminder interval, e.g. "every 3 days", 2: e-mail address
-#: includes/auto-off.php:336
+#: includes/auto-off.php:338
 #, php-format
 msgid "Logging will stay on. ErrorLight reminds you %1$s at %2$s."
 msgstr ""
 
 #. translators: %s: date and time of the next reminder
-#: includes/auto-off.php:344
+#: includes/auto-off.php:346
 #, php-format
 msgid "Next reminder: %s."
 msgstr ""
 
-#: includes/auto-off.php:352
+#: includes/auto-off.php:354
 msgid "WP-Cron is disabled on this site. The automatic turn-off then happens when someone opens the admin area after the set time, and reminders need your server to run wp-cron.php regularly."
 msgstr ""
 
@@ -169,162 +917,153 @@ msgid "Debug logging is now off."
 msgstr ""
 
 #: includes/debug-switch.php:28
-#: includes/debug-switch.php
 msgid "Nothing was changed: this site is part of a network, and wp-config.php is shared by every site in it."
 msgstr ""
 
+#: includes/debug-switch.php:32
 msgid "Nothing was changed: tick the confirmation box first."
 msgstr ""
 
-#: includes/debug-switch.php:32
+#: includes/debug-switch.php:36
 msgid "Nothing was changed: ErrorLight could not create the folder where the log is saved."
 msgstr ""
 
-#: includes/debug-switch.php:36
-msgid "Nothing was deleted: tick the confirmation box first."
-msgstr ""
-
 #: includes/debug-switch.php:40
-msgid "The old wp-content/debug.log was deleted."
-msgstr ""
-
-#: includes/debug-switch.php:44
-msgid "The old wp-content/debug.log could not be deleted. Check its permissions or delete it by hand."
-msgstr ""
-
-#: includes/debug-switch.php:48
-msgid "There was no wp-content/debug.log to delete."
-msgstr ""
-
-#: includes/debug-switch.php:52
 msgid "The excerpt was handed over to your site’s mail system. If it does not arrive, check the spam folder and your site’s e-mail setup."
 msgstr ""
 
-#: includes/debug-switch.php:56
+#: includes/debug-switch.php:44
 msgid "The e-mail could not be sent, so nothing was delivered. Most often the site cannot send e-mail: this is normal on a local test site, and on a live site an SMTP plugin or your host’s e-mail settings usually fix it. You can still download the log instead."
 msgstr ""
 
-#: includes/debug-switch.php:60
+#: includes/debug-switch.php:48
 msgid "Nothing was sent: enter a valid e-mail address."
 msgstr ""
 
-#: includes/debug-switch.php:64
+#: includes/debug-switch.php:52
 msgid "Nothing was sent: tick the confirmation box first."
 msgstr ""
 
-#: includes/debug-switch.php:68
+#: includes/debug-switch.php:56
 msgid "Nothing was sent: that log is not available or has nothing to send."
 msgstr ""
 
-#: includes/debug-switch.php:72
+#: includes/debug-switch.php:60
 msgid "Nothing was downloaded: that log is not available."
 msgstr ""
 
-#: includes/debug-switch.php:76
+#: includes/debug-switch.php:64
 msgid "The log could not be read, so nothing was downloaded. Check its permissions."
 msgstr ""
 
-#: includes/debug-switch.php:80
+#: includes/debug-switch.php:68
 msgid "Nothing was changed: enter a valid e-mail address for the reminder, or choose an automatic turn-off time."
 msgstr ""
 
-#: includes/debug-switch.php:84
+#: includes/debug-switch.php:72
 msgid "Nothing was changed: wp-config.php is not written in a form ErrorLight recognizes."
 msgstr ""
 
-#: includes/debug-switch.php:88
+#: includes/debug-switch.php:76
 msgid "Nothing was changed: ErrorLight could not produce a safe version of wp-config.php."
 msgstr ""
 
-#: includes/debug-switch.php:92
+#: includes/debug-switch.php:80
 msgid "Nothing was changed: wp-config.php could not be read."
 msgstr ""
 
-#: includes/debug-switch.php:96
+#: includes/debug-switch.php:84
 msgid "Nothing was changed: wp-config.php (or its folder) is not writable."
 msgstr ""
 
-#: includes/debug-switch.php:100
+#: includes/debug-switch.php:88
 msgid "Nothing was changed: the new wp-config.php would have a syntax error."
 msgstr ""
 
-#: includes/debug-switch.php:108
+#: includes/debug-switch.php:92
 msgid "The new wp-config.php could not be written. The original file was kept."
 msgstr ""
 
-#: includes/debug-switch.php:112
+#: includes/debug-switch.php:96
 msgid "The written file did not pass the final check, so the original wp-config.php was restored to how it was."
 msgstr ""
 
-#: includes/debug-switch.php:122
+#: includes/debug-switch.php:100
+msgid "The written file did not pass the final check and the original wp-config.php could not be restored with certainty. Please open wp-config.php and check that it is complete; your hosting provider can restore it from a backup."
+msgstr ""
+
+#: includes/debug-switch.php:104
+msgid "Nothing was changed: wp-config.php was being changed by another request or had just changed. Please try again."
+msgstr ""
+
+#: includes/debug-switch.php:114
 #: includes/download.php:55
 #: includes/email-excerpt.php:80
-#: includes/log-location.php:293
-#: includes/log-location.php:319
+#: includes/log-location.php:303
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: includes/debug-switch.php:209
+#: includes/debug-switch.php:200
 msgid "This usually happens when the file is set to read-only, belongs to another user on the server, or your hosting provider locks it for security. Nothing is wrong with your site."
 msgstr ""
 
-#: includes/debug-switch.php:210
+#: includes/debug-switch.php:201
 msgid "Who can help:"
 msgstr ""
 
-#: includes/debug-switch.php:211
+#: includes/debug-switch.php:202
 msgid "Your hosting provider’s support: they can change the file permissions or add the lines for you."
 msgstr ""
 
-#: includes/debug-switch.php:212
+#: includes/debug-switch.php:203
 msgid "The file manager in your hosting control panel, or an SFTP program: open wp-config.php, add the lines above the line “That’s all, stop editing!”, and save."
 msgstr ""
 
-#: includes/debug-switch.php:213
+#: includes/debug-switch.php:204
 msgid "The person who manages the site, if it is not you."
 msgstr ""
 
-#: includes/debug-switch.php:223
+#: includes/debug-switch.php:214
 msgid "For the button to work, these three lines must be written like this in wp-config.php: one per line, at the top level of the file (not inside an \"if\" block), above the line \"That's all, stop editing!\", and not defined anywhere else in the file."
 msgstr ""
 
-#: includes/debug-switch.php:225
+#: includes/debug-switch.php:216
 msgid "This is the \"off\" state. After you fix the file, reload this page: the button will appear."
 msgstr ""
 
-#: includes/debug-switch.php:227
+#: includes/debug-switch.php:218
 msgid "Debug logging is on right now. To turn it off by hand, change true to false in the first two lines."
 msgstr ""
 
-#: includes/debug-switch.php:240
+#: includes/debug-switch.php:231
 msgid "Find your error - check your logs"
 msgstr ""
 
-#: includes/debug-switch.php:241
+#: includes/debug-switch.php:232
 msgid "Use this box to turn logging on easily, and let WordPress write down what goes wrong."
 msgstr ""
 
-#: includes/debug-switch.php:257
+#: includes/debug-switch.php:248
 msgid "Logging is on"
 msgstr ""
 
-#: includes/debug-switch.php:257
+#: includes/debug-switch.php:248
 msgid "Logging is off"
 msgstr ""
 
-#: includes/debug-switch.php:261
+#: includes/debug-switch.php:252
 msgid "WordPress is writing the problems it meets into a log file, and you can read them below. When you are done, turn logging off: a log can contain private information."
 msgstr ""
 
-#: includes/debug-switch.php:262
+#: includes/debug-switch.php:253
 msgid "To find out what is going wrong, turn logging on, repeat the action that causes the problem, then come back here to see what was written down."
 msgstr ""
 
-#: includes/debug-switch.php:264
+#: includes/debug-switch.php:255
 msgid "This switch only controls the WordPress log (debug.log). The PHP error log belongs to your server: ErrorLight shows it below when it exists, but it cannot turn it on."
 msgstr ""
 
-#: includes/debug-switch.php
+#: includes/debug-switch.php:259
 msgid "This site is part of a network, and wp-config.php is shared by every site in it, so ErrorLight does not change it from here. To turn logging on or off for the whole network, these lines have to be set by hand:"
 msgstr ""
 
@@ -514,817 +1253,92 @@ msgstr ""
 msgid "The address is used only for this message and is not saved. If your site cannot send e-mail, the message will not arrive."
 msgstr ""
 
-#: includes/log-location.php:256
+#: includes/log-location.php:266
 msgid "Checked: your server refuses to hand out the files in the log folder."
 msgstr ""
 
-#: includes/log-location.php:260
+#: includes/log-location.php:270
 msgid "Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules ErrorLight writes (this is common on Nginx). Ask your hosting provider to block access to this folder."
 msgstr ""
 
-#: includes/log-location.php:264
+#: includes/log-location.php:274
 msgid "ErrorLight could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified."
 msgstr ""
 
-#: includes/log-location.php:270
+#: includes/log-location.php:280
 msgid "There is no old debug.log in wp-content."
 msgstr ""
 
-#: includes/log-location.php:274
+#: includes/log-location.php:284
 msgid "Checked: the old wp-content/debug.log cannot be downloaded from a web address."
 msgstr ""
 
-#: includes/log-location.php:278
-msgid "Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it with the button below."
+#: includes/log-location.php:288
+msgid "Warning: the old wp-content/debug.log can be downloaded by anyone who opens its web address. Delete it: the advice below explains how."
 msgstr ""
 
-#: includes/log-location.php:282
+#: includes/log-location.php:292
 msgid "ErrorLight could not check whether the old wp-content/debug.log can be downloaded."
 msgstr ""
 
-#: includes/log-location.php:354
+#: includes/log-location.php:336
 msgid "How to check it yourself"
 msgstr ""
 
-#: includes/log-location.php:355
+#: includes/log-location.php:337
 msgid "Make sure the log exists: it appears in the list of logs above after WordPress writes its first message."
 msgstr ""
 
-#: includes/log-location.php:356
+#: includes/log-location.php:338
 msgid "Open this address in a private browser window:"
 msgstr ""
 
-#: includes/log-location.php:357
+#: includes/log-location.php:339
 msgid "A “Forbidden” (403) or “Not found” (404) page means the folder is protected. If you can read the log, turn logging off and ask your hosting provider to block access to this folder."
 msgstr ""
 
-#: includes/log-location.php:378
+#: includes/log-location.php:359
 msgid "Where your log is saved"
 msgstr ""
 
-#: includes/log-location.php:384
+#: includes/log-location.php:362
 msgid "In a folder with a secret name inside your uploads folder, with rules that block access from the web."
 msgstr ""
 
-#: includes/log-location.php:389
+#: includes/log-location.php:365
 msgid "The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder."
 msgstr ""
 
-#: includes/log-location.php:394
+#: includes/log-location.php:368
 msgid "When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder, with rules that block access from the web."
 msgstr ""
 
-#: includes/log-location.php:422
+#: includes/log-location.php:394
 msgid "Check that my logs cannot be downloaded"
 msgstr ""
 
 #. translators: %s: file size, e.g. "1.2 MB"
-#: includes/log-location.php:432
+#: includes/log-location.php:405
 #, php-format
 msgid "There is an old debug.log in wp-content (%s). That file name is the first thing people try to download."
 msgstr ""
 
-#: includes/log-location.php:439
-msgid "Yes, delete wp-content/debug.log permanently."
+#: includes/log-location.php:409
+msgid "How to remove it"
 msgstr ""
 
-#: includes/log-location.php:440
-msgid "Delete debug.log"
+#: includes/log-location.php:410
+msgid "ErrorLight does not delete files outside its own folder, so we suggest you remove it yourself. This is its location:"
 msgstr ""
 
-#: errorlight.php:60
-msgid "Fatal error"
+#: includes/log-location.php:413
+msgid "If you still need what is in it, download or copy it first."
 msgstr ""
 
-#: errorlight.php:61
-msgid "PHP stopped running a request, so the page or feature that was running may have failed."
+#: includes/log-location.php:414
+msgid "Delete it with the file manager of your hosting control panel (for example cPanel or Plesk), or with an FTP/SFTP program such as FileZilla: open the wp-content folder and delete the file debug.log."
 msgstr ""
 
-#: errorlight.php:65
-msgid "Parse error"
-msgstr ""
-
-#: errorlight.php:66
-msgid "PHP could not read a file because of a syntax mistake in its code."
-msgstr ""
-
-#: errorlight.php:70
-msgid "Database error"
-msgstr ""
-
-#: errorlight.php:71
-msgid "A database query failed or reported a problem."
-msgstr ""
-
-#: errorlight.php:75
-msgid "Warning"
-msgstr ""
-
-#: errorlight.php:76
-msgid "Something went wrong, but PHP kept running. It may or may not affect the site."
-msgstr ""
-
-#: errorlight.php:80
-msgid "Notice"
-msgstr ""
-
-#: errorlight.php:81
-msgid "A minor issue in the code, normally harmless on its own."
-msgstr ""
-
-#: errorlight.php:85
-msgid "Deprecated"
-msgstr ""
-
-#: errorlight.php:86
-msgid "The code uses something that is planned to stop working in a future version."
-msgstr ""
-
-#: errorlight.php:90
-msgid "Unclassified"
-msgstr ""
-
-#: errorlight.php:91
-msgid "ErrorLight did not recognize the type of this entry."
-msgstr ""
-
-#: errorlight.php:106
-msgid "Serious problems"
-msgstr ""
-
-#: errorlight.php:107
-msgid "Something failed or stopped running. Look at these first."
-msgstr ""
-
-#: errorlight.php:113
-msgid "Warnings"
-msgstr ""
-
-#: errorlight.php:114
-msgid "Something went wrong, but the site kept running."
-msgstr ""
-
-#: errorlight.php:120
-msgid "Minor notes"
-msgstr ""
-
-#: errorlight.php:121
-msgid "Small remarks, things that will change in future versions, and entries ErrorLight could not sort."
-msgstr ""
-
-#. translators: %s: where PHP sends its errors, the value of its error_log setting, e.g. /dev/stderr
-#: errorlight.php:196
-#, php-format
-msgid "PHP sends its errors to %s, which is not a file (usually they end up in the server’s own log): there is no file to read."
-msgstr ""
-
-#: errorlight.php:200
-msgid "PHP sends its errors to the system log (syslog), which is not a file: there is no file to read."
-msgstr ""
-
-#. translators: %s: path of the PHP error log set in php.ini
-#: errorlight.php
-msgid "PHP is set to write its errors to %s, but that folder does not exist or PHP cannot write to it, so the file will never be created."
-msgstr ""
-
-#: errorlight.php:202
-msgid "PHP error logging is turned off (log_errors), so PHP does not record its errors anywhere: there is no log to read."
-msgstr ""
-
-#: errorlight.php:204
-msgid "PHP is not set to write its errors to a file: there is no file to read."
-msgstr ""
-
-#: errorlight.php:206
-msgid "The WordPress debug.log still records the errors WordPress can see."
-msgstr ""
-
-#: errorlight.php:213
-msgid "How can I get a PHP error log?"
-msgstr ""
-
-#: errorlight.php:214
-msgid "If your hosting lets you change PHP settings (in the hosting panel, in php.ini or in a .user.ini file), set these two lines, with a path that PHP can write to and that is outside your website folder. Some hosts do not allow it: ask them."
-msgstr ""
-
-#: errorlight.php:260
-msgid "WordPress debug.log"
-msgstr ""
-
-#: errorlight.php:261
-msgid "ErrorLight protected debug.log"
-msgstr ""
-
-#: errorlight.php:262
-msgid "PHP error_log"
-msgstr ""
-
-#. translators: %s: PHP memory limit, e.g. "64 MB"
-#: errorlight.php:722
-#, php-format
-msgid "There is not enough free PHP memory (limit: %s) to read the log safely, so ErrorLight does not load it."
-msgstr ""
-
-#. translators: 1: PHP memory limit, 2: log size that can be loaded, 3: usual log size limit
-#: errorlight.php:728
-#, php-format
-msgid "Your PHP memory limit (%1$s) leaves room for about %2$s of log at a time, less than the usual %3$s. ErrorLight lowers its limit so it does not run out of memory."
-msgstr ""
-
-#: errorlight.php:736
-msgid "How to get more memory"
-msgstr ""
-
-#. translators: 1: PHP constant line, 2: file name, 3: comment text found in that file
-#: errorlight.php:741
-#, php-format
-msgid "In the %2$s file, in the site root, add the line %1$s above the line that says \"%3$s\". Take a backup of the file first."
-msgstr ""
-
-#. translators: 1: php.ini setting, 2: file name
-#: errorlight.php:750
-#, php-format
-msgid "Or raise it in the PHP settings: many hosting control panels have a \"PHP settings\" or \"PHP version\" page with a memory limit field. On your own server, set %1$s in %2$s."
-msgstr ""
-
-#: errorlight.php:755
-msgid "If neither works, your hosting plan probably caps the memory. Ask your hosting provider's support to raise the PHP \"memory_limit\" to at least 256M, or ask the person who manages the site."
-msgstr ""
-
-#: errorlight.php:757
-msgid "Changing WP_MEMORY_LIMIT cannot exceed the cap set by the host. Reload this page afterwards to see the new limit."
-msgstr ""
-
-#: errorlight.php:787
-msgid "PHP ran out of memory while running something."
-msgstr ""
-
-#: errorlight.php:788
-msgid "Something took too long to run, so PHP stopped it."
-msgstr ""
-
-#: errorlight.php:789
-msgid "The code tried to use a function that does not exist. This often happens when a plugin or theme is missing, disabled or out of date."
-msgstr ""
-
-#: errorlight.php:790
-msgid "The code tried to use a class that was not found. This often happens when a plugin or theme is missing, disabled or out of date."
-msgstr ""
-
-#: errorlight.php:791
-msgid "The code used a value that was never set."
-msgstr ""
-
-#: errorlight.php:792
-msgid "Something printed text before WordPress could send the page headers."
-msgstr ""
-
-#: errorlight.php:793
-msgid "A plugin or theme loaded its translations too early."
-msgstr ""
-
-#: errorlight.php:794
-msgid "The code tried to open a file that is missing or cannot be read."
-msgstr ""
-
-#: errorlight.php:795
-msgid "The code looked for a database table that does not exist."
-msgstr ""
-
-#: errorlight.php:796
-msgid "The connection to the database was lost."
-msgstr ""
-
-#: errorlight.php:797
-msgid "The database refused the login details it was given."
-msgstr ""
-
-#: errorlight.php:840
-msgid "Out of memory"
-msgstr ""
-
-#: errorlight.php:844
-msgid "Took too long"
-msgstr ""
-
-#: errorlight.php:848
-msgid "Something not set or missing"
-msgstr ""
-
-#: errorlight.php:852
-msgid "Text printed too early"
-msgstr ""
-
-#: errorlight.php:856
-msgid "File not found"
-msgstr ""
-
-#: errorlight.php:860
-msgid "Missing database table"
-msgstr ""
-
-#: errorlight.php:864
-msgid "Translations loaded too early"
-msgstr ""
-
-#: errorlight.php:868
-msgid "Database connection failed"
-msgstr ""
-
-#: errorlight.php:872
-msgid "Method called on an empty value"
-msgstr ""
-
-#: errorlight.php:876
-msgid "Database connection lost"
-msgstr ""
-
-#: errorlight.php:880
-msgid "Database login refused"
-msgstr ""
-
-#: errorlight.php:999
-msgid "WordPress itself (a core file)"
-msgstr ""
-
-#. translators: %s: plugin name
-#: errorlight.php:1018
-#, php-format
-msgid "Plugin: %s"
-msgstr ""
-
-#. translators: %s: theme name
-#: errorlight.php:1030
-#, php-format
-msgid "Theme: %s"
-msgstr ""
-
-#. translators: %s: must-use plugin folder or file name
-#: errorlight.php:1034
-#, php-format
-msgid "Must-use plugin: %s"
-msgstr ""
-
-#. translators: %s: time elapsed, e.g. "5 minutes"
-#: errorlight.php:1128
-#, php-format
-msgid "%s ago"
-msgstr ""
-
-#. translators: 1: size of the chosen period, 2: most ErrorLight loads at once
-#: errorlight.php:1146
-#, php-format
-msgid "This period is too big to show (about %1$s). The most ErrorLight loads at once is %2$s. Choose fewer days."
-msgstr ""
-
-#. translators: 1: size of the chosen period, 2: most ErrorLight loads at once
-#: errorlight.php:1153
-#, php-format
-msgid "This period is small enough to show (about %1$s). The most ErrorLight loads at once is %2$s."
-msgstr ""
-
-#: errorlight.php:1433
-msgid "You do not have permission to access this page."
-msgstr ""
-
-#: errorlight.php:1473
-msgid "Read your WordPress error logs and see what each message means."
-msgstr ""
-
-#: errorlight.php:1483
-msgid "Which log do you want to read?"
-msgstr ""
-
-#: errorlight.php:1483
-msgid "Pick the log you want to look at. You can also download it or send an excerpt by e-mail."
-msgstr ""
-
-#: errorlight.php:1484
-msgid "Log files"
-msgstr ""
-
-#. translators: %s: log name
-#: errorlight.php:1505
-#, php-format
-msgid "%s — not available"
-msgstr ""
-
-#. translators: %s: log name
-#: errorlight.php:1511
-#, php-format
-msgid "%s — cannot be read"
-msgstr ""
-
-#. translators: %s: log name
-#: errorlight.php:1518
-#, php-format
-msgid "%s — not created yet"
-msgstr ""
-
-#: errorlight.php:1532
-msgid "ErrorLight protected debug.log is the WordPress debug log (the one WP_DEBUG_LOG writes), kept in a protected place."
-msgstr ""
-
-#: errorlight.php:1535
-msgid "A log marked “not created yet” does not exist: WordPress and PHP (if available) create their logs when the first message is written to them."
-msgstr ""
-
-#. translators: 1: log name, 2: file path
-#: errorlight.php:1549
-#, php-format
-msgid "%1$s (%2$s): the file exists, but PHP cannot read it. Check its permissions."
-msgstr ""
-
-#: errorlight.php:1562
-msgid "Nothing to read yet"
-msgstr ""
-
-#: errorlight.php:1565
-msgid "Logging is on, but no log file has been created yet. Repeat the action that causes the problem, then reload this page."
-msgstr ""
-
-#: errorlight.php:1566
-msgid "No log file exists yet. Turn logging on in the box above, repeat the action that causes the problem, then reload this page."
-msgstr ""
-
-#: errorlight.php:1568
-msgid "WordPress only writes debug.log while logging is on, and PHP only writes its own log if your server is set up to do so."
-msgstr ""
-
-#: errorlight.php:1577
-#: errorlight.php:1775
-#: errorlight.php:1790
-#: errorlight.php:1797
-msgid "The log file could not be read."
-msgstr ""
-
-#. translators: %s: log name, e.g. "PHP error_log"
-#: errorlight.php:1627
-#, php-format
-msgid "You are reading: %s"
-msgstr ""
-
-#: errorlight.php:1631
-msgid "This is WordPress’s own debug.log, saved by ErrorLight in a protected folder."
-msgstr ""
-
-#. translators: 1: file size, 2: last modified date and time
-#: errorlight.php:1636
-#, php-format
-msgid "%1$s · last modified %2$s"
-msgstr ""
-
-#: errorlight.php:1672
-msgid "Which period do you want to see?"
-msgstr ""
-
-#: errorlight.php:1672
-msgid "Choose which days of the log you want to look at."
-msgstr ""
-
-#: errorlight.php:1678
-msgid "All viewable entries"
-msgstr ""
-
-#: errorlight.php:1683
-msgid "Last day in the log"
-msgstr ""
-
-#: errorlight.php:1694
-msgid "Last 7 days in the log"
-msgstr ""
-
-#: errorlight.php:1706
-msgid "Quick choices"
-msgstr ""
-
-#: errorlight.php:1711
-msgid "Click again to go back to all viewable entries"
-msgstr ""
-
-#: errorlight.php:1717
-msgid "Pick your own dates"
-msgstr ""
-
-#: errorlight.php:1721
-msgid "From"
-msgstr ""
-
-#: errorlight.php:1723
-msgid "To"
-msgstr ""
-
-#: errorlight.php:1725
-msgid "Show these dates"
-msgstr ""
-
-#: errorlight.php:1728
-msgid "Clear dates"
-msgstr ""
-
-#. translators: 1: first date in the log, 2: last date in the log
-#: errorlight.php:1735
-#, php-format
-msgid "This log covers %1$s to %2$s."
-msgstr ""
-
-#: errorlight.php:1742
-msgid "Why can't I load everything at once?"
-msgstr ""
-
-#: errorlight.php:1743
-msgid "Very large logs can make the page slow or run out of memory, so ErrorLight only loads a limited amount at a time. Dates are the ones written in the log (usually UTC), not your site time."
-msgstr ""
-
-#. translators: %s: size limit, e.g. "2 MB"
-#: errorlight.php:1747
-#, php-format
-msgid "A period can load at most %s of log."
-msgstr ""
-
-#. translators: 1: average log growth per day, 2: size limit
-#: errorlight.php:1754
-#, php-format
-msgid "On average it grows about %1$s per day, more than the %2$s limit: some single days may be too large to load."
-msgstr ""
-
-#. translators: 1: average log growth per day, 2: number of days, 3: size limit
-#: errorlight.php:1761
-#, php-format
-msgid "On average it grows about %1$s per day, so ranges of about %2$s days or less stay under the %3$s limit."
-msgstr ""
-
-#: errorlight.php:1769
-msgid "This log has no dates ErrorLight can read, so only its latest part can be shown."
-msgstr ""
-
-#. translators: %s: size of the whole log file
-#: errorlight.php:1809
-#, php-format
-msgid "This log is large (%s), so only its most recent part is shown. Pick a period above to look at older days."
-msgstr ""
-
-#: errorlight.php:1819
-msgid "There are no entries in this range."
-msgstr ""
-
-#: errorlight.php:1819
-msgid "The log file is empty: nothing has been recorded in it yet."
-msgstr ""
-
-#. translators: %s: number of serious problems
-#: errorlight.php:1931
-#, php-format
-msgid "%s serious problem"
-msgid_plural "%s serious problems"
-msgstr[0] ""
-msgstr[1] ""
-
-#. translators: %s: number of warnings
-#: errorlight.php:1934
-#, php-format
-msgid "%s warning"
-msgid_plural "%s warnings"
-msgstr[0] ""
-msgstr[1] ""
-
-#. translators: %s: number of minor notes
-#: errorlight.php:1937
-#, php-format
-msgid "%s minor note"
-msgid_plural "%s minor notes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: errorlight.php:1942
-msgid "Which entries do you want to see?"
-msgstr ""
-
-#: errorlight.php:1942
-msgid "Narrow down the list below by type, by message or by where it comes from."
-msgstr ""
-
-#. translators: %s: counts, e.g. "2 serious problems, 14 warnings, 1,402 minor notes"
-#: errorlight.php:1947
-#, php-format
-msgid "In the part of the log shown: %s."
-msgstr ""
-
-#: errorlight.php:1998
-msgid "Copy a summary for support"
-msgstr ""
-
-#: errorlight.php:1999
-msgid "Asking someone for help? Copy one of these summaries and paste it into your message."
-msgstr ""
-
-#: errorlight.php:2002
-msgid "Safe summary (recommended)"
-msgstr ""
-
-#: errorlight.php:2003
-msgid "Counts, versions and the most repeated messages. File paths, web addresses, e-mail addresses and IP addresses are removed automatically, but please read it before you share it."
-msgstr ""
-
-#: errorlight.php:2005
-#: errorlight.php:2010
-#: errorlight.php:2404
-#: errorlight.php:2405
-msgid "Copy"
-msgstr ""
-
-#: errorlight.php:2005
-#: errorlight.php:2010
-#: errorlight.php:2404
-msgid "Copied"
-msgstr ""
-
-#: errorlight.php:2005
-#: errorlight.php:2010
-#: errorlight.php:2404
-msgid "Press Ctrl+C to copy"
-msgstr ""
-
-#: errorlight.php:2007
-msgid "Complete summary"
-msgstr ""
-
-#: errorlight.php:2008
-msgid "Includes personal data."
-msgstr ""
-
-#: errorlight.php:2008
-msgid "It adds the latest entries exactly as written in the log. They can contain file paths, web addresses, e-mail addresses or IP addresses. Share it only with people you trust."
-msgstr ""
-
-#: errorlight.php:2034
-msgid "Filter by exact type"
-msgstr ""
-
-#: errorlight.php:2067
-msgid "Search in “What happened”"
-msgstr ""
-
-#: errorlight.php:2068
-msgid "e.g. memory, undefined, table"
-msgstr ""
-
-#: errorlight.php:2069
-msgid "Search in “Reported in”"
-msgstr ""
-
-#: errorlight.php:2070
-msgid "e.g. a plugin or theme name"
-msgstr ""
-
-#: errorlight.php:2076
-msgid "Search"
-msgstr ""
-
-#: errorlight.php:2077
-msgid "You can use one field or both. They only search the part of the log loaded above."
-msgstr ""
-
-#. translators: %s: keyword that will be searched for
-#: errorlight.php:2182
-msgid "Click again to remove this search"
-msgstr ""
-
-#. translators: %s: keyword that will be searched for
-#: errorlight.php:2182
-#, php-format
-msgid "Search “What happened” for “%s”"
-msgstr ""
-
-#: errorlight.php:2208
-msgid "Most repeated messages (search “What happened”):"
-msgstr ""
-
-#: errorlight.php:2209
-msgid "Known problems (search “What happened”):"
-msgstr ""
-
-#. translators: %s: text searched for
-#: errorlight.php:2214
-#, php-format
-msgid "what happened: “%s”"
-msgstr ""
-
-#. translators: %s: text searched for in the "Reported in" column
-#: errorlight.php:2230
-#, php-format
-msgid "reported in: “%s”"
-msgstr ""
-
-#: errorlight.php:2238
-msgid "one repeated message"
-msgstr ""
-
-#. translators: 1: active filters, e.g. "Warnings, Plugin: Akismet", 2: number of matching entries
-#: errorlight.php:2257
-#, php-format
-msgid "Showing only: %1$s (%2$s entries)."
-msgstr ""
-
-#: errorlight.php:2272
-msgid "Show all"
-msgstr ""
-
-#: errorlight.php:2276
-msgid "Nothing found in the part of the log shown. Try another period or clear the filters."
-msgstr ""
-
-#: errorlight.php:2322
-msgid "Every entry of this message is listed."
-msgstr ""
-
-#: errorlight.php:2323
-#: errorlight.php:2326
-msgid "Group identical messages"
-msgstr ""
-
-#: errorlight.php:2325
-msgid "Every entry is listed."
-msgstr ""
-
-#: errorlight.php:2328
-msgid "Identical messages are shown once, with how many times they appear."
-msgstr ""
-
-#: errorlight.php:2329
-msgid "Show every entry"
-msgstr ""
-
-#: errorlight.php:2336
-msgid "Level"
-msgstr ""
-
-#: errorlight.php:2337
-msgid "When"
-msgstr ""
-
-#: errorlight.php:2338
-msgid "What happened"
-msgstr ""
-
-#: errorlight.php:2339
-msgid "Reported in"
-msgstr ""
-
-#. translators: %s: date and time of the first occurrence
-#: errorlight.php:2362
-#, php-format
-msgid "First seen: %s"
-msgstr ""
-
-#: errorlight.php:2382
-msgid "Click again to remove this filter"
-msgstr ""
-
-#: errorlight.php:2382
-msgid "Show only the entries from this source"
-msgstr ""
-
-#: errorlight.php:2387
-msgid "Several sources"
-msgstr ""
-
-#. translators: %s: number of times the same message appears
-#: errorlight.php:2395
-#, php-format
-msgid "Repeated %s time"
-msgid_plural "Repeated %s times"
-msgstr[0] ""
-msgstr[1] ""
-
-#: errorlight.php:2396
-msgid "See each entry"
-msgstr ""
-
-#: errorlight.php:2401
-msgid "Show the technical text"
-msgstr ""
-
-#: errorlight.php:2408
-msgid "Not identified"
-msgstr ""
-
-#. translators: 1: first row number, 2: last row number, 3: total different messages
-#: errorlight.php:2439
-#, php-format
-msgid "Showing %1$s–%2$s of %3$s different messages"
-msgstr ""
-
-#. translators: 1: first entry number, 2: last entry number, 3: total entries
-#: errorlight.php:2441
-#, php-format
-msgid "Showing %1$s–%2$s of %3$s entries"
-msgstr ""
-
-#: errorlight.php:2454
-msgid "‹ Newer"
-msgstr ""
-
-#: errorlight.php:2455
-msgid "Older ›"
+#: includes/log-location.php:415
+msgid "If you have SSH access, you can delete it from the command line with the location shown above."
 msgstr ""
