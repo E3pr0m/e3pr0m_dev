@@ -226,9 +226,10 @@ function e3p_errorlight_run_checks( $loc ) {
         return $result;
     }
 
-    $probe = $loc['dir'] . '/probe.txt';
+    // Stessa estensione del file vero (.log): le regole di alcuni server dipendono dall'estensione.
+    $probe = $loc['dir'] . '/probe.log';
     if ( is_dir( $loc['dir'] ) && false !== file_put_contents( $probe, $marker ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Temporary probe file inside the log folder, deleted right after the request.
-        $answer = e3p_errorlight_http_probe( $base['url'] . '/' . basename( $loc['dir'] ) . '/probe.txt' );
+        $answer = e3p_errorlight_http_probe( $base['url'] . '/' . basename( $loc['dir'] ) . '/probe.log' );
         wp_delete_file( $probe );
         if ( $answer ) {
             if ( 200 === $answer['code'] && false !== strpos( $answer['body'], $marker ) ) {
@@ -251,6 +252,17 @@ function e3p_errorlight_run_checks( $loc ) {
     }
 
     return $result;
+}
+
+/**
+ * Il server in uso applica le regole scritte nei file `.htaccess` o `web.config`? Vero per Apache, LiteSpeed e IIS
+ * (WordPress li riconosce da solo); Nginx e gli altri non le leggono.
+ *
+ * @return bool
+ */
+function e3p_errorlight_server_honors_rules() {
+    global $is_apache, $is_iis7;
+    return ! empty( $is_apache ) || ! empty( $is_iis7 );
 }
 
 /**

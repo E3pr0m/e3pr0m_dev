@@ -81,7 +81,7 @@ function e3p_errorlight_get_result_texts() {
         ),
         'not_writable' => array(
             'type' => 'error',
-            'text' => __( 'Nothing was changed: wp-config.php (or its folder) is not writable.', 'errorlight' ),
+            'text' => __( 'Nothing was changed: wp-config.php is not writable.', 'errorlight' ),
         ),
         'syntax'       => array(
             'type' => 'error',
@@ -98,6 +98,14 @@ function e3p_errorlight_get_result_texts() {
         'restore_failed' => array(
             'type' => 'error',
             'text' => __( 'The written file did not pass the final check and the original wp-config.php could not be restored with certainty. Please open wp-config.php and check that it is complete; your hosting provider can restore it from a backup.', 'errorlight' ),
+        ),
+        'exposed'      => array(
+            'type' => 'error',
+            'text' => __( 'Nothing was changed: the log folder can be opened from a web address on your server, so the logs would not be private. Ask your hosting provider to block web access to the uploads/errorlight folder, then try again.', 'errorlight' ),
+        ),
+        'unverified'   => array(
+            'type' => 'warning',
+            'text' => __( 'Nothing was changed: your server does not read the protection rules ErrorLight writes (this is common on Nginx) and the check could not confirm that the log folder is private. Ask your hosting provider to block web access to the uploads/errorlight folder, or turn on the debug lines by hand in wp-config.php.', 'errorlight' ),
         ),
         'busy'         => array(
             'type' => 'warning',
@@ -143,6 +151,14 @@ function e3p_errorlight_handle_toggle() {
                     $result = 'logdir';
                 } else {
                     $log_path = $loc['file'];
+                    // Prima di accendere si controlla che la cartella dei log non sia scaricabile. Se lo è, o se
+                    // non si può verificare su un server che ignora le regole di protezione (Nginx), non si accende.
+                    $checks = e3p_errorlight_run_checks( $loc );
+                    if ( 'exposed' === $checks['folder'] ) {
+                        $result = 'exposed';
+                    } elseif ( 'protected' !== $checks['folder'] && ! e3p_errorlight_server_honors_rules() ) {
+                        $result = 'unverified';
+                    }
                 }
             }
 
@@ -157,7 +173,6 @@ function e3p_errorlight_handle_toggle() {
                     // scaricare dal web. Spento: si toglie ogni pianificazione.
                     if ( $on ) {
                         e3p_errorlight_start_schedule( $choice );
-                        $checks = e3p_errorlight_run_checks( $loc );
                     } else {
                         e3p_errorlight_clear_schedule();
                     }
@@ -300,8 +315,8 @@ function e3p_errorlight_render_debug_section() {
         echo '</p></div>';
     }
 
-    if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
-        echo '<p>' . esc_html__( 'wp-config.php (or its folder) is not writable, so ErrorLight cannot change it. To turn logging on or off, these lines have to be set by hand:', 'errorlight' ) . '</p>';
+    if ( ! is_writable( $path ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
+        echo '<p>' . esc_html__( 'wp-config.php is not writable, so ErrorLight cannot change it. To turn logging on or off, these lines have to be set by hand:', 'errorlight' ) . '</p>';
         echo '<pre class="e3p-errorlight-code">' . esc_html( e3p_errorlight_manual_lines( ! $active ) ) . '</pre>';
         e3p_errorlight_render_manual_help();
         echo '</div>';
@@ -321,6 +336,13 @@ function e3p_errorlight_render_debug_section() {
         if ( ! empty( $c['found'] ) ) {
             $result_lines[] = $preview['analysis']['lines'][ $c['index'] ];
         }
+    }
+
+    // Server che non legge le regole di protezione (Nginx e simili): si dice prima, con il motivo.
+    if ( ! $active && ! e3p_errorlight_server_honors_rules() ) {
+        echo '<div class="e3p-errorlight-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
+        echo esc_html__( 'Your server does not seem to read the protection rules ErrorLight writes for its log folder (this is common on Nginx). ErrorLight will turn logging on only if it can confirm that the logs cannot be opened from a web address. If it cannot, it changes nothing and you can ask your hosting provider to block web access to the uploads/errorlight folder, or set the lines by hand.', 'errorlight' );
+        echo '</p></div>';
     }
 
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';

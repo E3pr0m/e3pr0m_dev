@@ -431,46 +431,37 @@ function e3p_errorlight_config_syntax_ok( $src ) {
 }
 
 /**
- * Sostituisce il contenuto di wp-config.php in modo atomico: file temporaneo con nome casuale (due richieste non
- * si pestano i piedi e il nome non si indovina), creato fin dall'inizio con permessi 0600 (contiene le
- * credenziali), permessi originali ripristinati prima della sostituzione, poi `rename`.
+ * Sostituisce il contenuto di wp-config.php scrivendo direttamente nel file (nessun file temporaneo: il codice
+ * di configurazione non finisce mai in un altro file). Il file resta lo stesso, con i suoi permessi. La
+ * sicurezza sta nel controllo di sintassi prima della scrittura e nella rilettura con ripristino dopo
+ * (vedi e3p_errorlight_config_write_locked()).
  *
  * @param string $path    Percorso di wp-config.php.
  * @param string $content Contenuto completo.
- * @return bool True se il file è stato sostituito.
+ * @return bool True se tutto il contenuto è stato scritto.
  */
 function e3p_errorlight_config_replace( $path, $content ) {
-    // L'estensione .php resta: se per sbaglio il file rimanesse sul disco, il server lo eseguirebbe (senza mostrare nulla) invece di servirlo come testo.
-    $temp  = dirname( $path ) . '/wp-config-errorlight-' . wp_generate_password( 16, false ) . '.php';
-    $umask = umask( 0177 );
-    $fh    = fopen( $temp, 'xb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Exclusive creation of the temporary file next to wp-config.php, with restricted permissions from the start.
-    umask( $umask );
+    $fh = fopen( $path, 'cb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Opens wp-config.php itself to change the debug constants, on request of the administrator.
     if ( false === $fh ) {
         return false;
     }
-    $bytes = fwrite( $fh, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Same temporary file.
-    fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Same temporary file.
-    if ( strlen( $content ) !== $bytes ) {
-        wp_delete_file( $temp );
-        return false;
+    $ok = flock( $fh, LOCK_EX ) && ftruncate( $fh, 0 ) && rewind( $fh );
+    if ( $ok ) {
+        $bytes = fwrite( $fh, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- Same file.
+        $ok    = ( strlen( $content ) === $bytes ) && fflush( $fh );
     }
-    $perms = fileperms( $path );
-    if ( false !== $perms ) {
-        chmod( $temp, $perms & 0777 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod -- Keeps the permissions of wp-config.php on its replacement.
-    }
-    if ( ! rename( $temp, $path ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- Atomic replacement of wp-config.php: the new file is complete or nothing changes.
-        wp_delete_file( $temp );
-        return false;
-    }
+    flock( $fh, LOCK_UN );
+    fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Same file.
     if ( function_exists( 'opcache_invalidate' ) ) {
         opcache_invalidate( $path, true );
     }
-    return true;
+    clearstatcache( true, $path );
+    return $ok;
 }
 
 /**
  * Scrive il nuovo wp-config.php in modo sicuro: un solo scrittore alla volta (blocco nella cartella del plugin
- * negli upload), controllo di sintassi, sostituzione atomica, rilettura e ripristino automatico verificato se
+ * negli upload), controllo di sintassi, scrittura diretta nel file, rilettura e ripristino automatico verificato se
  * qualcosa non torna. Non si crea nessuna copia su disco: il ripristino usa il contenuto letto qui, in memoria.
  *
  * @param string      $path     Percorso di wp-config.php.
@@ -519,7 +510,7 @@ function e3p_errorlight_config_write_locked( $path, $new_src, $expected ) {
     if ( null !== $expected && $old !== $expected ) {
         return 'busy';
     }
-    if ( ! is_writable( $path ) || ! is_writable( dirname( $path ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
+    if ( ! is_writable( $path ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Checks real write access to wp-config.php or the log folder before changing anything.
         return 'not_writable';
     }
     if ( ! e3p_errorlight_config_syntax_ok( $new_src ) ) {
@@ -527,7 +518,9 @@ function e3p_errorlight_config_write_locked( $path, $new_src, $expected ) {
     }
 
     if ( ! e3p_errorlight_config_replace( $path, $new_src ) ) {
-        return 'write';
+        // Scrittura incompleta: si rimette l'originale e si verifica, come dopo ogni altra scrittura.
+        e3p_errorlight_config_replace( $path, $old );
+        return ( file_get_contents( $path ) === $old ) ? 'write' : 'restore_failed';
     }
 
     // Rilettura: se non è identico o la sintassi non è valida, si ripristina il contenuto di prima.
@@ -536,14 +529,8 @@ function e3p_errorlight_config_write_locked( $path, $new_src, $expected ) {
         return '';
     }
 
-    $restored = e3p_errorlight_config_replace( $path, $old );
-    if ( ! $restored ) {
-        // Ultima via: scrittura diretta, che poi si verifica come le altre.
-        file_put_contents( $path, $old, LOCK_EX ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Last-resort restore of the original wp-config.php, checked right after.
-        if ( function_exists( 'opcache_invalidate' ) ) {
-            opcache_invalidate( $path, true );
-        }
-    }
+    // Anche se la scrittura è fallita a metà, si rimette il contenuto originale letto in memoria.
+    e3p_errorlight_config_replace( $path, $old );
     // Non si dice "ripristinato" se non è vero: si rilegge il file e si confronta.
     return ( file_get_contents( $path ) === $old ) ? 'verify' : 'restore_failed';
 }
