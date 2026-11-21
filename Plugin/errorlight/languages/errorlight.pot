@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-20T11:37:17+00:00\n"
+"POT-Creation-Date: 2026-11-21T08:31:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: errorlight\n"
@@ -420,7 +420,7 @@ msgid "You are reading: %s"
 msgstr ""
 
 #: errorlight.php:1716
-msgid "This is WordPress’s own debug.log, saved by ErrorLight in a protected folder."
+msgid "This is WordPress’s own debug.log, saved by ErrorLight in its own folder inside uploads."
 msgstr ""
 
 #. translators: 1: file size, 2: last modified date and time
@@ -1314,15 +1314,15 @@ msgid "Where your log is saved"
 msgstr ""
 
 #: includes/log-location.php:374
-msgid "In a folder with a secret name inside your uploads folder, with rules that block access from the web."
+msgid "In a folder with a secret name inside your uploads folder. ErrorLight writes rules that block web access on Apache and IIS; the check button below tells you whether your server really applies them."
 msgstr ""
 
 #: includes/log-location.php:377
-msgid "The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder."
+msgid "The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in ErrorLight’s own folder inside uploads. This works only if ErrorLight can confirm that the folder is private on your server."
 msgstr ""
 
 #: includes/log-location.php:380
-msgid "When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder, with rules that block access from the web."
+msgid "When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder. ErrorLight turns logging on only if it can confirm that the folder cannot be opened from a web address."
 msgstr ""
 
 #: includes/log-location.php:406

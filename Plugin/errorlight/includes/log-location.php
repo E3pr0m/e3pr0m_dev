@@ -371,13 +371,13 @@ function e3p_errorlight_render_location_section( $active ) {
     echo '<div id="e3p-errorlight-location" class="e3p-errorlight-location"><h3><span class="dashicons dashicons-shield-alt" aria-hidden="true"></span>' . esc_html__( 'Where your log is saved', 'errorlight' ) . '</h3>';
 
     if ( $ours_now ) {
-        echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'errorlight' ) . '</p>';
+        echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder. ErrorLight writes rules that block web access on Apache and IIS; the check button below tells you whether your server really applies them.', 'errorlight' ) . '</p>';
     } elseif ( $active ) {
         echo '<div class="e3p-errorlight-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
-        echo esc_html__( 'The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in a protected folder.', 'errorlight' );
+        echo esc_html__( 'The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in ErrorLight’s own folder inside uploads. This works only if ErrorLight can confirm that the folder is private on your server.', 'errorlight' );
         echo '</p></div>';
     } else {
-        echo '<p>' . esc_html__( 'When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder, with rules that block access from the web.', 'errorlight' ) . '</p>';
+        echo '<p>' . esc_html__( 'When you turn logging on, the log is saved in a folder with a secret name inside your uploads folder. ErrorLight turns logging on only if it can confirm that the folder cannot be opened from a web address.', 'errorlight' ) . '</p>';
     }
 
     // Esiti dell'ultimo controllo (solo codici noti).

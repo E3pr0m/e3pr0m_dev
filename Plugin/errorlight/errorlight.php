@@ -1713,7 +1713,7 @@ function e3p_errorlight_render_page() {
         '<strong>' . esc_html( $file['label'] ) . '</strong>'
     );
     if ( 'protected' === $selected ) {
-        echo '<p class="e3p-errorlight-current-note">' . esc_html__( 'This is WordPress’s own debug.log, saved by ErrorLight in a protected folder.', 'errorlight' ) . '</p>';
+        echo '<p class="e3p-errorlight-current-note">' . esc_html__( 'This is WordPress’s own debug.log, saved by ErrorLight in its own folder inside uploads.', 'errorlight' ) . '</p>';
     }
     echo '<p class="e3p-errorlight-current-path"><code>' . esc_html( $shown_path ) . '</code></p>';
     printf(
