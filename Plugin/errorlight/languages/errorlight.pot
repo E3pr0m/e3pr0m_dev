@@ -997,7 +997,7 @@ msgid "Nothing was changed: the log folder can be opened from a web address on y
 msgstr ""
 
 #: includes/debug-switch.php:108
-msgid "Nothing was changed: your server does not read the protection rules ErrorLight writes (this is common on Nginx) and the check could not confirm that the log folder is private. Ask your hosting provider to block web access to the uploads/errorlight folder, or turn on the debug lines by hand in wp-config.php."
+msgid "Nothing was changed, and your site is not at risk. For your safety ErrorLight turns logging on only when it can confirm that the logs cannot be downloaded from the web, and on your server that check could not be completed."
 msgstr ""
 
 #: includes/debug-switch.php:112
@@ -1093,10 +1093,6 @@ msgstr ""
 
 #: includes/debug-switch.php:319
 msgid "wp-config.php is not writable, so ErrorLight cannot change it. To turn logging on or off, these lines have to be set by hand:"
-msgstr ""
-
-#: includes/debug-switch.php:344
-msgid "Your server does not seem to read the protection rules ErrorLight writes for its log folder (this is common on Nginx). ErrorLight will turn logging on only if it can confirm that the logs cannot be opened from a web address. If it cannot, it changes nothing and you can ask your hosting provider to block web access to the uploads/errorlight folder, or set the lines by hand."
 msgstr ""
 
 #: includes/debug-switch.php:361
@@ -1270,11 +1266,11 @@ msgid "Checked: your server refuses to hand out the files in the log folder."
 msgstr ""
 
 #: includes/log-location.php:282
-msgid "Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules ErrorLight writes (this is common on Nginx). Ask your hosting provider to block access to this folder."
+msgid "Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules ErrorLight writes. Ask your hosting provider to block access to this folder."
 msgstr ""
 
 #: includes/log-location.php:286
-msgid "ErrorLight could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified."
+msgid "ErrorLight could not confirm that the log folder is protected, because the test request from your site to itself did not give a usable answer. This does not mean the folder is exposed: it means the check could not be completed on your server."
 msgstr ""
 
 #: includes/log-location.php:292
@@ -1314,7 +1310,7 @@ msgid "Where your log is saved"
 msgstr ""
 
 #: includes/log-location.php:374
-msgid "In a folder with a secret name inside your uploads folder. ErrorLight writes rules that block web access on Apache and IIS; the check button below tells you whether your server really applies them."
+msgid "In a folder with a secret name inside your uploads folder. ErrorLight writes rules that block web access on Apache and IIS; the check button below tells you whether your server really applies them, and logging is turned on only after that check succeeds."
 msgstr ""
 
 #: includes/log-location.php:377
@@ -1353,4 +1349,72 @@ msgstr ""
 
 #: includes/log-location.php:427
 msgid "If you have SSH access, you can delete it from the command line with the location shown above."
+msgstr ""
+
+#: includes/log-location.php
+msgid "The site did not answer its own test request (no response or timeout)."
+msgstr ""
+
+#: includes/log-location.php
+msgid "The test request was refused with “401 Unauthorized”, for example by a password on the site."
+msgstr ""
+
+#: includes/log-location.php
+msgid "The test request was refused with “403 Forbidden”, for example by a firewall or security service."
+msgstr ""
+
+#: includes/log-location.php
+msgid "The test request got “404 Not found” even for a file that exists, so its address could not be matched to the folder."
+msgstr ""
+
+#: includes/log-location.php
+msgid "The test request got an answer that could not be matched to the test file."
+msgstr ""
+
+#: includes/log-location.php
+msgid "ErrorLight could not write its temporary test file in the uploads folder."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "The “Turn logging on” button is not available right now. Logs can contain private data, so ErrorLight enables logging only after it has confirmed that the log folder cannot be opened from a web address. Nothing was changed."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "What ErrorLight saw:"
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "This depends on how your server is set up, and it can usually be fixed:"
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "Ask your hosting provider to allow your site to send requests to its own address (many hosts block them), or to block web access to the uploads/errorlight folder. You can copy the message below."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "If the site is behind a password, a firewall or a security service, allow requests from the server itself. WordPress reports the same problem in Tools → Site Health."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "When it is done, press “Check again”: if the check succeeds, the button comes back."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "Message for your hosting provider"
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "Hello, a WordPress plugin (ErrorLight) needs two things on my site:\n1. Requests from the server to my own site address (loopback HTTP requests) must be allowed.\n2. Web access to the folder wp-content/uploads/errorlight/ and all its subfolders must be denied (for example \"deny all\" in the server configuration).\nCould you check or enable them? Thank you."
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "Check again"
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "Or turn it on by hand"
+msgstr ""
+
+#: includes/debug-switch.php
+msgid "You can add these lines to wp-config.php yourself, above the line “That’s all, stop editing!”. Without the protected folder, WordPress saves the log in wp-content/debug.log, which is the first address anyone would try: turn logging off as soon as you are done."
 msgstr ""

@@ -16,7 +16,7 @@ ErrorLight is made for people who have never opened a log file. It shows the end
 
 You find it in **Tools → ErrorLight**. Only administrators can use it. On a multisite network only the super administrator can, and the button that edits `wp-config.php` is not offered there: the file is shared by every site, so the panel shows the lines to set by hand.
 
-**Logs are private data, so the button is careful.** ErrorLight turns logging on from the panel only if it can confirm that the log folder cannot be opened from a web address. On Apache, LiteSpeed and IIS the protection rules it writes do that. Nginx ignores those rules: on Nginx the button turns logging on only if its test confirms the folder is private; otherwise it changes nothing, explains why, and shows the lines you can add to `wp-config.php` by hand. See the FAQ.
+**Logs are private data, so the button is careful.** ErrorLight turns logging on from the panel only after a test has confirmed that the log folder cannot be opened from a web address, whatever your server. If it cannot confirm it, `wp-config.php` is not changed: the panel hides the button, explains why, gives you a message for your hosting provider and shows the lines you can add by hand. See the FAQ.
 
 = What you can do =
 
@@ -37,12 +37,12 @@ You find it in **Tools → ErrorLight**. Only administrators can use it. On a mu
 * It cannot read server logs that PHP has no access to, and it cannot turn on the PHP error log: that setting belongs to your server. ErrorLight shows it when it exists.
 * It does not use any external service and does not send data to anyone, except the e-mails you ask for (see Privacy).
 * It does not change any other setting of `wp-config.php`. `WP_DEBUG_DISPLAY` is always kept off, so errors are never shown to your visitors.
-* It does not turn logging on from the button when it cannot confirm that the log folder is private (for example on Nginx without a rule that blocks the folder).
+* It does not turn logging on from the button when it cannot confirm that the log folder is private (for example when the site cannot test itself, or the server has no rule that blocks the folder).
 * It does not create temporary or backup copies of `wp-config.php`.
 
 = Privacy =
 
-ErrorLight does not collect data and does not contact any external service. The only request it makes goes to your own site (a loopback request), to check that the log folder cannot be downloaded from the web.
+ErrorLight does not collect data and does not contact any external service. The only requests it makes go to your own site (loopback requests), to check that the logs cannot be downloaded from the web.
 
 A log can contain file paths, user names, e-mail addresses and other personal data, and the panel says so wherever you can download, copy or send one. The e-mails ErrorLight sends are only its own, sent with `wp_mail()`:
 
@@ -55,9 +55,9 @@ It does not hook into other e-mails of your site.
 = What ErrorLight writes =
 
 * **Database:** one option, `e3p_errorlight_settings`, with your turn-off or reminder choice. It is created when you turn logging on from the panel and removed when you turn it off. Up to two scheduled WP-Cron events go with it.
-* **Files:** `wp-config.php` (only when you press the button, with a confirmation: the three debug constants are written directly into the file, with no temporary or backup copy), and a folder named `errorlight` inside your uploads folder (found with `wp_upload_dir()`), with the log folder and its protection files, a lock file and short-lived test files that are deleted right away. ErrorLight never writes to or deletes any other file: the old `wp-content/debug.log` is only read, and you remove it yourself.
+* **Files:** `wp-config.php` (when you press the button, with a confirmation, and when the automatic turn-off you chose runs: only the three debug constants, written directly into the file, with no temporary or backup copy), and a folder named `errorlight` inside your uploads folder (found with `wp_upload_dir()`), with the log folder and its protection files, a lock file and short-lived test files that are deleted right away. The folder is created when you try to turn logging on or run the check, even if logging is then not turned on. ErrorLight never writes to or deletes any other file: the old `wp-content/debug.log` is only read, and you remove it yourself.
 
-Everything ErrorLight creates is removed when you delete the plugin, except the lines it added to `wp-config.php`. Download your logs and turn logging off before you delete the plugin. The `errorlight` folder in uploads is deleted with it, and the lines ErrorLight added to `wp-config.php` stay: if logging was still on, WordPress keeps debugging without a log file until you set `WP_DEBUG` and `WP_DEBUG_LOG` to `false` there.
+Everything ErrorLight creates, including the `errorlight` folder in uploads and the logs in it, is removed when you delete the plugin. The lines it added to `wp-config.php` stay, so download your logs and turn logging off first: if logging is still on, WordPress keeps debugging without a log file until you set `WP_DEBUG` and `WP_DEBUG_LOG` to `false` there.
 
 == Installation ==
 
@@ -75,15 +75,17 @@ There are three possible reasons, and the panel tells you which one applies:
 2. You are on a multisite network, where `wp-config.php` belongs to every site.
 3. ErrorLight cannot confirm that the log folder is private (see the next question).
 
-= Why does the button refuse to turn logging on (Nginx)? =
+= Why does the button refuse to turn logging on? =
 
-Logs can contain sensitive data, so ErrorLight turns logging on only if the log folder cannot be opened from a web address. It writes protection rules for Apache, LiteSpeed and IIS, but Nginx ignores them. Before changing anything, ErrorLight requests a test file from that folder:
+Logs can contain sensitive data, so ErrorLight turns logging on only after it has confirmed that the log folder cannot be opened from a web address, on any server. Before changing anything, ErrorLight requests a test file from that folder:
 
-* if the server hands the file out, ErrorLight changes nothing and warns you;
-* if the server ignores the rules (Nginx) and the test cannot confirm that the folder is private, ErrorLight changes nothing and explains why;
-* if the server reads the rules (Apache, LiteSpeed, IIS) and the test could not run, logging is turned on and the panel says the folder was not verified.
+* if the server refuses the file, logging is turned on;
+* if the server hands the file out, `wp-config.php` is not changed and the panel warns you;
+* if the test cannot be completed (for example the site cannot send requests to itself, or a password or firewall blocks them), `wp-config.php` is not changed and the panel says what it saw.
 
-To solve it, ask your hosting provider to block web access to the `uploads/errorlight` folder (on Nginx, a `location` rule that denies it), then press the button again. You can also add the debug lines to `wp-config.php` by hand: the panel shows them.
+In the last two cases the button is replaced by an explanation.
+
+To solve it, ask your hosting provider to allow requests from your site to its own address and to block web access to the `uploads/errorlight` folder (on Nginx, a `location` rule that denies it). The panel has a message you can copy for them. Then press "Check again": if the check succeeds, the button comes back. You can also add the debug lines to `wp-config.php` by hand: the panel shows them. In that case WordPress saves the log in `wp-content/debug.log`, which may be downloadable, so turn logging off as soon as you are done.
 
 = Does it change my wp-config.php safely? =
 
@@ -103,7 +105,7 @@ It uses WP-Cron, which runs when someone visits the site. ErrorLight also checks
 
 = Is my log really protected? =
 
-The log folder is inside your uploads folder, with a secret name and rules for Apache and IIS that block access from the web. Nginx ignores those rules: there ErrorLight will not turn logging on from the button unless its test confirms the folder is private (see the Nginx question above). You can run the same test at any time with the check button. The old `wp-content/debug.log` is checked too: if it can be downloaded, the panel says so and explains how to remove it.
+The log folder is inside your uploads folder, with a secret name and rules for Apache and IIS that block access from the web. Some servers (Nginx, for example) ignore those rules, which is why the button relies on the test described above and not on the rules alone. You can run the same test at any time with the check button. The old `wp-content/debug.log` is checked too: if it can be downloaded, the panel says so and explains how to remove it.
 
 = Why does it show only part of a large log? =
 

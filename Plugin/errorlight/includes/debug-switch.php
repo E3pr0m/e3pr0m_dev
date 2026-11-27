@@ -105,7 +105,7 @@ function e3p_errorlight_get_result_texts() {
         ),
         'unverified'   => array(
             'type' => 'warning',
-            'text' => __( 'Nothing was changed: your server does not read the protection rules ErrorLight writes (this is common on Nginx) and the check could not confirm that the log folder is private. Ask your hosting provider to block web access to the uploads/errorlight folder, or turn on the debug lines by hand in wp-config.php.', 'errorlight' ),
+            'text' => __( 'Nothing was changed, and your site is not at risk. For your safety ErrorLight turns logging on only when it can confirm that the logs cannot be downloaded from the web, and on your server that check could not be completed.', 'errorlight' ),
         ),
         'busy'         => array(
             'type' => 'warning',
@@ -151,12 +151,12 @@ function e3p_errorlight_handle_toggle() {
                     $result = 'logdir';
                 } else {
                     $log_path = $loc['file'];
-                    // Prima di accendere si controlla che la cartella dei log non sia scaricabile. Se lo è, o se
-                    // non si può verificare su un server che ignora le regole di protezione (Nginx), non si accende.
+                    // Si accende solo se il controllo conferma che la cartella dei log non è scaricabile. Se lo è
+                    // (exposed) o se non si riesce a verificare (unknown), su qualsiasi server, non si accende.
                     $checks = e3p_errorlight_run_checks( $loc );
                     if ( 'exposed' === $checks['folder'] ) {
                         $result = 'exposed';
-                    } elseif ( 'protected' !== $checks['folder'] && ! e3p_errorlight_server_honors_rules() ) {
+                    } elseif ( 'protected' !== $checks['folder'] ) {
                         $result = 'unverified';
                     }
                 }
@@ -188,6 +188,9 @@ function e3p_errorlight_handle_toggle() {
     if ( isset( $checks ) ) {
         $args['e3p_errorlight_pr'] = $checks['folder'];
         $args['e3p_errorlight_od'] = $checks['old'];
+        if ( '' !== $checks['why'] ) {
+            $args['e3p_errorlight_wh'] = $checks['why'];
+        }
     }
     wp_safe_redirect( add_query_arg( $args, admin_url( 'tools.php' ) ) . '#e3p-errorlight-debug' );
     exit;
@@ -221,6 +224,49 @@ function e3p_errorlight_render_manual_help() {
 }
 
 /**
+ * Riquadro al posto del pulsante quando la protezione della cartella dei log non è confermata: cosa ha visto il
+ * controllo, cosa può fare l'utente, un testo da inoltrare all'hosting e le righe da scrivere a mano.
+ *
+ * @param string $why     Codice del motivo (vuoto se non noto); si accettano solo i codici di e3p_errorlight_get_why_texts().
+ * @param bool   $exposed True se il controllo ha scaricato il file di prova (la cartella è aperta).
+ */
+function e3p_errorlight_render_blocked_help( $why, $exposed ) {
+    $whys = e3p_errorlight_get_why_texts();
+
+    echo '<div class="e3p-errorlight-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
+    echo esc_html__( 'The “Turn logging on” button is not available right now. Logs can contain private data, so ErrorLight enables logging only after it has confirmed that the log folder cannot be opened from a web address. Nothing was changed.', 'errorlight' );
+    echo '</p>';
+    if ( $exposed ) {
+        echo '<p>' . esc_html( e3p_errorlight_get_check_texts()['folder']['exposed']['text'] ) . '</p>';
+    } elseif ( isset( $whys[ $why ] ) ) {
+        echo '<p>' . esc_html__( 'What ErrorLight saw:', 'errorlight' ) . ' ' . esc_html( $whys[ $why ] ) . '</p>';
+    }
+    echo '</div>';
+
+    echo '<p>' . esc_html__( 'This depends on how your server is set up, and it can usually be fixed:', 'errorlight' ) . '</p>';
+    echo '<ul class="e3p-errorlight-help-list">';
+    echo '<li>' . esc_html__( 'Ask your hosting provider to allow your site to send requests to its own address (many hosts block them), or to block web access to the uploads/errorlight folder. You can copy the message below.', 'errorlight' ) . '</li>';
+    echo '<li>' . esc_html__( 'If the site is behind a password, a firewall or a security service, allow requests from the server itself. WordPress reports the same problem in Tools → Site Health.', 'errorlight' ) . '</li>';
+    echo '<li>' . esc_html__( 'When it is done, press “Check again”: if the check succeeds, the button comes back.', 'errorlight' ) . '</li>';
+    echo '</ul>';
+
+    echo '<details class="e3p-errorlight-details" open><summary><span class="dashicons dashicons-email" aria-hidden="true"></span>' . esc_html__( 'Message for your hosting provider', 'errorlight' ) . '</summary>';
+    echo '<pre class="e3p-errorlight-code">' . esc_html__( "Hello, a WordPress plugin (ErrorLight) needs two things on my site:\n1. Requests from the server to my own site address (loopback HTTP requests) must be allowed.\n2. Web access to the folder wp-content/uploads/errorlight/ and all its subfolders must be denied (for example \"deny all\" in the server configuration).\nCould you check or enable them? Thank you.", 'errorlight' ) . '</pre>';
+    echo '</details>';
+
+    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="e3p-errorlight-inline-form">';
+    echo '<input type="hidden" name="action" value="e3p_errorlight_check" />';
+    wp_nonce_field( 'e3p_errorlight_check' );
+    echo '<button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-update" aria-hidden="true"></span>' . esc_html__( 'Check again', 'errorlight' ) . '</button>';
+    echo '</form>';
+
+    echo '<details class="e3p-errorlight-details"><summary><span class="dashicons dashicons-editor-code" aria-hidden="true"></span>' . esc_html__( 'Or turn it on by hand', 'errorlight' ) . '</summary>';
+    echo '<p>' . esc_html__( 'You can add these lines to wp-config.php yourself, above the line “That’s all, stop editing!”. Without the protected folder, WordPress saves the log in wp-content/debug.log, which is the first address anyone would try: turn logging off as soon as you are done.', 'errorlight' ) . '</p>';
+    echo '<pre class="e3p-errorlight-code">' . esc_html( e3p_errorlight_manual_lines( true ) ) . '</pre>';
+    echo '</details>';
+}
+
+/**
  * Blocco "come dovrebbe essere scritto perché il pulsante funzioni".
  *
  * @param bool $on True se il debug è acceso ora (si mostrano i valori da usare per tornare a spento).
@@ -251,7 +297,9 @@ function e3p_errorlight_render_debug_section() {
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     $code = isset( $_GET['e3p_errorlight_rs'] ) ? sanitize_key( wp_unslash( $_GET['e3p_errorlight_rs'] ) ) : '';
     // Gli esiti di "scarica" ed "email" compaiono nella riga delle azioni, accanto ai pulsanti premuti.
-    if ( isset( $texts[ $code ] ) && ! e3p_errorlight_is_action_result( $code ) ) {
+    // "unverified" ed "exposed" non si ripetono qui: li spiega il riquadro che prende il posto del pulsante.
+    $in_box = ! $active && in_array( $code, array( 'unverified', 'exposed' ), true );
+    if ( isset( $texts[ $code ] ) && ! $in_box && ! e3p_errorlight_is_action_result( $code ) ) {
         printf(
             '<div class="notice notice-%1$s inline"><p>%2$s</p></div>',
             esc_attr( $texts[ $code ]['type'] ),
@@ -338,11 +386,18 @@ function e3p_errorlight_render_debug_section() {
         }
     }
 
-    // Server che non legge le regole di protezione (Nginx e simili): si dice prima, con il motivo.
-    if ( ! $active && ! e3p_errorlight_server_honors_rules() ) {
-        echo '<div class="e3p-errorlight-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
-        echo esc_html__( 'Your server does not seem to read the protection rules ErrorLight writes for its log folder (this is common on Nginx). ErrorLight will turn logging on only if it can confirm that the logs cannot be opened from a web address. If it cannot, it changes nothing and you can ask your hosting provider to block web access to the uploads/errorlight folder, or set the lines by hand.', 'errorlight' );
-        echo '</p></div>';
+    // Se l'ultimo tentativo o controllo non ha confermato la protezione, il pulsante non c'è: al suo posto la
+    // spiegazione, cosa chiedere all'hosting e le righe da scrivere a mano. Torna dopo un controllo riuscito.
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended
+    $last_rs = isset( $_GET['e3p_errorlight_rs'] ) ? sanitize_key( wp_unslash( $_GET['e3p_errorlight_rs'] ) ) : '';
+    $last_pr = isset( $_GET['e3p_errorlight_pr'] ) ? sanitize_key( wp_unslash( $_GET['e3p_errorlight_pr'] ) ) : '';
+    $why     = isset( $_GET['e3p_errorlight_wh'] ) ? sanitize_key( wp_unslash( $_GET['e3p_errorlight_wh'] ) ) : '';
+    // phpcs:enable WordPress.Security.NonceVerification.Recommended
+    if ( ! $active && ( in_array( $last_rs, array( 'unverified', 'exposed' ), true ) || in_array( $last_pr, array( 'unknown', 'exposed' ), true ) ) ) {
+        e3p_errorlight_render_blocked_help( $why, 'exposed' === $last_rs || 'exposed' === $last_pr );
+        e3p_errorlight_render_location_section( $active, true );
+        echo '</div>';
+        return;
     }
 
     echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';

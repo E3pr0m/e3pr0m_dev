@@ -114,7 +114,8 @@ function e3p_errorlight_plan_log_location() {
 
 /**
  * Crea la cartella con le regole che negano l'accesso dal web (Apache e IIS) e un index.php vuoto. Nginx ignora
- * questi file: per questo c'è la verifica con la richiesta di prova.
+ * questi file, e anche su Apache o IIS le regole potrebbero essere ignorate: per questo si accende solo dopo la
+ * verifica con la richiesta di prova.
  *
  * @param array{dir: string, file: string}|null $loc Posto scelto.
  * @return bool True se è tutto a posto.
@@ -136,7 +137,7 @@ function e3p_errorlight_prepare_log_location( $loc ) {
             . "<remove users=\"*\" roles=\"\" verbs=\"\" />\n<add accessType=\"Deny\" users=\"*\" />\n</authorization>\n</security>\n</system.webServer>\n</configuration>\n",
     );
     foreach ( $files as $name => $content ) {
-        if ( strlen( $content ) !== file_put_contents( $loc['dir'] . '/' . $name, $content ) ) {
+        if ( strlen( $content ) !== file_put_contents( $loc['dir'] . '/' . $name, $content ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Protection files inside the plugin's own folder in uploads; whether they are honored is verified before logging is turned on.
             return false;
         }
     }
@@ -191,17 +192,37 @@ function e3p_errorlight_http_probe( $url, $method = 'GET' ) {
 }
 
 /**
+ * Perché la richiesta di controllo non ha dato un esito leggibile (codice breve, solo valori noti).
+ *
+ * @param array{code: int, body: string}|null $answer Risposta della richiesta, o null se non è arrivata.
+ * @return string noanswer, auth, forbidden, notfound, other.
+ */
+function e3p_errorlight_probe_reason( $answer ) {
+    if ( ! $answer ) {
+        return 'noanswer';
+    }
+    $map = array(
+        401 => 'auth',
+        403 => 'forbidden',
+        404 => 'notfound',
+    );
+    return isset( $map[ $answer['code'] ] ) ? $map[ $answer['code'] ] : 'other';
+}
+
+/**
  * Verifica se i log si possono scaricare dal web. Scrive un file di controllo nella cartella del plugin negli
  * upload (per essere sicuri che l'indirizzo della richiesta corrisponda alla cartella) e un file di prova nella
  * cartella dei log, li chiede al sito e li cancella subito.
  *
  * @param array{dir: string, file: string}|null $loc Posto del log nuovo.
- * @return array{folder: string, old: string} `folder`: protected, exposed, unknown. `old`: none, protected, exposed, unknown.
+ * @return array{folder: string, old: string, why: string} `folder`: protected, exposed, unknown. `old`: none, protected,
+ *         exposed, unknown. `why`: motivo di un esito non leggibile (vedi e3p_errorlight_get_why_texts()), o vuoto.
  */
 function e3p_errorlight_run_checks( $loc ) {
     $result = array(
         'folder' => 'unknown',
         'old'    => 'unknown',
+        'why'    => '',
     );
 
     $old_here = is_file( e3p_errorlight_default_log_path() );
@@ -218,11 +239,13 @@ function e3p_errorlight_run_checks( $loc ) {
     $marker  = 'e3p-errorlight-probe-' . wp_generate_password( 12, false );
     $control = $base['dir'] . '/control-' . wp_generate_password( 8, false ) . '.txt';
     if ( false === file_put_contents( $control, $marker ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Temporary control file inside the plugin folder in uploads, deleted right after the request.
+        $result['why'] = 'nowrite';
         return $result;
     }
     $answer = e3p_errorlight_http_probe( $base['url'] . '/' . basename( $control ) );
     wp_delete_file( $control );
     if ( ! $answer || 200 !== $answer['code'] || false === strpos( $answer['body'], $marker ) ) {
+        $result['why'] = e3p_errorlight_probe_reason( $answer );
         return $result;
     }
 
@@ -236,8 +259,14 @@ function e3p_errorlight_run_checks( $loc ) {
                 $result['folder'] = 'exposed';
             } elseif ( in_array( $answer['code'], array( 401, 403, 404 ), true ) ) {
                 $result['folder'] = 'protected';
+            } else {
+                $result['why'] = e3p_errorlight_probe_reason( $answer );
             }
+        } else {
+            $result['why'] = 'noanswer';
         }
+    } else {
+        $result['why'] = 'nowrite';
     }
 
     if ( $old_here ) {
@@ -255,14 +284,20 @@ function e3p_errorlight_run_checks( $loc ) {
 }
 
 /**
- * Il server in uso applica le regole scritte nei file `.htaccess` o `web.config`? Vero per Apache, LiteSpeed e IIS
- * (WordPress li riconosce da solo); Nginx e gli altri non le leggono.
+ * Cosa ha visto il controllo quando non ha potuto confermare la protezione (codice => frase). I codici arrivano
+ * nell'indirizzo: si accettano solo questi.
  *
- * @return bool
+ * @return array<string, string>
  */
-function e3p_errorlight_server_honors_rules() {
-    global $is_apache, $is_iis7;
-    return ! empty( $is_apache ) || ! empty( $is_iis7 );
+function e3p_errorlight_get_why_texts() {
+    return array(
+        'noanswer'  => __( 'The site did not answer its own test request (no response or timeout).', 'errorlight' ),
+        'auth'      => __( 'The test request was refused with “401 Unauthorized”, for example by a password on the site.', 'errorlight' ),
+        'forbidden' => __( 'The test request was refused with “403 Forbidden”, for example by a firewall or security service.', 'errorlight' ),
+        'notfound'  => __( 'The test request got “404 Not found” even for a file that exists, so its address could not be matched to the folder.', 'errorlight' ),
+        'other'     => __( 'The test request got an answer that could not be matched to the test file.', 'errorlight' ),
+        'nowrite'   => __( 'ErrorLight could not write its temporary test file in the uploads folder.', 'errorlight' ),
+    );
 }
 
 /**
@@ -279,11 +314,11 @@ function e3p_errorlight_get_check_texts() {
             ),
             'exposed'   => array(
                 'type' => 'error',
-                'text' => __( 'Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules ErrorLight writes (this is common on Nginx). Ask your hosting provider to block access to this folder.', 'errorlight' ),
+                'text' => __( 'Warning: the log folder can be opened from a web address, so anyone who guesses its name could download your logs. Your server probably ignores the protection rules ErrorLight writes. Ask your hosting provider to block access to this folder.', 'errorlight' ),
             ),
             'unknown'   => array(
                 'type' => 'warning',
-                'text' => __( 'ErrorLight could not check whether the log folder is protected: the site did not answer its own test request. This is common on shared hosting and does not mean the folder is exposed. The folder has a secret name and protection rules, but this has not been verified.', 'errorlight' ),
+                'text' => __( 'ErrorLight could not confirm that the log folder is protected, because the test request from your site to itself did not give a usable answer. This does not mean the folder is exposed: it means the check could not be completed on your server.', 'errorlight' ),
             ),
         ),
         'old'    => array(
@@ -319,15 +354,19 @@ function e3p_errorlight_handle_check() {
     $loc    = e3p_errorlight_plan_log_location();
     $checks = e3p_errorlight_run_checks( $loc );
 
+    // A debug spento e senza conferma la spiegazione sta nel riquadro al posto del pulsante: si torna lì.
+    $active = defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG;
+    $anchor = ( ! $active && 'protected' !== $checks['folder'] ) ? '#e3p-errorlight-debug' : '#e3p-errorlight-location';
+
     wp_safe_redirect(
         add_query_arg(
             array(
                 'page'            => 'errorlight',
                 'e3p_errorlight_pr' => $checks['folder'],
                 'e3p_errorlight_od' => $checks['old'],
-            ),
+            ) + ( '' !== $checks['why'] ? array( 'e3p_errorlight_wh' => $checks['why'] ) : array() ),
             admin_url( 'tools.php' )
-        ) . '#e3p-errorlight-location'
+        ) . $anchor
     );
     exit;
 }
@@ -355,9 +394,10 @@ function e3p_errorlight_render_manual_check( $name ) {
 /**
  * Parte del pannello: dove viene salvato il log, controllo di protezione e vecchio debug.log.
  *
- * @param bool $active True se il debug è acceso adesso.
+ * @param bool $active  True se il debug è acceso adesso.
+ * @param bool $blocked True se al posto del pulsante c'è il riquadro di blocco (non si ripetono esito e controllo).
  */
-function e3p_errorlight_render_location_section( $active ) {
+function e3p_errorlight_render_location_section( $active, $blocked = false ) {
     $check_texts = e3p_errorlight_get_check_texts();
     $name        = e3p_errorlight_log_folder_name();
 
@@ -371,7 +411,7 @@ function e3p_errorlight_render_location_section( $active ) {
     echo '<div id="e3p-errorlight-location" class="e3p-errorlight-location"><h3><span class="dashicons dashicons-shield-alt" aria-hidden="true"></span>' . esc_html__( 'Where your log is saved', 'errorlight' ) . '</h3>';
 
     if ( $ours_now ) {
-        echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder. ErrorLight writes rules that block web access on Apache and IIS; the check button below tells you whether your server really applies them.', 'errorlight' ) . '</p>';
+        echo '<p>' . esc_html__( 'In a folder with a secret name inside your uploads folder. ErrorLight writes rules that block web access on Apache and IIS; the check button below tells you whether your server really applies them, and logging is turned on only after that check succeeds.', 'errorlight' ) . '</p>';
     } elseif ( $active ) {
         echo '<div class="e3p-errorlight-problems"><p><span class="dashicons dashicons-warning" aria-hidden="true"></span> ';
         echo esc_html__( 'The log is in the usual place, wp-content/debug.log: it is the first address anyone would try. Turn logging off and on again here to save it in ErrorLight’s own folder inside uploads. This works only if ErrorLight can confirm that the folder is private on your server.', 'errorlight' );
@@ -387,24 +427,28 @@ function e3p_errorlight_render_location_section( $active ) {
         'e3p_errorlight_od' => 'old',
     ) as $param => $group ) {
         $code = isset( $_GET[ $param ] ) ? sanitize_key( wp_unslash( $_GET[ $param ] ) ) : '';
-        if ( isset( $check_texts[ $group ][ $code ] ) ) {
+        if ( isset( $check_texts[ $group ][ $code ] ) && ! ( $blocked && 'folder' === $group ) ) {
             printf(
                 '<div class="notice notice-%1$s inline"><p>%2$s</p></div>',
                 esc_attr( $check_texts[ $group ][ $code ]['type'] ),
                 esc_html( $check_texts[ $group ][ $code ]['text'] )
             );
-            if ( 'folder' === $group && 'unknown' === $code ) {
+            // Le istruzioni a mano chiedono che il log esista: hanno senso solo a debug acceso.
+            if ( $active && 'folder' === $group && 'unknown' === $code ) {
                 e3p_errorlight_render_manual_check( $name );
             }
         }
     }
     // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-    echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="e3p-errorlight-inline-form">';
-    echo '<input type="hidden" name="action" value="e3p_errorlight_check" />';
-    wp_nonce_field( 'e3p_errorlight_check' );
-    echo '<button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>' . esc_html__( 'Check that my logs cannot be downloaded', 'errorlight' ) . '</button>';
-    echo '</form>';
+    // Nel riquadro di blocco c'è già "Check again", che fa la stessa cosa.
+    if ( ! $blocked ) {
+        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="e3p-errorlight-inline-form">';
+        echo '<input type="hidden" name="action" value="e3p_errorlight_check" />';
+        wp_nonce_field( 'e3p_errorlight_check' );
+        echo '<button type="submit" class="button e3p-errorlight-iconbtn"><span class="dashicons dashicons-yes-alt" aria-hidden="true"></span>' . esc_html__( 'Check that my logs cannot be downloaded', 'errorlight' ) . '</button>';
+        echo '</form>';
+    }
 
     // Vecchio debug.log: il primo indirizzo che chiunque proverebbe. Il plugin non lo cancella (è fuori dalla sua
     // cartella): mostra dov'è e consiglia come toglierlo.
